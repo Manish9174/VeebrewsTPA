@@ -1,0 +1,1046 @@
+{%- comment -%}
+  ============================================================
+  OWNER / FOUNDER SECTION
+  ------------------------------------------------------------
+  File name: sections/owner-section.liquid
+
+  FIXED BACKGROUND SYSTEM:
+  - Background image directly section par
+  - Desktop: cover
+  - Mobile / Tablet: auto 100lvh
+  - repeat-y
+  - center top
+  - Overlay image ke upar
+  - Content overlay ke upar
+  ============================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign sid = section.id
+  assign overlay_opacity = section.settings.overlay_opacity | divided_by: 100.0
+-%}
+
+<style>
+  /* ============================================================
+     SECTION VARIABLES
+     ============================================================ */
+
+  #owner-{{ sid }} {
+    --ow-overlay: {{ section.settings.overlay_color }};
+    --ow-overlay-opacity: {{ overlay_opacity }};
+    --ow-text: {{ section.settings.text_color }};
+    --ow-btn-bg: {{ section.settings.btn_bg }};
+    --ow-btn-text: {{ section.settings.btn_text }};
+    --ow-btn-hover-bg: {{ section.settings.btn_hover_bg }};
+    --ow-btn-hover-text: {{ section.settings.btn_hover_text }};
+    --ow-accent: {{ section.settings.accent_color }};
+    --ow-frame: {{ section.settings.frame_color }};
+
+    --ow-pt: {{ section.settings.padding_top }}px;
+    --ow-pb: {{ section.settings.padding_bottom }}px;
+
+    --ow-pt-m: {{ section.settings.padding_top_mobile }}px;
+    --ow-pb-m: {{ section.settings.padding_bottom_mobile }}px;
+
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+
+    color: var(--ow-text);
+
+    /*
+      ============================================================
+      BACKGROUND IMAGE
+      Same basic system as Keep It Fresh section
+      ============================================================
+    */
+
+    background-color: var(--ow-overlay);
+
+    {%- if section.settings.bg_image != blank -%}
+      background-image: url('{{ section.settings.bg_image | image_url: width: 2400 }}');
+    {%- endif -%}
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    padding: var(--ow-pt) 0 var(--ow-pb);
+  }
+
+
+  /* ============================================================
+     FONT
+     ============================================================ */
+
+  #owner-{{ sid }},
+  #owner-{{ sid }} * {
+    font-family: 'Lineal', sans-serif;
+  }
+
+
+  /* ============================================================
+     OVERLAY
+     ============================================================ */
+
+  #owner-{{ sid }} .ow__overlay {
+    position: absolute;
+    inset: 0;
+
+    z-index: 0;
+
+    background-color: var(--ow-overlay);
+    opacity: var(--ow-overlay-opacity);
+
+    pointer-events: none;
+  }
+
+
+  /* ============================================================
+     MAIN CONTAINER
+     ============================================================ */
+
+  #owner-{{ sid }} .ow__container {
+    position: relative;
+    z-index: 1;
+
+    max-width: {{ section.settings.max_width }}px;
+    margin: 0 auto;
+
+    padding: 0 20px;
+  }
+
+
+  /* ============================================================
+     GRID
+     ============================================================ */
+
+  #owner-{{ sid }} .ow__grid {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 48px;
+
+    align-items: center;
+  }
+
+
+  /* ============================================================
+     IMAGE + OFFSET FRAME
+     ============================================================ */
+
+  #owner-{{ sid }} .ow__media {
+    position: relative;
+
+    width: 100%;
+    max-width: 480px;
+
+    margin: 0 auto;
+
+    padding: 0 22px 22px 0;
+  }
+
+
+  #owner-{{ sid }} .ow__media::after {
+    content: "";
+
+    position: absolute;
+
+    top: 22px;
+    left: 22px;
+    right: 0;
+    bottom: 0;
+
+    background: var(--ow-accent);
+
+    z-index: 0;
+
+    border-radius: 10px;
+  }
+
+
+  /* ============================================================
+     OWNER PHOTO
+     ============================================================ */
+
+  #owner-{{ sid }} .ow__photo {
+    position: relative;
+
+    z-index: 1;
+
+    border: 2px solid var(--ow-frame);
+
+    background: var(--ow-frame);
+
+    aspect-ratio: {{ section.settings.image_ratio }};
+
+    overflow: hidden;
+
+    border-radius: 10px;
+  }
+
+
+  #owner-{{ sid }} .ow__photo img,
+  #owner-{{ sid }} .ow__photo svg {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+  }
+
+
+  /* ============================================================
+     CONTENT
+     ============================================================ */
+
+  #owner-{{ sid }} .ow__content {
+    position: relative;
+
+    z-index: 1;
+
+    text-align: left;
+  }
+
+
+  /* ============================================================
+     HEADING
+     ============================================================ */
+
+  #owner-{{ sid }} .ow__heading {
+    margin: 0 0 20px;
+
+    font-size: clamp(32px, 5vw, 56px);
+
+    line-height: 1.08;
+
+    color: var(--ow-text);
+  }
+
+
+  #owner-{{ sid }} .ow__heading strong {
+    font-weight: 800;
+  }
+
+
+  #owner-{{ sid }} .ow__heading span {
+    font-weight: 300;
+
+    display: block;
+  }
+
+
+  /* ============================================================
+     SUBHEADING
+     ============================================================ */
+
+  #owner-{{ sid }} .ow__subheading {
+    margin: 0 0 16px;
+
+    font-size: clamp(17px, 2vw, 22px);
+
+    font-weight: 600;
+
+    line-height: 1.35;
+
+    color: var(--ow-text);
+  }
+
+
+  /* ============================================================
+     DESCRIPTION
+     ============================================================ */
+
+  #owner-{{ sid }} .ow__text,
+  #owner-{{ sid }} .ow__text p {
+    margin: 0 0 24px;
+
+    font-size: clamp(15px, 1.6vw, 18px);
+
+    line-height: 1.6;
+
+    font-weight: 300;
+
+    color: var(--ow-text);
+
+    max-width: 62ch;
+  }
+
+
+  /* ============================================================
+     OWNER NAME
+     ============================================================ */
+
+  #owner-{{ sid }} .ow__name {
+    margin: 0;
+
+    font-size: clamp(18px, 2vw, 24px);
+
+    font-weight: 800;
+
+    color: var(--ow-text);
+  }
+
+
+  #owner-{{ sid }} .ow__role {
+    margin: 2px 0 0;
+
+    font-size: clamp(16px, 1.8vw, 20px);
+
+    font-weight: 300;
+
+    color: var(--ow-text);
+  }
+
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+
+  #owner-{{ sid }} .ow__footer {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 24px;
+
+    margin-top: 32px;
+
+    flex-wrap: wrap;
+  }
+
+
+  /* ============================================================
+     BUTTON
+     ============================================================ */
+
+  #owner-{{ sid }} .ow__btn {
+    display: inline-block;
+
+    padding: 15px 34px;
+
+    border-radius: 10px;
+
+    background: var(--ow-btn-bg);
+
+    color: var(--ow-btn-text);
+
+    font-weight: 700;
+
+    font-size: 21px;
+
+    line-height: 1;
+
+    letter-spacing: .04em;
+
+    text-decoration: none;
+
+    border: 2px solid var(--ow-btn-bg);
+
+    transition:
+      background-color .25s ease,
+      color .25s ease,
+      transform .25s ease;
+  }
+
+
+  #owner-{{ sid }} .ow__btn:hover {
+    background: var(--ow-btn-hover-bg);
+
+    color: var(--ow-btn-hover-text);
+
+    border-color: var(--ow-btn-hover-bg);
+
+    transform: translateY(-2px);
+  }
+
+
+  #owner-{{ sid }} .ow__btn:focus-visible {
+    outline: 3px solid var(--ow-text);
+
+    outline-offset: 3px;
+  }
+
+
+  /* ============================================================
+     DOODLE
+     ============================================================ */
+
+  #owner-{{ sid }} .ow__doodle {
+    color: var(--ow-text);
+  }
+
+
+  #owner-{{ sid }} .ow__doodle-text {
+    font-size: 20px;
+
+    font-style: italic;
+
+    font-weight: 600;
+
+    transform: rotate(-4deg);
+
+    margin-bottom: 40px;
+  }
+
+
+  #owner-{{ sid }} .ow__doodle img {
+    width: {{ section.settings.doodle_size }}px;
+
+    height: auto;
+
+    display: block;
+  }
+
+
+  /* ============================================================
+     DESKTOP
+     ============================================================ */
+
+  @media screen and (min-width: 990px) {
+
+    #owner-{{ sid }} .ow__grid {
+      grid-template-columns: 1fr 1fr;
+
+      gap: 80px;
+    }
+
+    {% if section.settings.image_position == 'right' %}
+
+      #owner-{{ sid }} .ow__media {
+        order: 2;
+      }
+
+      #owner-{{ sid }} .ow__content {
+        order: 1;
+      }
+
+    {% endif %}
+
+  }
+
+
+  /* ============================================================
+     TABLET
+     ============================================================ */
+
+  @media screen and (max-width: 989px) {
+
+    #owner-{{ sid }} {
+      padding:
+        var(--ow-pt-m)
+        0
+        var(--ow-pb-m);
+    }
+
+    #owner-{{ sid }} .ow__grid {
+      gap: 40px;
+    }
+
+  }
+
+
+  /* ============================================================
+     MOBILE BACKGROUND
+     
+     EXACT STYLE:
+     Keep It Fresh jaisa background grip
+     ============================================================ */
+
+  @media screen and (max-width: 900px) {
+
+    #owner-{{ sid }} {
+
+      background-size: auto 100lvh;
+
+      background-repeat: repeat-y;
+
+      background-position: center top;
+
+    }
+
+  }
+
+
+  /* ============================================================
+     SMALL MOBILE
+     ============================================================ */
+
+  @media screen and (max-width: 589px) {
+
+    #owner-{{ sid }} .ow__container {
+      padding: 0 16px;
+    }
+
+
+    #owner-{{ sid }} .ow__media {
+      padding: 0 14px 14px 0;
+
+      max-width: 100%;
+    }
+
+
+    #owner-{{ sid }} .ow__media::after {
+      top: 14px;
+
+      left: 14px;
+    }
+
+
+    #owner-{{ sid }} .ow__btn {
+      padding: 13px 28px;
+    }
+
+
+    #owner-{{ sid }} .ow__doodle img {
+      width: {{ section.settings.doodle_size | times: 0.7 | round }}px;
+    }
+
+
+    {% if section.settings.center_mobile %}
+
+      #owner-{{ sid }} .ow__content {
+        text-align: center;
+      }
+
+      #owner-{{ sid }} .ow__text {
+        margin-left: auto;
+
+        margin-right: auto;
+      }
+
+      #owner-{{ sid }} .ow__footer {
+        justify-content: center;
+      }
+
+    {% endif %}
+
+  }
+
+
+  /* ============================================================
+     REDUCED MOTION
+     ============================================================ */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #owner-{{ sid }} .ow__btn {
+      transition: none;
+    }
+
+  }
+
+</style>
+
+
+<!-- ============================================================
+     SECTION
+     ============================================================ -->
+
+<section
+  id="owner-{{ sid }}"
+  class="ow"
+  data-section-id="{{ sid }}"
+>
+
+  <!-- Overlay -->
+  <div class="ow__overlay"></div>
+
+
+  <!-- Main Container -->
+  <div class="ow__container">
+
+    <div class="ow__grid">
+
+
+      <!-- ======================================================
+           OWNER IMAGE
+           ====================================================== -->
+
+      <div class="ow__media">
+
+        <div class="ow__photo">
+
+          {%- if section.settings.owner_image != blank -%}
+
+            {{
+              section.settings.owner_image
+              | image_url: width: 1000
+              | image_tag:
+                loading: 'lazy',
+                widths: '400, 600, 800, 1000',
+                sizes: '(min-width: 990px) 480px, 90vw',
+                alt: section.settings.owner_name
+            }}
+
+          {%- else -%}
+
+            {{ 'image' | placeholder_svg_tag }}
+
+          {%- endif -%}
+
+        </div>
+
+      </div>
+
+
+      <!-- ======================================================
+           CONTENT
+           ====================================================== -->
+
+      <div class="ow__content">
+
+        {%- if section.settings.heading_bold != blank or section.settings.heading_light != blank -%}
+
+          <h2 class="ow__heading">
+
+            {%- if section.settings.heading_bold != blank -%}
+
+              <strong>
+                {{ section.settings.heading_bold | escape }}
+              </strong>
+
+            {%- endif -%}
+
+
+            {%- if section.settings.heading_light != blank -%}
+
+              <span>
+                {{ section.settings.heading_light | escape }}
+              </span>
+
+            {%- endif -%}
+
+          </h2>
+
+        {%- endif -%}
+
+
+        {%- if section.settings.subheading != blank -%}
+
+          <p class="ow__subheading">
+            {{ section.settings.subheading | escape }}
+          </p>
+
+        {%- endif -%}
+
+
+        {%- if section.settings.text != blank -%}
+
+          <div class="ow__text">
+            {{ section.settings.text }}
+          </div>
+
+        {%- endif -%}
+
+
+        {%- if section.settings.owner_name != blank -%}
+
+          <p class="ow__name">
+            {{ section.settings.owner_name | escape }}
+          </p>
+
+        {%- endif -%}
+
+
+        {%- if section.settings.owner_role != blank -%}
+
+          <p class="ow__role">
+            {{ section.settings.owner_role | escape }}
+          </p>
+
+        {%- endif -%}
+
+
+        <!-- ====================================================
+             FOOTER
+             ==================================================== -->
+
+        <div class="ow__footer">
+
+
+          {%- if section.settings.btn_label != blank -%}
+
+            <a
+              class="ow__btn"
+              href="{{ section.settings.btn_link | default: '#' }}"
+            >
+              {{ section.settings.btn_label | escape }}
+            </a>
+
+          {%- endif -%}
+
+
+          {%- if section.settings.doodle_image != blank or section.settings.doodle_text != blank -%}
+
+            <div
+              class="ow__doodle"
+              aria-hidden="true"
+            >
+
+              {%- if section.settings.doodle_text != blank -%}
+
+                <span class="ow__doodle-text">
+                  {{ section.settings.doodle_text | escape }}
+                </span>
+
+              {%- endif -%}
+
+
+              {%- if section.settings.doodle_image != blank -%}
+
+                {{
+                  section.settings.doodle_image
+                  | image_url: width: 400
+                  | image_tag:
+                    loading: 'lazy',
+                    alt: ''
+                }}
+
+              {%- endif -%}
+
+            </div>
+
+          {%- endif -%}
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+{% schema %}
+
+{
+  "name": "Owner Section",
+
+  "tag": "section",
+
+  "class": "owner-section",
+
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "Background"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#f44b20"
+    },
+
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 85
+    },
+
+
+    {
+      "type": "header",
+      "content": "Owner image"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "owner_image",
+      "label": "Owner image"
+    },
+
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+
+      "options": [
+        {
+          "value": "4 / 5",
+          "label": "Portrait (4:5)"
+        },
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Tall (3:4)"
+        },
+        {
+          "value": "4 / 3",
+          "label": "Landscape (4:3)"
+        }
+      ],
+
+      "default": "4 / 5"
+    },
+
+
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position (desktop)",
+
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+
+      "default": "left"
+    },
+
+
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Offset block color",
+      "default": "#e7a0c2"
+    },
+
+    {
+      "type": "color",
+      "id": "frame_color",
+      "label": "Image border color",
+      "default": "#ffffff"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Content"
+    },
+
+    {
+      "type": "text",
+      "id": "heading_bold",
+      "label": "Heading (bold part)",
+      "default": "Meet our owner"
+    },
+
+    {
+      "type": "text",
+      "id": "heading_light",
+      "label": "Heading (light part)",
+      "default": "behind the brand"
+    },
+
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "How a simple idea became our brand."
+    },
+
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description",
+
+      "default": "<p>Write a short story about the owner and why the brand was started. Keep it honest, simple and personal.</p>"
+    },
+
+    {
+      "type": "text",
+      "id": "owner_name",
+      "label": "Owner name",
+      "default": "Owner Name,"
+    },
+
+    {
+      "type": "text",
+      "id": "owner_role",
+      "label": "Owner role",
+      "default": "Founder"
+    },
+
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Button"
+    },
+
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button label",
+      "default": "Our story"
+    },
+
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button link"
+    },
+
+    {
+      "type": "color",
+      "id": "btn_bg",
+      "label": "Button background",
+      "default": "#ffffff"
+    },
+
+    {
+      "type": "color",
+      "id": "btn_text",
+      "label": "Button text color",
+      "default": "#f44b20"
+    },
+
+    {
+      "type": "color",
+      "id": "btn_hover_bg",
+      "label": "Button hover background",
+      "default": "#5c7650"
+    },
+
+    {
+      "type": "color",
+      "id": "btn_hover_text",
+      "label": "Button hover text color",
+      "default": "#ffffff"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Doodle (optional)"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "doodle_image",
+      "label": "Doodle / illustration"
+    },
+
+    {
+      "type": "text",
+      "id": "doodle_text",
+      "label": "Doodle text",
+      "default": "Hey Founder!"
+    },
+
+    {
+      "type": "range",
+      "id": "doodle_size",
+      "label": "Doodle size",
+      "min": 60,
+      "max": 240,
+      "step": 10,
+      "unit": "px",
+      "default": 130
+    },
+
+
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 1000,
+      "max": 1800,
+      "step": 50,
+      "unit": "px",
+      "default": 1300
+    },
+
+    {
+      "type": "checkbox",
+      "id": "center_mobile",
+      "label": "Center align text on mobile",
+      "default": false
+    },
+
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    }
+
+  ],
+
+  "presets": [
+    {
+      "name": "Owner Section"
+    }
+  ]
+}
+
+{% endschema %}

@@ -1,0 +1,2600 @@
+{% comment %}
+  HUCK STYLE RECOMMENDATIONS (sections/hckx-recommendations-swiper.liquid)
+  File needed: assets/cust-featured-new.css
+
+  Desktop: 3 cards per row (no slider)
+  Tablet: 2 cards per row (no slider)
+  Mobile: slider + arrows
+
+  FIX:
+  - Mobile Swiper properly works
+  - Desktop grid remains static
+  - transform:none only applies on desktop
+  - Mobile Swiper uses its own translate3d transform
+{% endcomment %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer="defer"></script>
+
+{{ 'cust-featured-new.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign s = section.settings
+-%}
+
+{% style %}
+
+  /* =========================================
+     SECTION VARIABLES
+  ========================================= */
+
+  #shopify-section-{{ section.id }} {
+    --hckxbs-bg: {{ s.background_color }};
+    --hckxbs-text: {{ s.text_color }};
+    --hckxbs-card-bg: {{ s.card_background }};
+    --hckxbs-accent-fallback: {{ s.accent_fallback_color }};
+
+    --hckxbs-card-width: {{ s.card_width }}px;
+    --hckxbs-card-gap: {{ s.card_gap }}px;
+    --hckxbs-row-gap: {{ s.row_gap }}px;
+
+    --hckxbs-product-img-width:
+      {{ s.product_image_width | default: 220 }}px;
+
+    --hckxbs-image-overlap:
+      {{ s.image_overlap | default: 40 }}px;
+
+    --hckxbs-overlay-opacity:
+      {{ s.overlay_opacity | default: 65 }}%;
+
+    {% if s.background_image != blank %}
+      --hckxbs-bg-image:
+        url('{{ s.background_image | image_url: width: 1600 }}');
+    {% else %}
+      --hckxbs-bg-image: none;
+    {% endif %}
+  }
+
+
+  /* =========================================
+     INITIAL LOAD
+  ========================================= */
+
+  #hckxbs-{{ section.id }} .hckxbs-swiper {
+    transition: opacity .35s ease;
+  }
+
+  #hckxbs-{{ section.id }}:not(.is-ready) .hckxbs-swiper {
+    opacity: 0;
+    animation: hckxbs-reveal 0s 4s forwards;
+  }
+
+  @keyframes hckxbs-reveal {
+    to {
+      opacity: 1;
+    }
+  }
+
+
+  /* =========================================
+     RECOMMENDATION CARDS
+  ========================================= */
+
+  .hckxbs.hckxbs-rec .hckxbs-stage {
+    height: auto;
+    display: block;
+  }
+
+  .hckxbs.hckxbs-rec .hckxbs-card {
+    width: 100%;
+    transform: none;
+    opacity: 1;
+
+    box-shadow:
+      0 26px 50px rgba(0, 0, 0, .16);
+  }
+
+  .hckxbs.hckxbs-rec .hckxbs-card-title {
+    font-size: 28px;
+  }
+
+  .hckxbs.hckxbs-rec .hckxbs-card-flavor {
+    font-size: 22px;
+  }
+
+  .hckxbs.hckxbs-rec .hckxbs-card-desc {
+    display: block;
+    margin-top: 16px;
+
+    font-size: 18px;
+    line-height: 1.6;
+
+    color: black;
+  }
+
+  .hckxbs.hckxbs-rec .hckxbs-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-top: 20px;
+  }
+
+
+  /* =========================================
+     CARD ITEM
+  ========================================= */
+
+  .hckxbs.hckxbs-rec .hckxbs-item {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    height: auto;
+  }
+
+  .hckxbs.hckxbs-rec .hckxbs-card {
+    flex: 1 1 auto;
+  }
+
+
+  /* =========================================
+     PRODUCT IMAGE
+  ========================================= */
+
+  .hckxbs.hckxbs-rec .hckxbs-card-image {
+    order: -1;
+
+    position: relative;
+
+    left: auto;
+    bottom: auto;
+
+    z-index: 3;
+
+    width: 400px;
+    max-width: 100%;
+
+    margin: auto;
+
+    opacity: 1;
+
+    transform: none;
+
+    transition: transform .4s ease;
+
+    pointer-events: none;
+  }
+
+
+  /* =========================================
+     ARROWS - DESKTOP HIDDEN
+  ========================================= */
+
+  .hckxbs.hckxbs-rec .hckxbs-arrow {
+    display: none !important;
+  }
+
+
+  /* =========================================
+     DESKTOP - STATIC GRID
+     IMPORTANT:
+     transform:none ONLY desktop par hai.
+     Mobile par nahi lagega.
+  ========================================= */
+
+  @media (min-width: 701px) {
+
+    .hckxbs.hckxbs-rec .swiper-wrapper {
+
+      display: grid;
+
+      width: 100%;
+
+      max-width: calc(
+        (var(--hckxbs-card-width) * 3) +
+        (var(--hckxbs-card-gap) * 2)
+      );
+
+      margin-inline: auto;
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(0, var(--hckxbs-card-width))
+        );
+
+      justify-content: center;
+
+      align-items: stretch;
+
+      column-gap: 10rem !important;
+
+      row-gap: var(--hckxbs-row-gap);
+
+      /*
+        Desktop par Swiper movement disable.
+        Mobile par ye property bilkul nahi hogi.
+      */
+      transform: none !important;
+    }
+
+
+    .hckxbs.hckxbs-rec .swiper-slide,
+    .hckxbs.hckxbs-rec .swiper-slide-active {
+      width: auto;
+    }
+
+  }
+
+
+  /* =========================================
+     TABLET - 2 COLUMNS
+  ========================================= */
+
+  @media (min-width: 701px) and (max-width: 1100px) {
+
+    .hckxbs.hckxbs-rec .swiper-wrapper {
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(0, var(--hckxbs-card-width))
+        );
+
+    }
+
+  }
+
+
+  /* =========================================
+     MOBILE - REAL SWIPER
+  ========================================= */
+
+  @media (max-width: 700px) {
+
+    /* -------------------------
+       ARROWS
+    ------------------------- */
+
+    .hckxbs.hckxbs-rec .hckxbs-arrow {
+      display: grid !important;
+    }
+
+
+    /* -------------------------
+       SWIPER CONTAINER
+    ------------------------- */
+
+    .hckxbs.hckxbs-rec .hckxbs-swiper {
+
+      display: block;
+
+      width: 100%;
+
+      height: auto;
+
+      overflow: hidden;
+
+      position: relative;
+    }
+
+
+    /* -------------------------
+       SWIPER WRAPPER
+    ------------------------- */
+
+    .hckxbs.hckxbs-rec .swiper-wrapper {
+
+      /*
+        IMPORTANT:
+        Desktop grid ko yahan override
+        kiya ja raha hai.
+      */
+
+      display: flex !important;
+
+      width: auto;
+
+      max-width: none;
+
+      margin: 0;
+
+      justify-content: flex-start;
+
+      align-items: flex-end;
+
+      column-gap: 0 !important;
+
+      row-gap: 0 !important;
+
+      /*
+        IMPORTANT:
+        Yahan transform:none nahi hai.
+
+        Swiper khud:
+        translate3d(...)
+        lagayega.
+      */
+    }
+
+
+    /* -------------------------
+       MOBILE SLIDES
+    ------------------------- */
+
+    .hckxbs.hckxbs-rec .swiper-slide,
+    .hckxbs.hckxbs-rec .swiper-slide-active {
+
+      width: min(300px, 78vw) !important;
+
+      flex:
+        0 0 min(300px, 78vw) !important;
+
+      flex-shrink: 0 !important;
+    }
+
+
+    /* -------------------------
+       MOBILE PRODUCT IMAGE
+    ------------------------- */
+
+    .hckxbs.hckxbs-rec .hckxbs-card-image {
+
+      width:
+        min(
+          var(--hckxbs-product-img-width),
+          150px
+        );
+
+    }
+
+
+    /* -------------------------
+       MOBILE TYPOGRAPHY
+    ------------------------- */
+
+    .hckxbs.hckxbs-rec .hckxbs-card-title {
+      font-size: 24px;
+    }
+
+    .hckxbs.hckxbs-rec .hckxbs-card-flavor {
+      font-size: 18px;
+    }
+
+    .hckxbs.hckxbs-rec .hckxbs-card-desc {
+      font-size: 15px;
+    }
+
+  }
+
+
+  /* =========================================
+     PRODUCT IMAGE HOVER
+  ========================================= */
+
+  .hckxbs.hckxbs-rec
+  .hckxbs-item:hover
+  .hckxbs-card-image {
+
+    transform: rotate(8deg);
+
+  }
+
+
+  /* =========================================
+     MODAL / OTHER STYLES
+     Existing CSS file:
+     cust-featured-new.css
+  ========================================= */
+
+{% endstyle %}
+
+
+<!-- =====================================================
+     MAIN SECTION
+===================================================== -->
+
+<div
+  class="hckxbs hckxbs-rec"
+  id="hckxbs-{{ section.id }}"
+  data-hckxbs
+
+  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ s.products_to_show }}&intent={{ s.intent }}"
+
+  data-autoplay="{{ s.autoplay | default: false }}"
+
+  data-autoplay-speed="{{ s.autoplay_speed | default: 4 }}"
+
+  data-card-gap="{{ s.card_gap | default: 26 }}"
+
+  data-currency-symbol="{{ cart.currency.symbol }}"
+
+  hidden
+>
+
+
+  <!-- ===================================================
+       HEADING
+  =================================================== -->
+
+  {%- if s.heading != blank -%}
+
+    <h2 class="hckxbs-heading">
+      {{ s.heading }}
+    </h2>
+
+  {%- endif -%}
+
+
+  <!-- ===================================================
+       PARAGRAPH
+  =================================================== -->
+
+  {%- if s.paragraph != blank -%}
+
+    <div class="hckxbs-intro">
+      {{ s.paragraph }}
+    </div>
+
+  {%- endif -%}
+
+
+  <!-- ===================================================
+       CURSOR LABEL
+  =================================================== -->
+
+  <div
+    class="hckxbs-cursor"
+    data-hckxbs-cursor
+    aria-hidden="true"
+  >
+
+    <span class="hckxbs-cursor-dot"></span>
+
+    <span
+      class="hckxbs-cursor-text"
+      data-hckxbs-cursor-text
+    ></span>
+
+  </div>
+
+
+  <!-- ===================================================
+       STAGE
+  =================================================== -->
+
+  <div class="hckxbs-stage">
+
+
+    <!-- PREVIOUS -->
+
+    <button
+      type="button"
+      class="hckxbs-arrow hckxbs-arrow-prev"
+      data-hckxbs-prev
+      aria-label="Previous product"
+    >
+
+      <svg
+        role="none"
+        viewBox="0 0 34 28"
+      >
+
+        <path
+          stroke="currentColor"
+          stroke-miterlimit="10"
+          stroke-width="2"
+          d="M32.962 18.794c-2.217-2.544-5.002-3.933-7.713-4.918-7.786-2.81-15.748-2.739-22.658.203"
+        ></path>
+
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M7.218 6.4c-2.045 1.933-3.652 4.579-4.635 7.681l7.182 5.958"
+        ></path>
+
+      </svg>
+
+    </button>
+
+
+    <!-- NEXT -->
+
+    <button
+      type="button"
+      class="hckxbs-arrow hckxbs-arrow-next"
+      data-hckxbs-next
+      aria-label="Next product"
+    >
+
+      <svg
+        role="none"
+        viewBox="0 0 34 28"
+      >
+
+        <path
+          stroke="currentColor"
+          stroke-miterlimit="10"
+          stroke-width="2"
+          d="M32.962 18.794c-2.217-2.544-5.002-3.933-7.713-4.918-7.786-2.81-15.748-2.739-22.658.203"
+        ></path>
+
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M7.218 6.4c-2.045 1.933-3.652 4.579-4.635 7.681l7.182 5.958"
+        ></path>
+
+      </svg>
+
+    </button>
+
+
+    <!-- =================================================
+         RECOMMENDATION MOUNT
+    ================================================= -->
+
+    <div
+      data-hckxbs-mount
+      style="display:contents"
+    >
+
+      {%- if recommendations.performed and recommendations.products_count > 0 -%}
+
+        <div data-hckxbs-source>
+
+          <div
+            class="hckxbs-swiper swiper is-active-track"
+            data-hckxbs-track
+            id="hckxbs-track-{{ section.id }}"
+          >
+
+            <div class="swiper-wrapper">
+
+
+              {%- for product in recommendations.products -%}
+
+                {%- assign flavor_list =
+                  product.metafields.custom.tasting_note.value
+                -%}
+
+                {%- assign color_mf =
+                  product.metafields.custom.color_image.value
+                -%}
+
+                {%- assign border_mf =
+                  product.metafields.custom.border_image.value
+                -%}
+
+
+                <!-- PRODUCT -->
+
+                <div class="swiper-slide hckxbs-item">
+
+
+                  <!-- CARD -->
+
+                  <div
+                    class="hckxbs-card"
+                    data-title="{{ product.title | escape }}"
+                  >
+
+
+                    <!-- CARD TOP -->
+
+                    <div class="hckxbs-card-top">
+
+                      <h3 class="hckxbs-card-title">
+
+                        <span>
+                          {{ product.title | truncate: 25 }}
+                        </span>
+
+                      </h3>
+
+
+                      {% if color_mf != blank %}
+
+                        <span
+                          class="hckxbs-card-blob"
+                          style="background-image:url({{ color_mf | image_url: width: 200 }})"
+                          aria-hidden="true"
+                        ></span>
+
+                      {% endif %}
+
+                    </div>
+
+
+                    <!-- FLAVOR -->
+
+                    <p class="hckxbs-card-flavor">
+
+                      {%- if flavor_list -%}
+
+                        {%- for f in flavor_list -%}
+
+                          {{ f.name }}
+
+                          {%- assign note_text = '' -%}
+
+                          {%- if f.fields.size > 0 -%}
+
+                            {%- assign note_text =
+                              f.fields.first.value
+                            -%}
+
+                          {%- endif -%}
+
+                          {{ note_text }}
+
+                          {% unless forloop.last %}
+                            &bull;
+                          {% endunless %}
+
+                        {%- endfor -%}
+
+                      {%- endif -%}
+
+                    </p>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="hckxbs-card-desc">
+
+                      {{ product.metafields.custom.blend_description }}
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="hckxbs-card-actions">
+
+                      <a
+                        class="hckxbs-learn-more"
+                        href="{{ product.url }}"
+                      >
+                        Learn More
+                      </a>
+
+
+                      {% if product.available %}
+
+                        <button
+                          type="button"
+                          class="hckxbs-buy-now"
+                          data-hckxbs-buy-now
+                          data-variants="{{ product.variants | json | escape }}"
+                        >
+                          Buy Now
+                        </button>
+
+                      {% else %}
+
+                        <button
+                          type="button"
+                          class="hckxbs-buy-now"
+                          disabled
+                        >
+                          Sold out
+                        </button>
+
+                      {% endif %}
+
+                    </div>
+
+
+                    <!-- CARD STRIP -->
+
+                    {% if border_mf != blank %}
+
+                      <span
+                        class="hckxbs-card-strip"
+                        style="background-image:url({{ border_mf | image_url: width: 500 }})"
+                      ></span>
+
+                    {% else %}
+
+                      <span
+                        class="hckxbs-card-strip hckxbs-card-strip-fallback"
+                      ></span>
+
+                    {% endif %}
+
+
+                  </div>
+
+
+                  <!-- PRODUCT IMAGE -->
+
+                  {%- assign prod_img =
+                    product.metafields.custom.collection_image.value
+                  -%}
+
+                  {%- if prod_img == blank -%}
+
+                    {%- assign prod_img =
+                      product.featured_image
+                    -%}
+
+                  {%- endif -%}
+
+
+                  {%- if prod_img != blank -%}
+
+                    <div
+                      class="hckxbs-card-image"
+                      aria-hidden="true"
+                    >
+
+                      {{
+                        prod_img
+                        | image_url: width: 600
+                        | image_tag:
+                          widths: '200, 300, 450, 600',
+                          loading: 'lazy',
+                          alt: ''
+                      }}
+
+                    </div>
+
+                  {%- endif -%}
+
+
+                </div>
+
+              {%- endfor -%}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      {%- endif -%}
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================
+       BUY NOW MODAL
+  =================================================== -->
+
+  <div
+    class="hckxbs-modal"
+    data-hckxbs-modal
+    aria-hidden="true"
+  >
+
+    <div
+      class="hckxbs-modal-overlay"
+      data-hckxbs-modal-close
+    ></div>
+
+
+    <div
+      class="hckxbs-modal-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Buy now"
+    >
+
+
+      <!-- HEADER -->
+
+      <div class="hckxbs-modal-header">
+
+        <span class="hckxbs-modal-title">
+          Buy Now
+        </span>
+
+        <button
+          type="button"
+          class="hckxbs-modal-close"
+          data-hckxbs-modal-close
+          aria-label="Close"
+        >
+
+          <svg
+            aria-label="Close"
+            viewBox="0 0 26 26"
+            width="26"
+            height="26"
+          >
+
+            <path
+              fill="currentColor"
+              d="M9.46499 18.3026 13 14.7676l3.535 3.535 1.7675-1.7675-3.535-3.535 3.535-3.53503-1.7675-1.7675L13 11.2326 9.46499 7.69757l-1.7675 1.7675 3.53501 3.53503-3.53501 3.535 1.7675 1.7675Z"
+            ></path>
+
+            <path
+              fill="currentColor"
+              d="M13 25.5c6.8925 0 12.5-5.6075 12.5-12.5S19.8925.5 13 .5.5 6.1075.5 13 6.1075 25.5 13 25.5ZM13 3c5.5138 0 10 4.48625 10 10 0 5.51375-4.4862 10-10 10C7.48625 23 3 18.51375 3 13 3 7.48625 7.48625 3 13 3Z"
+            ></path>
+
+          </svg>
+
+        </button>
+
+      </div>
+
+
+      <!-- PRICE -->
+
+      <div class="hckxbs-modal-row">
+
+        <span class="hckxbs-modal-label">
+          Price
+        </span>
+
+        <span
+          class="hckxbs-modal-price"
+          data-hckxbs-modal-price
+        ></span>
+
+      </div>
+
+
+      <!-- SIZE -->
+
+      <div
+        class="hckxbs-modal-row"
+        data-hckxbs-modal-size-row
+      >
+
+        <span class="hckxbs-modal-label">
+          Size
+        </span>
+
+        <div
+          class="hckxbs-modal-size-options"
+          data-hckxbs-modal-size-options
+        ></div>
+
+      </div>
+
+
+      <!-- QUANTITY -->
+
+      <div class="hckxbs-modal-row">
+
+        <span class="hckxbs-modal-label">
+          Quantity
+        </span>
+
+        <div class="hckxbs-modal-qty">
+
+          <button
+            type="button"
+            class="hckxbs-modal-qty-btn"
+            data-hckxbs-qty-minus
+            aria-label="Decrease quantity"
+          >
+            &minus;
+          </button>
+
+          <span
+            class="hckxbs-modal-qty-value"
+            data-hckxbs-qty-value
+          >
+            1
+          </span>
+
+          <button
+            type="button"
+            class="hckxbs-modal-qty-btn"
+            data-hckxbs-qty-plus
+            aria-label="Increase quantity"
+          >
+            +
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ADD TO CART -->
+
+      <button
+        type="button"
+        class="hckxbs-modal-add"
+        data-hckxbs-modal-add
+      >
+        Add to Cart
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+(function () {
+
+
+  /* =====================================================
+     BOOT
+  ===================================================== */
+
+  function boot(root) {
+
+    if (!root) return;
+
+    if (typeof Swiper === 'undefined') {
+      console.warn(
+        '[HCKXBS] Swiper library not loaded.'
+      );
+      return;
+    }
+
+
+    /* ===================================================
+       ELEMENTS
+    =================================================== */
+
+    var trackEl =
+      root.querySelector('[data-hckxbs-track]');
+
+    var prevBtn =
+      root.querySelector('[data-hckxbs-prev]');
+
+    var nextBtn =
+      root.querySelector('[data-hckxbs-next]');
+
+    var currencySymbol =
+      root.getAttribute(
+        'data-currency-symbol'
+      ) || '$';
+
+
+    /* ===================================================
+       SETTINGS
+    =================================================== */
+
+    var autoplayEnabled =
+      root.getAttribute(
+        'data-autoplay'
+      ) === 'true';
+
+    var autoplaySpeed =
+      (
+        parseFloat(
+          root.getAttribute(
+            'data-autoplay-speed'
+          )
+        ) || 4
+      ) * 1000;
+
+    var gap =
+      parseInt(
+        root.getAttribute(
+          'data-card-gap'
+        ),
+        10
+      ) || 26;
+
+
+    if (!trackEl) {
+      console.warn(
+        '[HCKXBS] Swiper track not found.'
+      );
+      return;
+    }
+
+
+    /* ===================================================
+       MOBILE BREAKPOINT
+    =================================================== */
+
+    var mq =
+      window.matchMedia(
+        '(max-width: 700px)'
+      );
+
+    var swiper = null;
+
+
+    /* ===================================================
+       INIT SWIPER
+    =================================================== */
+
+    function initSwiper() {
+
+      if (swiper || !trackEl) {
+        return;
+      }
+
+
+      var slideCount =
+        trackEl.querySelectorAll(
+          '.swiper-slide'
+        ).length;
+
+
+      if (slideCount === 0) {
+        return;
+      }
+
+
+      swiper = new Swiper(
+        trackEl,
+        {
+
+          /*
+            Mobile card width CSS se
+            automatically calculate hogi.
+          */
+
+          slidesPerView: 'auto',
+
+          centeredSlides: true,
+
+          /*
+            3 se zyada products hone par
+            loop.
+          */
+
+          loop: slideCount > 3,
+
+          loopAdditionalSlides:
+            slideCount > 3 ? 3 : 0,
+
+          rewind:
+            slideCount <= 3,
+
+          speed: 550,
+
+          spaceBetween: gap,
+
+          grabCursor: true,
+
+          /*
+            IMPORTANT MOBILE TOUCH SETTINGS
+          */
+
+          allowTouchMove: true,
+
+          touchRatio: 1,
+
+          touchAngle: 45,
+
+          threshold: 5,
+
+          resistance: true,
+
+          resistanceRatio: 0.85,
+
+          /*
+            Click karke card par
+            slide bhi kar sake.
+          */
+
+          slideToClickedSlide: true,
+
+          /*
+            Agar slides kam ho to
+            unnecessary movement avoid.
+          */
+
+          watchOverflow: true,
+
+          /*
+            AJAX / dynamic content ke
+            liye observer.
+          */
+
+          observer: true,
+
+          observeParents: true,
+
+          observeSlideChildren: true,
+
+
+          /*
+            AUTOPLAY
+          */
+
+          autoplay:
+            autoplayEnabled
+              ? {
+                  delay: autoplaySpeed,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: false
+                }
+              : false,
+
+
+          /*
+            EVENTS
+          */
+
+          on: {
+
+            init: function () {
+
+              requestAnimationFrame(
+                function () {
+
+                  swiper.update();
+
+                }
+              );
+
+            },
+
+            slideChange: function () {
+
+              /*
+                Optional future hooks
+              */
+
+            }
+
+          }
+
+        }
+      );
+
+    }
+
+
+    /* ===================================================
+       DESTROY SWIPER
+    =================================================== */
+
+    function destroySwiper() {
+
+      if (!swiper) {
+        return;
+      }
+
+
+      swiper.destroy(
+        true,
+        true
+      );
+
+      swiper = null;
+
+    }
+
+
+    /* ===================================================
+       RESPONSIVE SYNC
+    =================================================== */
+
+    function sync() {
+
+      if (mq.matches) {
+
+        /*
+          MOBILE
+        */
+
+        initSwiper();
+
+
+        requestAnimationFrame(
+          function () {
+
+            if (swiper) {
+
+              swiper.update();
+
+            }
+
+          }
+        );
+
+      } else {
+
+        /*
+          DESKTOP / TABLET
+        */
+
+        destroySwiper();
+
+      }
+
+    }
+
+
+    /* ===================================================
+       MEDIA QUERY CHANGE
+    =================================================== */
+
+    if (mq.addEventListener) {
+
+      mq.addEventListener(
+        'change',
+        sync
+      );
+
+    } else if (mq.addListener) {
+
+      mq.addListener(sync);
+
+    }
+
+
+    /* ===================================================
+       ARROWS
+    =================================================== */
+
+    if (prevBtn) {
+
+      prevBtn.addEventListener(
+        'click',
+        function () {
+
+          if (
+            swiper &&
+            mq.matches
+          ) {
+
+            swiper.slidePrev();
+
+          }
+
+        }
+      );
+
+    }
+
+
+    if (nextBtn) {
+
+      nextBtn.addEventListener(
+        'click',
+        function () {
+
+          if (
+            swiper &&
+            mq.matches
+          ) {
+
+            swiper.slideNext();
+
+          }
+
+        }
+      );
+
+    }
+
+
+    /* ===================================================
+       RESIZE
+    =================================================== */
+
+    var resizeTimer = null;
+
+    window.addEventListener(
+      'resize',
+      function () {
+
+        clearTimeout(
+          resizeTimer
+        );
+
+        resizeTimer =
+          setTimeout(
+            function () {
+
+              if (swiper) {
+
+                swiper.update();
+
+              }
+
+              sync();
+
+            },
+            150
+          );
+
+      }
+    );
+
+
+    /* ===================================================
+       WINDOW LOAD
+    =================================================== */
+
+    window.addEventListener(
+      'load',
+      function () {
+
+        if (swiper) {
+
+          swiper.update();
+
+        }
+
+      }
+    );
+
+
+    /* ===================================================
+       INITIAL SYNC
+    =================================================== */
+
+    sync();
+
+
+    requestAnimationFrame(
+      function () {
+
+        requestAnimationFrame(
+          function () {
+
+            root.classList.add(
+              'is-ready'
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+    /* =====================================================
+       BUY NOW POPUP
+    ===================================================== */
+
+    var modal =
+      root.querySelector(
+        '[data-hckxbs-modal]'
+      );
+
+
+    if (modal) {
+
+      /*
+        Modal ko body ke end me move
+        kar rahe hain.
+      */
+
+      document.body.appendChild(
+        modal
+      );
+
+    }
+
+
+    var priceEl =
+      modal &&
+      modal.querySelector(
+        '[data-hckxbs-modal-price]'
+      );
+
+
+    var sizeRow =
+      modal &&
+      modal.querySelector(
+        '[data-hckxbs-modal-size-row]'
+      );
+
+
+    var sizeOptionsEl =
+      modal &&
+      modal.querySelector(
+        '[data-hckxbs-modal-size-options]'
+      );
+
+
+    var qtyValueEl =
+      modal &&
+      modal.querySelector(
+        '[data-hckxbs-qty-value]'
+      );
+
+
+    var qtyMinusBtn =
+      modal &&
+      modal.querySelector(
+        '[data-hckxbs-qty-minus]'
+      );
+
+
+    var qtyPlusBtn =
+      modal &&
+      modal.querySelector(
+        '[data-hckxbs-qty-plus]'
+      );
+
+
+    var addBtn =
+      modal &&
+      modal.querySelector(
+        '[data-hckxbs-modal-add]'
+      );
+
+
+    var closeEls =
+      modal
+        ? Array.prototype.slice.call(
+            modal.querySelectorAll(
+              '[data-hckxbs-modal-close]'
+            )
+          )
+        : [];
+
+
+    var currentVariantId =
+      null;
+
+    var currentQty = 1;
+
+
+    /* ===================================================
+       PRICE
+    =================================================== */
+
+    function formatPrice(cents) {
+
+      return (
+        currencySymbol +
+        (cents / 100).toFixed(2)
+      );
+
+    }
+
+
+    /* ===================================================
+       SELECT VARIANT
+    =================================================== */
+
+    function setSelectedVariant(
+      variant
+    ) {
+
+      currentVariantId =
+        variant.id;
+
+
+      if (priceEl) {
+
+        priceEl.textContent =
+          formatPrice(
+            variant.price
+          );
+
+      }
+
+
+      if (sizeOptionsEl) {
+
+        Array.prototype.slice.call(
+          sizeOptionsEl.querySelectorAll(
+            '[data-hckxbs-size-btn]'
+          )
+        ).forEach(
+          function (btn) {
+
+            btn.classList.toggle(
+              'is-active',
+
+              parseInt(
+                btn.getAttribute(
+                  'data-variant-id'
+                ),
+                10
+              ) === variant.id
+            );
+
+          }
+        );
+
+      }
+
+    }
+
+
+    /* ===================================================
+       OPEN MODAL
+    =================================================== */
+
+    function openModalForVariants(
+      variants
+    ) {
+
+      if (
+        !modal ||
+        !variants ||
+        !variants.length
+      ) {
+
+        return;
+
+      }
+
+
+      currentQty = 1;
+
+
+      if (qtyValueEl) {
+
+        qtyValueEl.textContent =
+          currentQty;
+
+      }
+
+
+      if (sizeOptionsEl) {
+
+        sizeOptionsEl.innerHTML =
+          '';
+
+
+        if (sizeRow) {
+
+          sizeRow.style.display =
+            variants.length > 1
+              ? ''
+              : 'none';
+
+        }
+
+
+        variants.forEach(
+          function (variant) {
+
+            var btn =
+              document.createElement(
+                'button'
+              );
+
+
+            btn.type =
+              'button';
+
+
+            btn.className =
+              'hckxbs-modal-size-btn';
+
+
+            btn.textContent =
+              variant.option1 ||
+              variant.title;
+
+
+            btn.setAttribute(
+              'data-hckxbs-size-btn',
+              ''
+            );
+
+
+            btn.setAttribute(
+              'data-variant-id',
+              variant.id
+            );
+
+
+            if (!variant.available) {
+
+              btn.disabled = true;
+
+            }
+
+
+            btn.addEventListener(
+              'click',
+              function () {
+
+                setSelectedVariant(
+                  variant
+                );
+
+              }
+            );
+
+
+            sizeOptionsEl.appendChild(
+              btn
+            );
+
+          }
+        );
+
+      }
+
+
+      var firstAvailable =
+        variants.filter(
+          function (v) {
+
+            return v.available;
+
+          }
+        )[0] ||
+        variants[0];
+
+
+      setSelectedVariant(
+        firstAvailable
+      );
+
+
+      modal.classList.add(
+        'is-open'
+      );
+
+
+      modal.setAttribute(
+        'aria-hidden',
+        'false'
+      );
+
+
+      document.body.classList.add(
+        'hckxbs-modal-open'
+      );
+
+    }
+
+
+    /* ===================================================
+       CLOSE MODAL
+    =================================================== */
+
+    function closeModal() {
+
+      if (!modal) {
+        return;
+      }
+
+
+      modal.classList.remove(
+        'is-open'
+      );
+
+
+      modal.setAttribute(
+        'aria-hidden',
+        'true'
+      );
+
+
+      document.body.classList.remove(
+        'hckxbs-modal-open'
+      );
+
+    }
+
+
+    closeEls.forEach(
+      function (el) {
+
+        el.addEventListener(
+          'click',
+          closeModal
+        );
+
+      }
+    );
+
+
+    document.addEventListener(
+      'keydown',
+      function (e) {
+
+        if (
+          e.key === 'Escape' &&
+          modal &&
+          modal.classList.contains(
+            'is-open'
+          )
+        ) {
+
+          closeModal();
+
+        }
+
+      }
+    );
+
+
+    /* ===================================================
+       QUANTITY MINUS
+    =================================================== */
+
+    if (qtyMinusBtn) {
+
+      qtyMinusBtn.addEventListener(
+        'click',
+        function () {
+
+          currentQty =
+            Math.max(
+              1,
+              currentQty - 1
+            );
+
+
+          if (qtyValueEl) {
+
+            qtyValueEl.textContent =
+              currentQty;
+
+          }
+
+        }
+      );
+
+    }
+
+
+    /* ===================================================
+       QUANTITY PLUS
+    =================================================== */
+
+    if (qtyPlusBtn) {
+
+      qtyPlusBtn.addEventListener(
+        'click',
+        function () {
+
+          currentQty += 1;
+
+
+          if (qtyValueEl) {
+
+            qtyValueEl.textContent =
+              currentQty;
+
+          }
+
+        }
+      );
+
+    }
+
+
+    /* ===================================================
+       ADD TO CART
+    =================================================== */
+
+    if (addBtn) {
+
+      addBtn.addEventListener(
+        'click',
+        function () {
+
+          if (
+            !currentVariantId ||
+            addBtn.disabled
+          ) {
+
+            return;
+
+          }
+
+
+          addBtn.disabled =
+            true;
+
+
+          var originalText =
+            addBtn.textContent;
+
+
+          addBtn.textContent =
+            'Adding...';
+
+
+          fetch(
+            '/cart/add.js',
+            {
+
+              method: 'POST',
+
+              headers: {
+                'Content-Type':
+                  'application/json'
+              },
+
+              body: JSON.stringify({
+                items: [
+                  {
+                    id:
+                      currentVariantId,
+
+                    quantity:
+                      currentQty
+                  }
+                ]
+              })
+
+            }
+          )
+
+            .then(
+              function (res) {
+
+                if (!res.ok) {
+
+                  throw new Error(
+                    'add to cart failed'
+                  );
+
+                }
+
+                window.location.href =
+                  '/cart';
+
+              }
+            )
+
+            .catch(
+              function () {
+
+                addBtn.disabled =
+                  false;
+
+                addBtn.textContent =
+                  originalText;
+
+              }
+            );
+
+        }
+      );
+
+    }
+
+
+    /* ===================================================
+       BUY NOW BUTTON
+    =================================================== */
+
+    root.addEventListener(
+      'click',
+      function (e) {
+
+        var btn =
+          e.target.closest(
+            '[data-hckxbs-buy-now]'
+          );
+
+
+        if (
+          !btn ||
+          btn.disabled
+        ) {
+
+          return;
+
+        }
+
+
+        var raw =
+          btn.getAttribute(
+            'data-variants'
+          );
+
+
+        if (!raw) {
+          return;
+        }
+
+
+        try {
+
+          openModalForVariants(
+            JSON.parse(raw)
+          );
+
+        } catch (err) {
+
+          console.error(
+            '[HCKXBS] Variant JSON error:',
+            err
+          );
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       CURSOR LABEL
+    ===================================================== */
+
+    var cursorEl =
+      root.querySelector(
+        '[data-hckxbs-cursor]'
+      );
+
+
+    var cursorText =
+      root.querySelector(
+        '[data-hckxbs-cursor-text]'
+      );
+
+
+    var canHover =
+      window.matchMedia(
+        '(hover: hover) and (pointer: fine)'
+      ).matches;
+
+
+    if (
+      cursorEl &&
+      cursorText &&
+      canHover
+    ) {
+
+      var curX = 0;
+      var curY = 0;
+
+      var tgtX = 0;
+      var tgtY = 0;
+
+      var curRaf = null;
+      var curVisible = false;
+
+
+      var curLoop =
+        function () {
+
+          curX +=
+            (tgtX - curX) *
+            0.18;
+
+
+          curY +=
+            (tgtY - curY) *
+            0.18;
+
+
+          cursorEl.style.transform =
+            'translate3d(' +
+            (curX + 18) +
+            'px,' +
+            (curY + 18) +
+            'px,0)';
+
+
+          curRaf =
+            requestAnimationFrame(
+              curLoop
+            );
+
+        };
+
+
+      var showCursor =
+        function () {
+
+          if (curVisible) {
+            return;
+          }
+
+
+          curVisible = true;
+
+
+          cursorEl.classList.add(
+            'is-visible'
+          );
+
+
+          if (!curRaf) {
+
+            curRaf =
+              requestAnimationFrame(
+                curLoop
+              );
+
+          }
+
+        };
+
+
+      var hideCursor =
+        function () {
+
+          if (!curVisible) {
+            return;
+          }
+
+
+          curVisible = false;
+
+
+          cursorEl.classList.remove(
+            'is-visible'
+          );
+
+
+          cancelAnimationFrame(
+            curRaf
+          );
+
+
+          curRaf = null;
+
+        };
+
+
+      root.addEventListener(
+        'mousemove',
+        function (e) {
+
+          var item =
+            e.target.closest(
+              '.hckxbs-item'
+            );
+
+
+          var overUi =
+            e.target.closest(
+              'a, button'
+            );
+
+
+          if (
+            item &&
+            !overUi
+          ) {
+
+            var card =
+              item.querySelector(
+                '.hckxbs-card'
+              );
+
+
+            var title =
+              card
+                ? card.getAttribute(
+                    'data-title'
+                  )
+                : '';
+
+
+            if (!title) {
+
+              hideCursor();
+
+              return;
+
+            }
+
+
+            if (
+              cursorText.textContent !==
+              title
+            ) {
+
+              cursorText.textContent =
+                title;
+
+            }
+
+
+            tgtX =
+              e.clientX;
+
+            tgtY =
+              e.clientY;
+
+
+            if (!curVisible) {
+
+              curX =
+                tgtX;
+
+              curY =
+                tgtY;
+
+            }
+
+
+            showCursor();
+
+          } else {
+
+            hideCursor();
+
+          }
+
+        }
+      );
+
+
+      root.addEventListener(
+        'mouseleave',
+        hideCursor
+      );
+
+
+      window.addEventListener(
+        'scroll',
+        hideCursor,
+        {
+          passive: true
+        }
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     LOAD RECOMMENDATIONS
+  ===================================================== */
+
+  function loadRecommendations() {
+
+    var root =
+      document.getElementById(
+        'hckxbs-{{ section.id }}'
+      );
+
+
+    if (!root) {
+      return;
+    }
+
+
+    var url =
+      root.getAttribute(
+        'data-url'
+      );
+
+
+    var mount =
+      root.querySelector(
+        '[data-hckxbs-mount]'
+      );
+
+
+    if (
+      !url ||
+      !mount
+    ) {
+
+      return;
+
+    }
+
+
+    fetch(url)
+
+      .then(
+        function (res) {
+
+          if (!res.ok) {
+
+            throw new Error(
+              'recommendations failed'
+            );
+
+          }
+
+
+          return res.text();
+
+        }
+      )
+
+      .then(
+        function (text) {
+
+          var holder =
+            document.createElement(
+              'div'
+            );
+
+
+          holder.innerHTML =
+            text;
+
+
+          var source =
+            holder.querySelector(
+              '[data-hckxbs-source]'
+            );
+
+
+          if (
+            !source ||
+            !source.querySelector(
+              '.swiper-slide'
+            )
+          ) {
+
+            return;
+
+          }
+
+
+          mount.innerHTML =
+            source.innerHTML;
+
+
+          root.hidden =
+            false;
+
+
+          /*
+            Recommendations AJAX load
+            ke baad Swiper initialize.
+          */
+
+          boot(root);
+
+        }
+      )
+
+      .catch(
+        function (err) {
+
+          console.error(
+            '[HCKXBS]',
+            err
+          );
+
+        }
+      );
+
+  }
+
+
+  /* =====================================================
+     WAIT FOR SWIPER
+  ===================================================== */
+
+  function start() {
+
+    if (
+      typeof Swiper !==
+      'undefined'
+    ) {
+
+      loadRecommendations();
+
+      return;
+
+    }
+
+
+    var tries = 0;
+
+
+    (function wait() {
+
+      if (
+        typeof Swiper !==
+        'undefined'
+      ) {
+
+        loadRecommendations();
+
+      } else if (
+        tries++ < 100
+      ) {
+
+        setTimeout(
+          wait,
+          50
+        );
+
+      } else {
+
+        console.error(
+          '[HCKXBS] Swiper could not be loaded.'
+        );
+
+      }
+
+    })();
+
+  }
+
+
+  /* =====================================================
+     DOM READY
+  ===================================================== */
+
+  if (
+    document.readyState ===
+    'loading'
+  ) {
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      start
+    );
+
+  } else {
+
+    start();
+
+  }
+
+
+  /* =====================================================
+     SHOPIFY SECTION LOAD
+  ===================================================== */
+
+  document.addEventListener(
+    'shopify:section:load',
+    function (e) {
+
+      if (
+        e.target &&
+        e.target.querySelector(
+          '#hckxbs-{{ section.id }}'
+        )
+      ) {
+
+        location.reload();
+
+      }
+
+    }
+  );
+
+
+})();
+
+</script>
+
+
+{% schema %}
+
+{
+  "name": "Recommendations Swiper",
+
+  "class": "m-section-hckxbs",
+
+  "enabled_on": {
+    "templates": [
+      "product"
+    ]
+  },
+
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "Recommendations"
+    },
+
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "label": "Products to show",
+      "default": 6
+    },
+
+    {
+      "type": "select",
+      "id": "intent",
+      "label": "Recommendation type",
+      "info": "Complementary ke liye Shopify Search & Discovery app me setup zaroori hai",
+
+      "options": [
+
+        {
+          "value": "related",
+          "label": "Related products"
+        },
+
+        {
+          "value": "complementary",
+          "label": "Complementary products"
+        }
+
+      ],
+
+      "default": "related"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Heading (optional)"
+    },
+
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "You may also like"
+    },
+
+    {
+      "type": "richtext",
+      "id": "paragraph",
+      "label": "Paragraph"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Product image"
+    },
+
+    {
+      "type": "range",
+      "id": "product_image_width",
+      "min": 120,
+      "max": 1080,
+      "step": 10,
+      "unit": "px",
+      "label": "Product image width",
+      "default": 220
+    },
+
+    {
+      "type": "range",
+      "id": "image_overlap",
+      "min": 0,
+      "max": 160,
+      "step": 5,
+      "unit": "px",
+      "label": "Image overlap on card",
+      "default": 40,
+      "info": "Image card ke upar kitni andar ghusegi. 0 = card ke bilkul upar sitti hai."
+    },
+
+
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+
+    {
+      "type": "range",
+      "id": "card_width",
+      "min": 260,
+      "max": 460,
+      "step": 10,
+      "unit": "px",
+      "label": "Card max width",
+      "default": 340
+    },
+
+    {
+      "type": "range",
+      "id": "card_gap",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between cards",
+      "default": 26
+    },
+
+    {
+      "type": "range",
+      "id": "row_gap",
+      "min": 60,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "label": "Gap between rows",
+      "info": "Image card ke upar nikalti hai, isliye rows ke beech gap chahiye.",
+      "default": 180
+    },
+
+
+    {
+      "type": "header",
+      "content": "Background image"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Section background image (optional)"
+    },
+
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 65,
+      "info": "0% = sirf image dikhegi, 100% = sirf color dikhega (image chhup jayegi). Neeche wala 'Section background' hi tint ke liye use hota hai."
+    },
+
+
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#F9F4EC"
+    },
+
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#111111"
+    },
+
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+
+    {
+      "type": "color",
+      "id": "accent_fallback_color",
+      "label": "Fallback accent color (agar product ki color image na ho)",
+      "default": "#E6007E"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Mobile slider autoplay"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay on",
+      "default": false
+    },
+
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay speed",
+      "default": 4
+    }
+
+  ],
+
+  "presets": [
+
+    {
+      "name": "Recommendations Swiper"
+    }
+
+  ]
+
+}
+
+{% endschema %}

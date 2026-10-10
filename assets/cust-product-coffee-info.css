@@ -1,0 +1,308 @@
+.coffee-info-section {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16rem 20px 16rem;
+  background-color: #172019;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  --cup-float-scale: 1;
+}
+
+.coffee-info-section .coffee-info__panel {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 83%;
+  min-height: 240px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 74px 48px 24px;
+  background-color: var(--panel-overlay-color, #172019);
+  border-radius: 4px;
+  overflow: visible;
+}
+
+/* Leaves (top-left / bottom-right) - square box, image centered, so rotation stays in place */
+.coffee-info-section .coffee-info__panel::before,
+.coffee-info-section .coffee-info__panel::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: clamp(100px, 14vw, 120px);
+  height: clamp(100px, 14vw, 180px);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  transform-origin: center center;
+  pointer-events: none;
+}
+
+.coffee-info-section .coffee-info__panel::before {
+  top: -16px;
+  left: -24px;
+  background-image: var(--coffee-leaf-left, none);
+  display:none;
+}
+
+.coffee-info-section .coffee-info__panel::after {
+  right: -45px;
+  bottom: 55%;
+  background-image: var(--coffee-leaf-right, none);
+}
+
+/* Leaf rotation */
+@keyframes coffee-leaf-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.coffee-info-section.is-leaf-rotating .coffee-info__panel::before,
+.coffee-info-section.is-leaf-rotating .coffee-info__panel::after {
+  animation: coffee-leaf-spin var(--leaf-rotate-duration, 20s) linear infinite;
+  animation-direction: var(--leaf-rotate-direction, normal);
+  will-change: transform;
+}
+
+/* Panel background image + overlay */
+.coffee-info-section .coffee-info__panel-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.coffee-info-section .coffee-info__panel-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: var(--panel-overlay-color, #172019);
+  opacity: var(--panel-overlay-opacity, 0.85);
+}
+
+/* Cup */
+.coffee-info-section .coffee-info__cup {
+  position: absolute;
+  top: -12rem;
+  left: 50%;
+  z-index: 3;
+  width: 307px;
+  transform: translateX(-50%);
+  line-height: 0;
+  pointer-events: none;
+}
+
+.coffee-info-section .coffee-info__cup img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Cup up-down jump */
+@keyframes coffee-cup-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(calc(var(--cup-float-distance, 20px) * var(--cup-float-scale, 1) * -1));
+  }
+}
+
+.coffee-info-section.is-cup-floating .coffee-info__cup img {
+  animation: coffee-cup-float var(--cup-float-duration, 3s) ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Content */
+.coffee-info-section .coffee-info__content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-column-gap: 2rem;
+  justify-items: center;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 7.5rem;
+  align-items: start;
+  gap: 20px;
+  width: 100%;
+}
+
+.coffee-info-section .coffee-info__item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.coffee-info-section .coffee-info__label {
+  color: var(--panel-text-color, #fff);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+  font-family: 'Lineal';
+}
+
+.coffee-info-section .coffee-info__value {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  color: var(--panel-text-color, #fff);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.coffee-info-section .coffee-info__icon {
+  display: block;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.coffee-info-section .coffee-info__text {
+  overflow-wrap: anywhere;
+}
+
+.coffee-info-section .coffee-info__type .coffee-info__text {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+}
+
+.coffee-info__text {
+  font-size: 16px;
+  color: var(--panel-text-color, #fff);
+    font-family: 'Lineal';
+}
+
+.coffee-info-section .coffee-info__intensity-value {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.coffee-info-section .coffee-info__intensity-icons {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 5px;
+}
+
+.coffee-info-section .coffee-info__intensity-icon {
+  display: block;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.coffee-info-section .coffee-info__intensity-line {
+  display: block;
+  width: 17px;
+  height: 1px;
+  flex: 0 0 auto;
+  background: #c9c9c9;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .coffee-info-section.is-cup-floating .coffee-info__cup img,
+  .coffee-info-section.is-leaf-rotating .coffee-info__panel::before,
+  .coffee-info-section.is-leaf-rotating .coffee-info__panel::after {
+    animation: none;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 749px) {
+  .coffee-info-section {
+    padding: 85px 14px 30px;
+    --cup-float-scale: 0.5;
+  }
+
+  .coffee-info-section .coffee-info__panel {
+    max-width: 100%;
+    min-height: 125px;
+    padding: 66px 14px 20px;
+  }
+
+  .coffee-info-section .coffee-info__panel::before {
+    top: -12px;
+    left: -12px;
+  }
+
+  .coffee-info-section .coffee-info__panel::after {
+          right: 36%;
+        bottom: 30%;
+  }
+
+  .coffee-info-section .coffee-info__cup {
+    top: -43px;
+    width: 125px;
+  }
+
+  .coffee-info-section .coffee-info__content {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .coffee-info-section .coffee-info__item {
+    gap: 8px;
+  }
+
+  .coffee-info-section .coffee-info__label {
+    font-size: 10px;
+  }
+
+  .coffee-info-section .coffee-info__value {
+    gap: 4px;
+    font-size: 10px;
+  }
+
+  .coffee-info__text {
+    font-size: 12px;
+  }
+
+  .coffee-info-section .coffee-info__icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .coffee-info-section .coffee-info__intensity-value {
+    gap: 5px;
+  }
+
+  .coffee-info-section .coffee-info__intensity-icons {
+    gap: 3px;
+  }
+
+  .coffee-info-section .coffee-info__intensity-icon {
+    width: 10px;
+    height: 10px;
+  }
+
+  .coffee-info-section .coffee-info__intensity-line {
+    width: 7px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .coffee-info-section .coffee-info__panel {
+    padding-right: 9px;
+    padding-left: 9px;
+  }
+
+  .coffee-info-section .coffee-info__content {
+    gap: 6px;
+  }
+
+  .coffee-info-section .coffee-info__intensity-line {
+    width: 5px;
+  }
+}

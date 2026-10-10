@@ -1,0 +1,311 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "cust_banner_4Y4WMY": {
+      "type": "cust-banner",
+      "name": "Banner (Huck)",
+      "settings": {
+        "heading_line_1": "Brew.",
+        "heading_line_2": "Like You Mean it",
+        "accent_mark": "!",
+        "accent_color": "#5c7650",
+        "button_1_text": "Shop All",
+        "button_1_url": "shopify://collections/all",
+        "button_2_text": "",
+        "button_2_url": "",
+        "video_overlay_opacity": 90,
+        "hide_video_mobile": true,
+        "background_image": "shopify://shop_images/pile-of-roasted-coffee-beans-background-filling-fr-2026-09-24-22-10-59-utc_jpg.jpg",
+        "image_overlay_color": "#000000",
+        "image_overlay_opacity": 15,
+        "color_top": "#1b1410",
+        "color_mid": "#6d5c50",
+        "color_bottom": "#a49384",
+        "color_highlight_1": "#ecc89b",
+        "color_highlight_2": "#cdbeaf",
+        "min_height": 100,
+        "title_max_size": 120,
+        "title_min_size": 50,
+        "add_top_padding": true
+      }
+    },
+    "cust_reveal_wQEyF4": {
+      "type": "cust-reveal",
+      "name": "Split Heading Reveal",
+      "settings": {
+        "heading_left": "Three Coffees",
+        "heading_right": "Three Personalities",
+        "icon_image": "shopify://shop_images/Brew-icon.png",
+        "icon_alt": "",
+        "icon_max_width": 80,
+        "split_gap": 20,
+        "heading_max_size": 72,
+        "heading_min_size": 48,
+        "paragraph": "<p>Good coffee starts with good choices. At VeebRew, we keep things bold, thoughtful, and anything but boring. From dark, unapologetic blends to smooth single origins and unexpected flavour twists, every coffee has its own personality. Roasted with intention and made for the moments when only a really good cup will do.</p>",
+        "button_text": "",
+        "button_url": "#",
+        "show_wave": false,
+        "wave_color": "#000000",
+        "wave_height": 220,
+        "wave_overlap": 160,
+        "wave_travel": 22,
+        "background_image": "shopify://shop_images/Background_1_8cedd5de-b6d7-46fd-ab1f-7b618ca1e484.png",
+        "overlay_opacity": 65,
+        "background_color": "#f44b20",
+        "text_color": "#ffffff",
+        "trigger_point": 30,
+        "replay_on_scroll": true
+      }
+    },
+    "cust_featured_gD6qJb": {
+      "type": "cust-featured",
+      "blocks": {
+        "collection_tab_ittMBM": {
+          "type": "collection_tab",
+          "settings": {
+            "collection": "shop-all",
+            "label": "COFEES"
+          }
+        },
+        "collection_tab_eQJNP3": {
+          "type": "collection_tab",
+          "disabled": true,
+          "settings": {
+            "collection": "test-1-to-5",
+            "label": ""
+          }
+        },
+        "collection_tab_jjFCdR": {
+          "type": "collection_tab",
+          "disabled": true,
+          "settings": {
+            "collection": "test-6-to-10",
+            "label": ""
+          }
+        },
+        "collection_tab_WmhQAi": {
+          "type": "collection_tab",
+          "disabled": true,
+          "settings": {
+            "collection": "test-10-to-15",
+            "label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_tab_ittMBM",
+        "collection_tab_eQJNP3",
+        "collection_tab_jjFCdR",
+        "collection_tab_WmhQAi"
+      ],
+      "disabled": true,
+      "name": "Blend Swiper",
+      "settings": {
+        "heading": "Shop All",
+        "paragraph": "",
+        "center_image": "shopify://shop_images/huck-bag.webp",
+        "center_image_width": 400,
+        "card_width": 420,
+        "card_gap": 26,
+        "stage_height": 560,
+        "active_left_padding": 150,
+        "background_image": "shopify://shop_images/bag-texture.webp",
+        "overlay_opacity": 90,
+        "background_color": "#ffffff",
+        "text_color": "#000000",
+        "card_background": "#ffffff",
+        "accent_fallback_color": "#e6007e",
+        "autoplay": false,
+        "autoplay_speed": 4
+      }
+    },
+    "cust_featured_new_MKBEBq": {
+      "type": "cust-featured-new",
+      "blocks": {
+        "collection_tab_JwjcBg": {
+          "type": "collection_tab",
+          "settings": {
+            "collection": "shop-all",
+            "label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_tab_JwjcBg"
+      ],
+      "name": "New Featured Collection",
+      "settings": {
+        "heading": "Pick Your Personality",
+        "paragraph": "",
+        "product_image_width": 410,
+        "image_overlap": 40,
+        "card_width": 340,
+        "card_gap": 26,
+        "stage_height": 560,
+        "background_image": "shopify://shop_images/Background_1_8cedd5de-b6d7-46fd-ab1f-7b618ca1e484.png",
+        "overlay_opacity": 65,
+        "background_color": "#f44b20",
+        "text_color": "#111111",
+        "card_background": "#ffffff",
+        "accent_fallback_color": "#e6007e",
+        "autoplay": false,
+        "autoplay_speed": 4
+      }
+    },
+    "coffee_people_CyXF3Q": {
+      "type": "coffee-people",
+      "name": "Coffee People",
+      "settings": {
+        "heading_left": "WHAT’S BEHIND",
+        "heading_icon": "shopify://shop_images/Heart_e5ffafb8-9e5a-4ce2-aa1b-ddd9f472694c.png",
+        "heading_right": "THE BREW?",
+        "icon_max_width": 140,
+        "split_gap": 20,
+        "trigger_point": 30,
+        "replay_on_scroll": true,
+        "image_left": "shopify://shop_images/Product-Strong-Opinions.jpg",
+        "image_center": "shopify://shop_images/Product-High-Maintenance.jpg",
+        "image_right": "shopify://shop_images/Product-Plot-Twist.jpg",
+        "passion_heading": "GOOD BEANS",
+        "passion_subheading": "GOOD PEOPLE",
+        "passion_icon": "shopify://shop_images/Heart_e5ffafb8-9e5a-4ce2-aa1b-ddd9f472694c.png",
+        "mission_heading": "BOLD IDEAS",
+        "mission_subheading": "BETTER COFFEE",
+        "mission_icon": "shopify://shop_images/brew-icon-white.png",
+        "paragraph": "<p>We’re here for coffee that makes you stop, sip, and think, “Yep, that’s the one.” VeebRew brings together carefully chosen beans, thoughtful roasting, and a little personality to make every cup worth remembering. Because coffee should be more than a routine — it should be something you look forward to.</p>",
+        "link_text": "GET TO KNOW THE BREW",
+        "link_url": "shopify://pages/about",
+        "background_image": "shopify://shop_images/Background_1_8cedd5de-b6d7-46fd-ab1f-7b618ca1e484.png",
+        "overlay_color": "#f44b20",
+        "overlay_opacity": 65,
+        "bg_gradient_start": "#57c6ae",
+        "bg_gradient_end": "#2e9d87",
+        "heading_color": "#ffffff",
+        "body_text_color": "#0f2a24",
+        "accent_color": "#5c7650"
+      }
+    },
+    "cust_fresh_g3dDUm": {
+      "type": "cust-fresh",
+      "name": "Keep It Fresh",
+      "settings": {
+        "heading_left": "KEEP YOUR",
+        "heading_right": "CUP FULL",
+        "heading_font": "assistant_n4",
+        "heading_max_size": 120,
+        "heading_min_size": 60,
+        "bag_spin": true,
+        "spin_start": 75,
+        "spin_speed": 15,
+        "icon_image": "shopify://shop_images/cup-1_48cd93ff-fe72-41df-a938-6e2f35168adc.png",
+        "icon_alt": "",
+        "icon_max_width": 140,
+        "icon_gap": 10,
+        "icon_tilt": 8,
+        "icon_wobble": true,
+        "wobble_travel": 4,
+        "bag_image": "shopify://shop_images/Stamp.png",
+        "bag_alt": "HUCK coffee bag - Huck yeah",
+        "bag_max_width": 500,
+        "bag_shadow": true,
+        "subheading": "Coffee that keeps showing up.",
+        "paragraph": "<p>Your favourite VeebRew coffee, delivered when you need it. Choose your favourite roast, set your schedule, and keep the good stuff coming without having to remember to reorder. Whether you’re loyal to <strong>Strong Opinions</strong>, living with <strong>High Maintenance</strong>, or always ready for a <strong>Plot Twist</strong> — there’s a coffee subscription for you.</p>",
+        "button_text": "Shop Subscriptions",
+        "button_url": "shopify://collections/all",
+        "link_text": "",
+        "link_url": "",
+        "body_font": "assistant_n4",
+        "bg_image": "shopify://shop_images/Background_1_8cedd5de-b6d7-46fd-ab1f-7b618ca1e484.png",
+        "bg_color": "#f44b20",
+        "overlay_opacity": 65,
+        "heading_color": "#ffffff",
+        "text_color": "#000000",
+        "button_bg": "#ffffff",
+        "button_text_color": "#f44b20",
+        "link_color": "#ffffff",
+        "trigger_point": 30,
+        "replay_on_scroll": true
+      }
+    },
+    "cust_owner_FFgTUk": {
+      "type": "cust-owner",
+      "name": "Owner Section",
+      "settings": {
+        "bg_image": "shopify://shop_images/Background_1_8cedd5de-b6d7-46fd-ab1f-7b618ca1e484.png",
+        "overlay_color": "#f44b20",
+        "overlay_opacity": 65,
+        "owner_image": "shopify://shop_images/Owner.jpg",
+        "image_ratio": "4 / 5",
+        "image_position": "left",
+        "accent_color": "#e7a0c2",
+        "frame_color": "#ffffff",
+        "heading_bold": "Meet our owner",
+        "heading_light": "behind the brand",
+        "subheading": "How a simple idea became our brand.",
+        "text": "<p>Write a short story about the owner and why the brand was started. Keep it honest, simple and personal.</p>",
+        "owner_name": "Owner Name,",
+        "owner_role": "Founder",
+        "text_color": "#ffffff",
+        "btn_label": "Our story",
+        "btn_link": "shopify://pages/about",
+        "btn_bg": "#ffffff",
+        "btn_text": "#f44b20",
+        "btn_hover_bg": "#5c7650",
+        "btn_hover_text": "#ffffff",
+        "doodle_image": "shopify://shop_images/element-black.svg",
+        "doodle_text": "Hey Founder!",
+        "doodle_size": 240,
+        "max_width": 1300,
+        "center_mobile": false,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "padding_top_mobile": 40,
+        "padding_bottom_mobile": 40
+      }
+    },
+    "cust_newsletter_bUqfXY": {
+      "type": "cust-newsletter",
+      "name": "Custom Newsletter",
+      "settings": {
+        "heading": "LET'S TALK COFFEE",
+        "paragraph": "<p>Good coffee deserves a little conversation. Get the latest from VeebRew — new coffees, fresh drops, behind-the-scenes stories, and the occasional excuse to refill your cup.<br/><br/><strong>Sign up and get 10% off your first order.</strong></p>",
+        "input_placeholder": "Enter your email",
+        "button_text": "Sign Up",
+        "disclaimer": "<p>By subscribing you agree with our Privacy Policy</p>",
+        "success_message": "Thanks - you're on the list!",
+        "image": "shopify://shop_images/vee_brews_steam_no_cuts_2.webp",
+        "image_width": 30,
+        "image_ratio": "auto",
+        "image_radius": 10,
+        "show_image_mobile": true,
+        "show_hands": false,
+        "hands_max_offset": 20,
+        "hand_angle": -35,
+        "hands_width": 1400,
+        "scroll_room": 300,
+        "min_height": 500,
+        "background_color": "#e7a0c2",
+        "text_color": "#FFFFFF",
+        "accent_color": "#5c7650"
+      }
+    }
+  },
+  "order": [
+    "cust_banner_4Y4WMY",
+    "cust_reveal_wQEyF4",
+    "cust_featured_gD6qJb",
+    "cust_featured_new_MKBEBq",
+    "coffee_people_CyXF3Q",
+    "cust_fresh_g3dDUm",
+    "cust_owner_FFgTUk",
+    "cust_newsletter_bUqfXY"
+  ]
+}

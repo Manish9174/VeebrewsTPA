@@ -1,0 +1,258 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "cust_head_banner_tt3Drk": {
+      "type": "cust-head-banner",
+      "disabled": true,
+      "name": "Dynamic page heading",
+      "settings": {
+        "show_heading": true,
+        "custom_heading": "",
+        "text_transform": "uppercase",
+        "heading_size": 42,
+        "mobile_heading_size": 32,
+        "heading_weight": "700",
+        "letter_spacing": 1,
+        "mobile_letter_spacing": 0,
+        "image_position": "center center",
+        "background_color": "#5c7650",
+        "overlay_color": "#5c7650",
+        "overlay_opacity": 90,
+        "desktop_height": 260,
+        "mobile_height": 140,
+        "padding_vertical": 20,
+        "mobile_padding": 20,
+        "heading_color": "#ffffff"
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "cust_about_ME3jPF": {
+      "type": "cust-about",
+      "blocks": {
+        "founder_nKjKKX": {
+          "type": "founder",
+          "settings": {
+            "image": "shopify://shop_images/Owner.jpg",
+            "name": "Varsha Banerjee",
+            "role": "Co-Founder"
+          }
+        }
+      },
+      "block_order": [
+        "founder_nKjKKX"
+      ],
+      "name": "About – Founders",
+      "settings": {
+        "eyebrow": "Welcome to VeeBrew",
+        "heading": "Brewed With Love",
+        "heading_width": 800,
+        "image": "shopify://shop_images/Strong_Opinion.png",
+        "image_max_width": 920,
+        "text": "<p><strong>One Passion. One Purpose.</strong></p><p>We started VeeBrew with a simple vision — to make every cup of coffee more enjoyable, flavourful, and memorable. At VeeBrew, we believe great coffee is not just about the brew, but about the moments it creates.</p>",
+        "stagger": true,
+        "top_bg": "#e7a0c2",
+        "bottom_bg": "#5c7650",
+        "eyebrow_color": "#5c7650",
+        "heading_color": "#5c7650",
+        "text_color": "#ffffff",
+        "founder_color": "#ffffff",
+        "split": 62,
+        "padding_top": 20,
+        "padding_bottom": 70
+      }
+    },
+    "cust_about_products_8UAiVT": {
+      "type": "cust-about-products",
+      "blocks": {
+        "product_VXxf9F": {
+          "type": "product",
+          "settings": {
+            "image": "shopify://shop_images/Plot_Twist_1.png",
+            "title": "Plot Twist",
+            "text": "Medium Roast",
+            "link_label": "More",
+            "link": "shopify://products/plot-twist"
+          }
+        },
+        "product_MgLf3C": {
+          "type": "product",
+          "settings": {
+            "image": "shopify://shop_images/High_Maintenace.png",
+            "title": "HIGH MAINTENANCE",
+            "text": "Medium Dark Roast",
+            "link_label": "More",
+            "link": "shopify://products/high-maintenance"
+          }
+        },
+        "product_73bWtA": {
+          "type": "product",
+          "settings": {
+            "image": "shopify://shop_images/Strong_Opinion.png",
+            "title": "STRONG OPINIONS",
+            "text": "Dark Roast",
+            "link_label": "More",
+            "link": "shopify://products/strong-opinions-coffees"
+          }
+        }
+      },
+      "block_order": [
+        "product_VXxf9F",
+        "product_MgLf3C",
+        "product_73bWtA"
+      ],
+      "name": "About – Products",
+      "settings": {
+        "heading": "We’re known for our\nbold, flavorful brews",
+        "description": "<p>Every VeeBrew coffee is crafted with quality, rich flavour, and everyday convenience in mind. From the first aroma to the last sip, we’re passionate about creating coffee that tastes exceptional and fits effortlessly into your daily routine.</p>",
+        "columns": 3,
+        "card_max_width": 1560,
+        "radius": 48,
+        "card_padding_y": 110,
+        "outer_padding_top": 60,
+        "outer_padding_bottom": 100,
+        "outer_bg": "#5c7650",
+        "card_bg": "#e7a0c2",
+        "heading_color": "#5c7650",
+        "desc_color": "#5c7650",
+        "title_color": "#5c7650",
+        "item_text_color": "#5c7650",
+        "link_color": "#5c7650"
+      }
+    },
+    "cust_about_split_hF6LfG": {
+      "type": "cust-about-split",
+      "name": "About – Split",
+      "settings": {
+        "heading": "Roasted fresh, brewed to be loved",
+        "text": "<p>Great coffee starts with great beans. At VeeBrew, we carefully select quality coffee beans and craft them to bring out a rich aroma, balanced flavour, and satisfying taste in every cup.</p>",
+        "btn_label": "Shop Coffee",
+        "btn_link": "shopify://collections/all",
+        "image": "shopify://shop_images/Strong_Opinion.png",
+        "badge": "shopify://shop_images/White_Star.png",
+        "badge_size": 40,
+        "badge_left": 0,
+        "badge_top": 0,
+        "rotate_badge": true,
+        "float_image": true,
+        "image_max_width": 760,
+        "layout": "image_right",
+        "mobile_image_first": true,
+        "mobile_align": "center",
+        "max_width": 1320,
+        "padding_top": 102,
+        "padding_bottom": 90,
+        "bg_color": "#5c7650",
+        "heading_color": "#ffffff",
+        "text_color": "#ffffff",
+        "btn_bg": "#ffffff",
+        "btn_text_color": "#5c7650",
+        "btn_hover_bg": "#ffffff",
+        "btn_radius": 10
+      }
+    },
+    "cust_about_epic_AcxK3R": {
+      "type": "cust-about-epic",
+      "blocks": {
+        "link_7pyyBb": {
+          "type": "link",
+          "settings": {
+            "icon_text": "PDF",
+            "label": "Read our brand story",
+            "url": "",
+            "new_tab": true
+          }
+        },
+        "link_iUGFjP": {
+          "type": "link",
+          "settings": {
+            "icon_text": "in",
+            "label": "Veebrew on LinkedIn",
+            "url": "",
+            "new_tab": true
+          }
+        },
+        "job_3eEhCL": {
+          "type": "job",
+          "settings": {
+            "title": "Operations Manager",
+            "location": "New Delhi",
+            "url": ""
+          }
+        },
+        "job_4NRbHp": {
+          "type": "job",
+          "settings": {
+            "title": "Customer Support Executive",
+            "location": "New Delhi",
+            "url": ""
+          }
+        },
+        "job_6fhKB7": {
+          "type": "job",
+          "settings": {
+            "title": "Digital Marketing Specialist",
+            "location": "New Delhi",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "link_7pyyBb",
+        "link_iUGFjP",
+        "job_3eEhCL",
+        "job_4NRbHp",
+        "job_6fhKB7"
+      ],
+      "name": "About – EPIC",
+      "settings": {
+        "big_text": "Brews",
+        "big_size": 340,
+        "big_weight": 300,
+        "big_spacing": 0,
+        "stroke_width": 2,
+        "left_heading": "It’s more than a name. It’s how we work, every single day.",
+        "left_text": "<p>BREW is what we stand for—Bold ideas, Respect for people, Excellence in every cup and Warm hearts. It guides how we source, roast, pack and serve, and how we treat one another.</p><p>Whether we’re testing new blends, designing packaging or finding smarter ways to bring coffee to your door, we carry the BREW spirit into everything. And we’d love you to be part of it.</p>",
+        "right_heading": "Join the VeeBrews team and help us make coffee better.",
+        "right_text": "<p>Think you’d be a great fit? Write to us at hello@yourdomain.com</p>",
+        "max_width": 1320,
+        "col_gap": 50,
+        "cols_top_gap": 60,
+        "padding_top": 40,
+        "padding_bottom": 80,
+        "bg_color": "#F44B20",
+        "outline_color": "#ffffff",
+        "heading_color": "#ffffff",
+        "text_color": "#ffffff",
+        "link_color": "#FFFFFF",
+        "icon_bg": "#5C7650",
+        "job_bg": "#5C7650",
+        "job_alt_bg": "#5C7650",
+        "job_text_color": "#ffffff",
+        "job_location_color": "#FFFFFF"
+      }
+    }
+  },
+  "order": [
+    "cust_head_banner_tt3Drk",
+    "main",
+    "cust_about_ME3jPF",
+    "cust_about_products_8UAiVT",
+    "cust_about_split_hF6LfG",
+    "cust_about_epic_AcxK3R"
+  ]
+}

@@ -1,0 +1,384 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "cust_head_banner_m3DAMd": {
+      "type": "cust-head-banner",
+      "name": "Dynamic page heading",
+      "settings": {
+        "show_heading": false,
+        "custom_heading": "",
+        "text_transform": "uppercase",
+        "heading_size": 42,
+        "mobile_heading_size": 20,
+        "heading_weight": "700",
+        "letter_spacing": 1,
+        "mobile_letter_spacing": 0,
+        "image_position": "center center",
+        "background_color": "#e7a0c2",
+        "overlay_color": "#e7a0c2",
+        "overlay_opacity": 85,
+        "desktop_height": 260,
+        "mobile_height": 100,
+        "padding_vertical": 20,
+        "mobile_padding": 20,
+        "heading_color": "#5c7650"
+      }
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "{{ product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "description_gLNBaN": {
+          "type": "description",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "cust_flav_yAWze7": {
+          "type": "cust-flav",
+          "settings": {
+            "flavhead": "Select Flavor:"
+          }
+        },
+        "product_feature_cards_b9LCBR": {
+          "type": "product_feature_cards",
+          "settings": {
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "feature_heading": "Tasting notes:"
+          }
+        },
+        "brew_methods_A7ihbw": {
+          "type": "brew_methods",
+          "settings": {
+            "heading": "Best Brewed With:",
+            "image_1": "shopify://shop_images/Brew-3.png",
+            "label_1": "Espresso",
+            "image_2": "shopify://shop_images/Brew-11.png",
+            "label_2": "Pour Over",
+            "image_3": "shopify://shop_images/Brew-7.png",
+            "label_3": "Moka Pot",
+            "image_4": "shopify://shop_images/Brew-5.png",
+            "label_4": "Electronic Drip",
+            "label_5": "",
+            "label_6": ""
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "dropdown",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "description_gLNBaN",
+        "price",
+        "cust_flav_yAWze7",
+        "product_feature_cards_b9LCBR",
+        "brew_methods_A7ihbw",
+        "variant_picker",
+        "quantity_selector",
+        "buy_buttons"
+      ],
+      "custom_css": [
+        "#product-description {color: #5c7650; font-family: \"Lineal\";}",
+        ".product__description {border-bottom: 3px solid #5c7650; margin: 0px;}"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "small",
+        "constrain_to_viewport": false,
+        "media_fit": "contain",
+        "gallery_layout": "thumbnail_slider",
+        "mobile_thumbnails": "show",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
+    "cust_coffee_product_info_YVa8pw": {
+      "type": "cust-coffee-product-info",
+      "name": "Coffee Product Info",
+      "settings": {
+        "panel_bg_image": "shopify://shop_images/Background_1.png",
+        "overlay_color": "#f44b20",
+        "overlay_opacity": 65,
+        "enable_cup_float": true,
+        "cup_float_duration": 3,
+        "cup_float_distance": 20,
+        "enable_leaf_rotate": true,
+        "leaf_rotate_duration": 20,
+        "leaf_rotate_direction": "reverse"
+      }
+    },
+    "cust_coffee_info_ykNM6i": {
+      "type": "cust-coffee-info",
+      "name": "Know your bean",
+      "settings": {
+        "heading": "Know Your Brew",
+        "roast_max": 3,
+        "illustration": "shopify://shop_images/brew-icon-white_1.png",
+        "badge_image": "shopify://shop_images/Brew-icon.png",
+        "badge_size": 180,
+        "rotate_speed": 3,
+        "bg": "#e7a0c2",
+        "card": "#f44b20",
+        "ink": "#ffffff",
+        "title_color": "#5c7650",
+        "badge": "#c99a74"
+      }
+    },
+    "cust_brewed_ACkync": {
+      "type": "cust-brewed",
+      "blocks": {
+        "card_zhhk7b": {
+          "type": "card",
+          "settings": {
+            "title": "Home Espresso",
+            "image": "shopify://shop_images/Brew-2_ecb9aa59-cd0a-4362-bba6-bee1e9808d7f.png",
+            "label_1": "Coffee",
+            "value_1": "18g",
+            "label_2": "Brew Time",
+            "value_2": "30 - 35 secs",
+            "label_3": "Water",
+            "value_3": "40 - 50ml",
+            "label_4": "Water Temp",
+            "value_4": "95 °C",
+            "label_5": "Grind Size",
+            "value_5": "Home Espresso"
+          }
+        },
+        "card_jkiqqp": {
+          "type": "card",
+          "settings": {
+            "title": "Pour Over",
+            "image": "shopify://shop_images/Brew-12_e297711d-34fd-467f-ab52-b3df1bf7b5e4.png",
+            "label_1": "Coffee",
+            "value_1": "15g",
+            "label_2": "Brew Time",
+            "value_2": "3:00 - 3:30 mins",
+            "label_3": "Water",
+            "value_3": "240ml",
+            "label_4": "Water Temp",
+            "value_4": "88 - 94 °C",
+            "label_5": "Grind Size",
+            "value_5": "Pour Over"
+          }
+        },
+        "card_LCxEdC": {
+          "type": "card",
+          "settings": {
+            "title": "Moka Pot",
+            "image": "shopify://shop_images/Brew-9_c0c9d312-e3d0-482b-902b-8124009fc76e.png",
+            "label_1": "Coffee",
+            "value_1": "20g",
+            "label_2": "Brew Time",
+            "value_2": "2:30 mins",
+            "label_3": "Water",
+            "value_3": "100ml",
+            "label_4": "Water Temp",
+            "value_4": "Boiling",
+            "label_5": "Grind Size",
+            "value_5": "Moka Pot"
+          }
+        },
+        "card_cjwLQR": {
+          "type": "card",
+          "settings": {
+            "title": "Electronic Drip",
+            "image": "shopify://shop_images/Brew-4_44f8be07-700d-4db8-8d8f-62c2539d5d21.png",
+            "label_1": "Coffee",
+            "value_1": "20g",
+            "label_2": "Brew Time",
+            "value_2": "Auto",
+            "label_3": "Water",
+            "value_3": "300ml",
+            "label_4": "Water Temp",
+            "value_4": "Auto",
+            "label_5": "Grind Size",
+            "value_5": "Electronic Drip"
+          }
+        }
+      },
+      "block_order": [
+        "card_zhhk7b",
+        "card_jkiqqp",
+        "card_LCxEdC",
+        "card_cjwLQR"
+      ],
+      "name": "Best Brewed With",
+      "settings": {
+        "heading": "Best Brewed With",
+        "heading_size": 66,
+        "section_bg": "#e7a0c2",
+        "heading_color": "#5c7650",
+        "card_bg": "#5c7650",
+        "card_title_color": "#ffffff",
+        "card_text_color": "#ffffff",
+        "columns_desktop": 4,
+        "gap": 24,
+        "card_radius": 10,
+        "image_height": 150,
+        "card_shadow": true,
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "image_banner_r36eXU": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_9c3MJN": {
+          "type": "heading",
+          "settings": {
+            "heading": "Image banner",
+            "heading_size": "h1"
+          }
+        },
+        "text_7gV7bH": {
+          "type": "text",
+          "settings": {
+            "text": "Give customers details about the banner image(s) or content on the template.",
+            "text_style": "body"
+          }
+        },
+        "buttons_ALEtdA": {
+          "type": "buttons",
+          "settings": {
+            "button_label_1": "Button label",
+            "button_link_1": "",
+            "button_style_secondary_1": false,
+            "button_label_2": "Button label",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_9c3MJN",
+        "text_7gV7bH",
+        "buttons_ALEtdA"
+      ],
+      "disabled": true,
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image_overlay_opacity": 0,
+        "image_height": "medium",
+        "image_behavior": "none",
+        "desktop_content_position": "middle-center",
+        "desktop_content_alignment": "center",
+        "show_text_box": true,
+        "color_scheme": "",
+        "stack_images_on_mobile": true,
+        "mobile_content_alignment": "center",
+        "show_text_below": true
+      }
+    },
+    "disclosures": {
+      "type": "disclosures",
+      "settings": {
+        "heading": "Disclosures",
+        "heading_size": "h2",
+        "open_by_default": false,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "disabled": true,
+      "settings": {
+        "heading": "You may also like",
+        "heading_size": "h2",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    },
+    "cust_related_Kpfcxf": {
+      "type": "cust-related",
+      "custom_css": [
+        ".hckxbs-heading {margin: 0 0 5rem; color: #5c7650;}",
+        ".hckxbs-swiper .swiper-slide {width: 350px;}"
+      ],
+      "name": "Recommendations Swiper",
+      "settings": {
+        "products_to_show": 6,
+        "intent": "related",
+        "heading": "You may also like",
+        "paragraph": "",
+        "product_image_width": 560,
+        "image_overlap": 40,
+        "card_width": 300,
+        "card_gap": 40,
+        "row_gap": 180,
+        "overlay_opacity": 65,
+        "background_color": "#e7a0c2",
+        "text_color": "#111111",
+        "card_background": "#ffffff",
+        "accent_fallback_color": "#e6007e",
+        "autoplay": false,
+        "autoplay_speed": 4
+      }
+    }
+  },
+  "order": [
+    "cust_head_banner_m3DAMd",
+    "main",
+    "cust_coffee_product_info_YVa8pw",
+    "cust_coffee_info_ykNM6i",
+    "cust_brewed_ACkync",
+    "image_banner_r36eXU",
+    "disclosures",
+    "related-products",
+    "cust_related_Kpfcxf"
+  ]
+}

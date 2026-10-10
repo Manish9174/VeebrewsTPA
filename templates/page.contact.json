@@ -1,0 +1,59 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "cust_head_banner_wFa9hX": {
+      "type": "cust-head-banner",
+      "name": "Dynamic page heading",
+      "settings": {
+        "show_heading": true,
+        "custom_heading": "",
+        "text_transform": "uppercase",
+        "heading_size": 42,
+        "mobile_heading_size": 32,
+        "heading_weight": "600",
+        "letter_spacing": 1,
+        "mobile_letter_spacing": 0,
+        "image_position": "center center",
+        "background_color": "#5C7650",
+        "overlay_color": "#5C7650",
+        "overlay_opacity": 65,
+        "desktop_height": 260,
+        "mobile_height": 360,
+        "padding_vertical": 20,
+        "mobile_padding": 20,
+        "heading_color": "#ffffff"
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "form": {
+      "type": "contact-form",
+      "settings": {
+        "heading": "",
+        "heading_size": "h0",
+        "color_scheme": "scheme-5",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "cust_head_banner_wFa9hX",
+    "main",
+    "form"
+  ]
+}

@@ -1,0 +1,343 @@
+/* =====================================================================
+   HUCK STYLE "KEEP IT FRESH"  -  assets/cust-fresh.css
+   (Liquid me 'cust-fresh.css' load ho rahi hai, isi naam se save karo)
+   Saare classes "hckxkf-" prefix se hain.
+   Baseline screenshot: 1095px wide. Desktop me sizes vw se scale hote
+   hain, isliye har screen par same proportion rehta hai.
+   ===================================================================== */
+
+:root {
+  --hckxkf-bg: #e2066f;
+  --hckxkf-overlay: .75;
+  --hckxkf-heading-color: #fff;
+  --hckxkf-text: #000;
+  --hckxkf-btn-bg: #000;
+  --hckxkf-btn-text: #fff;
+  --hckxkf-link: #fff;
+  --hckxkf-fs-max: 120px;
+  --hckxkf-fs-min: 34px;
+  --hckxkf-icon-w: clamp(26px, 4.8vw, 60px);
+  --hckxkf-icon-m: clamp(10px, 4.8vw, 60px);
+  --hckxkf-tilt: 8deg;
+  --hckxkf-bag-max: 500px;
+  --hckxkf-ease-snap: cubic-bezier(.2, .9, .25, 1.2);
+}
+
+.hckxkf,
+.hckxkf *,
+.hckxkf *::before,
+.hckxkf *::after {
+  box-sizing: border-box;
+}
+
+.hckxkf h2,
+.hckxkf p {
+  margin: 0;
+}
+
+.hckxkf {
+  --hckxkf-bag-w: min(34.4vw, var(--hckxkf-bag-max));
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 10rem 0 10rem;
+  color: var(--hckxkf-text);
+  background-color: var(--hckxkf-bg);
+  background-image: var(--hckxkf-bg-image, none);
+  background-size: cover;
+  background-position: center;
+}
+
+/* Pink overlay: bg image ke upar solid color, opacity se control */
+.hckxkf::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--hckxkf-bg);
+  opacity: var(--hckxkf-overlay);
+  pointer-events: none;
+}
+
+.hckxkf-heading,
+.hckxkf-grid {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------------
+   HEADING  (KEEP IT [icon] FRESH)
+   --------------------------------------------------------------- */
+.hckxkf-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px 5rem;
+  font-size: 65px;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--hckxkf-heading-color);
+}
+
+.hckxkf-word {
+  display: block;
+}
+
+.hckxkf-icon {
+  display: block;
+  flex: none;
+  width: var(--hckxkf-icon-w);
+  margin-inline: var(--hckxkf-icon-m);
+}
+
+/* NOTE: will-change hata diya hai, usse icon blur ho jaata tha */
+.hckxkf-icon-inner {
+  display: block;
+  transform: rotate(calc(var(--hckxkf-tilt) + var(--hckxkf-r, 0deg)));
+  transform-origin: 50% 60%;
+}
+
+.hckxkf-icon img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------------------------------------------------------------
+   GRID  (bag left, content right)
+   --------------------------------------------------------------- */
+.hckxkf-grid {
+  display: grid;
+  grid-template-columns: 50.8% 1fr;
+  align-items: center;
+  max-width: 1440px;
+  margin: clamp(28px, 3vw, 116px) auto 0;
+}
+
+.hckxkf-media {
+  position: relative;
+  width: var(--hckxkf-bag-w);
+  margin-left: 10%;
+}
+
+/* Bag image: scroll rotation (JS --hckxkf-spin set karta hai) */
+.hckxkf-bag img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform: rotate(var(--hckxkf-spin, 0deg));
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.hckxkf-bag--shadow {
+  filter: drop-shadow(-6px 22px 26px rgba(70, 0, 60, .20));
+}
+
+/* ---------------------------------------------------------------
+   CONTENT
+   --------------------------------------------------------------- */
+.hckxkf-content {
+  padding-right: 24px;
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.hckxkf-sub {
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.35;
+  color: white;
+}
+
+.hckxkf-text p {
+  font-size: 25px;
+  color: white;
+  font-weight: 500;
+}
+
+.hckxkf-text {
+  margin-top: 17px;
+}
+
+.hckxkf-text p + p {
+  margin-top: 10px;
+}
+
+.hckxkf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 30px;
+  margin-top: 52px;
+}
+
+.hckxkf-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 15px 34px;
+  border-radius: 10px;
+  background: var(--hckxkf-btn-bg);
+  color: var(--hckxkf-btn-text);
+  font-weight: 700;
+  font-size: 21px;
+  line-height: 1;
+  text-decoration: none;
+  transition: transform .3s ease;
+}
+
+.hckxkf-btn:hover {
+  transform: translateY(-2px);
+}
+
+.hckxkf-link {
+  color: var(--hckxkf-link);
+  font-weight: 700;
+  font-size: 21px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.hckxkf-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.hckxkf-btn:focus-visible,
+.hckxkf-link:focus-visible {
+  outline: 2px solid var(--hckxkf-link);
+  outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------
+   ANIMATION STATES
+   Sirf tab active jab JS load ho chuka ho (html.hckxkf-js),
+   warna content hamesha visible rehta hai.
+   --------------------------------------------------------------- */
+
+/* Icon: width + margin grow => dono words beech se split hote hain */
+.hckxkf-js .hckxkf-icon {
+  width: 0;
+  margin-inline: 0;
+  opacity: 0;
+  transition:
+    width .6s var(--hckxkf-ease-snap),
+    margin .6s var(--hckxkf-ease-snap),
+    opacity .35s ease .1s;
+}
+
+.hckxkf-js .hckxkf-icon-inner {
+  scale: .3;
+  transition: scale .6s .12s var(--hckxkf-ease-snap);
+}
+
+.hckxkf-js .hckxkf.hckxkf-is-inview .hckxkf-icon {
+  width: 150px;
+  margin-inline: var(--hckxkf-icon-m);
+  opacity: 1;
+}
+
+.hckxkf-js .hckxkf.hckxkf-is-inview .hckxkf-icon-inner {
+  scale: 1;
+}
+
+/* Bag */
+.hckxkf-js .hckxkf-bag {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .7s ease .15s, transform .8s ease .15s;
+}
+
+.hckxkf-js .hckxkf.hckxkf-is-inview .hckxkf-bag {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------------------------------------------------------------
+   MOBILE  (stacked)
+   --------------------------------------------------------------- */
+@media (max-width: 749px) {
+
+  .hckxkf {
+    --hckxkf-bag-w: 80vw;
+    padding: 64px 0 64px;
+  }
+
+  /* ---- Heading cut fix: font size same (32px), jagah kam ho to 2nd line me aa jaye ---- */
+  .hckxkf-heading {
+    flex-wrap: wrap;
+    row-gap: 8px;
+    white-space: normal;
+    padding: 0 16px 2rem;
+  }
+
+  .hckxkf-word {
+    font-size: 32px;
+    white-space: nowrap;
+  }
+
+  .hckxkf-js .hckxkf.hckxkf-is-inview .hckxkf-icon {
+    width: 100px;
+    margin-inline: 10px;
+  }
+
+  /* ---- Bag reveal animation mobile par band (seedha visible) ---- */
+  .hckxkf-js .hckxkf-bag {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  /* ---- Layout ---- */
+  .hckxkf-text p {
+    font-size: 18px;
+  }
+
+  .hckxkf-grid {
+    grid-template-columns: 1fr;
+    row-gap: 36px;
+    margin-top: 30px;
+  }
+
+  .hckxkf-media {
+    margin: 0 auto;
+    width: 50vw;
+  }
+
+  .hckxkf-content {
+    max-width: none;
+    padding: 0 24px;
+  }
+
+  .hckxkf-actions {
+    margin-top: 32px;
+  }
+}
+
+/* ---------------------------------------------------------------
+   REDUCED MOTION
+   --------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .hckxkf *,
+  .hckxkf *::before,
+  .hckxkf *::after {
+    transition-duration: .01ms !important;
+    transition-delay: 0s !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Mobile / tablet: bg image ka size viewport height se tay ho, taaki
+   upar-neeche ke sections me lines match karein.
+   100lvh = address bar ke saath size change nahi hota.
+   --------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .hckxkf {
+    background-size: auto 100vh;
+    background-size: auto 100lvh;
+    background-repeat: repeat-y;
+    background-position: center top;
+  }
+}

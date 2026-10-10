@@ -1,0 +1,159 @@
+{%- comment -%}
+  snippets/custom-size-picker.liquid
+
+  Purani site jaisa "Size" layout: [icon] SINGLE  10 TABLETS  (side-by-side pills)
+  Ye apna markup banata he aur Dawn ke asli Size control ko hide karke usi ko click/select karta he,
+  isliye Dawn ka variant change, price, URL update sab pehle jaisa chalta he.
+
+  Metafields (variant): custom.packaging_icon (image), custom.packaging_text (text)
+  Usage (variant_picker block me, Dawn picker ke baad):
+    {% if has_size %}{% render 'custom-size-picker', product: product %}{% endif %}
+{%- endcomment -%}
+  {{ 'cust-product.css' | asset_url | stylesheet_tag }}
+
+{%- assign size_option = nil -%}
+{%- for option in product.options_with_values -%}
+  {%- assign oname = option.name | downcase -%}
+  {%- if oname == 'size' -%}{%- assign size_option = option -%}{%- endif -%}
+{%- endfor -%}
+
+{%- if size_option -%}
+
+
+<div class="vgs" id="vgs-{{ product.id }}">
+  <div class="vgs__label">{{ size_option.name }}:</div>
+  <div class="vgs__list" role="radiogroup" aria-label="{{ size_option.name | escape }}">
+    {%- for value in size_option.values -%}
+      {%- assign pv = value.variant -%}
+      {%- assign icon_file = pv.metafields.custom.packaging_icon.value -%}
+      {%- assign qty_text = pv.metafields.custom.packaging_text.value -%}
+      <button
+        type="button"
+        class="vgs__opt{% if value.selected %} is-selected{% endif %}"
+        role="radio"
+        aria-checked="{{ value.selected }}"
+        data-value="{{ value.name | escape }}"
+      >
+        <span class="pv">
+          {%- if icon_file != blank -%}
+            <span class="pv__icon">
+              <img src="{{ icon_file | image_url: width: 80 }}" alt="" loading="lazy">
+            </span>
+          {%- endif -%}
+          <span class="pv__title">{{ value.name }}</span>
+          {%- if qty_text != blank -%}
+            <span class="pv__qty">{{ qty_text }}</span>
+          {%- endif -%}
+        </span>
+      </button>
+    {%- endfor -%}
+  </div>
+</div>
+
+<script>
+(function () {
+  var block = document.getElementById('vgs-{{ product.id }}');
+  if (!block) return;
+  var OPT = 'size';
+
+  function norm(v) { return String(v || '').trim().toLowerCase(); }
+  function ctlName(n) { return norm(n).replace(/^options\[(.*)\]$/, '$1'); }
+
+  /* Dawn ke asli Size radios (name se, ya fieldset legend se) */
+  function findRadios() {
+    var r = Array.prototype.filter.call(document.querySelectorAll('input[type="radio"]'), function (i) {
+      return !block.contains(i) && ctlName(i.name) === OPT;
+    });
+    if (r.length) return r;
+    var out = [];
+    document.querySelectorAll('fieldset').forEach(function (fs) {
+      if (block.contains(fs)) return;
+      var lg = fs.querySelector('legend');
+      if (lg && norm(lg.textContent).replace(/:$/, '') === OPT) {
+        out = out.concat(Array.prototype.slice.call(fs.querySelectorAll('input[type="radio"]')));
+      }
+    });
+    return out;
+  }
+
+  /* Dawn ka dropdown (agar picker type dropdown ho) */
+  function findSelect() {
+    return Array.prototype.slice.call(document.querySelectorAll('select')).filter(function (s) {
+      return !block.contains(s) && ctlName(s.name) === OPT;
+    })[0];
+  }
+
+  function hideNative() {
+    var radios = findRadios(), sel = findSelect(), host = null;
+    if (radios.length) host = radios[0].closest('fieldset');
+    else if (sel) host = sel.closest('.product-form__input') || sel.parentElement;
+    if (!host) return null;
+    host.classList.add('vgs-native-hidden');
+    /* apna block Dawn ke Size control ki jagah le */
+    if (host.previousElementSibling !== block && host.parentNode) {
+      host.parentNode.insertBefore(block, host);
+    }
+    return host;
+  }
+
+  function sync() {
+    var host = hideNative();
+    if (!host) { block.classList.remove('is-ready'); return; }
+    block.classList.add('is-ready');
+
+    var radios = findRadios(), sel = findSelect();
+    block.querySelectorAll('.vgs__opt').forEach(function (btn) {
+      var v = norm(btn.getAttribute('data-value')), on = false, off = false;
+      if (radios.length) {
+        radios.forEach(function (r) {
+          if (norm(r.value) === v) { on = r.checked; off = r.classList.contains('disabled'); }
+        });
+      } else if (sel) {
+        var o = sel.options[sel.selectedIndex];
+        on = norm(sel.value) === v || (o && norm(o.text) === v);
+      }
+      btn.classList.toggle('is-selected', on);
+      btn.classList.toggle('is-unavailable', off);
+      btn.setAttribute('aria-checked', on ? 'true' : 'false');
+    });
+  }
+
+  block.addEventListener('click', function (e) {
+    var btn = e.target.closest('.vgs__opt');
+    if (!btn) return;
+    var v = norm(btn.getAttribute('data-value'));
+
+    var radios = findRadios();
+    var target = radios.filter(function (x) { return norm(x.value) === v; })[0];
+    if (target) {
+      if (!target.checked) target.click(); // Dawn ka change event chalega
+    } else {
+      var sel = findSelect();
+      if (sel) {
+        for (var i = 0; i < sel.options.length; i++) {
+          if (norm(sel.options[i].value) === v || norm(sel.options[i].text) === v) {
+            sel.selectedIndex = i;
+            sel.dispatchEvent(new Event('change', { bubbles: true }));
+            break;
+          }
+        }
+      }
+    }
+    block.querySelectorAll('.vgs__opt').forEach(function (b) {
+      b.classList.toggle('is-selected', b === btn);
+    });
+    setTimeout(sync, 60);
+  });
+
+  document.addEventListener('change', function () { setTimeout(sync, 60); });
+
+  var timer;
+  new MutationObserver(function () {
+    clearTimeout(timer);
+    timer = setTimeout(sync, 30);
+  }).observe(document.body, { childList: true, subtree: true });
+
+  sync();
+})();
+</script>
+{%- endif -%}

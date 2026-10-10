@@ -1,0 +1,1291 @@
+{%- comment -%}
+  snippets/custom-variant-gallery.liquid
+
+  Usage (main-product.liquid me):
+  {% render 'custom-variant-gallery', section_id: section.id, product: product %}
+
+  Features:
+  - Main image Swiper slider
+  - Bottom horizontal thumbnails
+  - Each thumbnail = 150px x 150px
+  - Maximum 5 thumbnails visible
+  - Horizontal thumbnail scrolling
+  - Thumbnail arrows left/right
+  - Arrow click -> main image bhi change hoti hai
+  - Variant option "Size" select hone par sirf wahi images
+    jinka ALT text == option value
+  - Page reload par sabhi images show
+  - Agar sirf 1 image ho to thumbnails + arrows hide
+{%- endcomment -%}
+
+
+{%- assign gallery_id = 'vgallery-' | append: section_id -%}
+
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@14.0.1/swiper-bundle.min.css"
+>
+
+
+<style>
+
+/* =========================================================
+   MAIN GALLERY
+========================================================= */
+
+#{{ gallery_id }} {
+
+  --thumb: 150px;
+  --gap: 10px;
+  --accent: #242F63;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+
+  gap: 15px;
+}
+
+
+/* =========================================================
+   MAIN IMAGE
+========================================================= */
+
+#{{ gallery_id }} .vg__main {
+
+  order: 1;
+
+  width: 100%;
+
+  min-width: 0;
+}
+
+
+#{{ gallery_id }} .vg__swiper {
+
+  width: 100%;
+
+  overflow: hidden;
+}
+
+
+#{{ gallery_id }} .vg__swiper .swiper-wrapper {
+
+  align-items: flex-start;
+}
+
+
+#{{ gallery_id }} .vg__swiper .swiper-slide {
+
+  width: 100%;
+  height: auto;
+
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: center;
+}
+
+
+#{{ gallery_id }} .vg__swiper img {
+
+  display: block;
+
+  width: auto;
+
+  max-width: 100%;
+
+  height: auto;
+
+  object-fit: contain;
+
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   THUMBNAIL AREA
+========================================================= */
+
+#{{ gallery_id }} .vg__thumbs {
+
+  order: 2;
+
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: row;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   THUMBNAIL WINDOW
+========================================================= */
+
+#{{ gallery_id }} .vg__window {
+
+  position: relative;
+
+  width: 100%;
+
+  max-width: calc(
+    var(--thumb) * 5 + var(--gap) * 4
+  );
+
+  overflow-x: auto;
+
+  overflow-y: hidden;
+
+  scrollbar-width: none;
+}
+
+
+#{{ gallery_id }} .vg__window::-webkit-scrollbar {
+
+  display: none;
+}
+
+
+/* =========================================================
+   THUMBNAIL LIST
+========================================================= */
+
+#{{ gallery_id }} .vg__list {
+
+  display: flex;
+
+  flex-direction: row;
+
+  gap: var(--gap);
+
+  width: max-content;
+}
+
+
+/* =========================================================
+   THUMBNAIL
+========================================================= */
+
+#{{ gallery_id }} .vg__thumb {
+
+  {% comment %} flex: 0 0 var(--thumb); {% endcomment %}
+
+  {% comment %} width: var(--thumb); {% endcomment %}
+
+  height: var(--thumb);
+
+  {% comment %} min-width: var(--thumb); {% endcomment %}
+
+  padding: 0;
+
+  border: 3px solid #5c7650;
+
+  border-radius: 10px;
+
+  background: #E8D9D3;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color .2s ease,
+    opacity .2s ease;
+}
+
+
+/* =========================================================
+   THUMBNAIL IMAGE
+========================================================= */
+
+#{{ gallery_id }} .vg__thumb img {
+
+  display: block;
+
+  width: 120px;
+
+  height: auto;
+
+
+ 
+
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   ACTIVE THUMBNAIL
+========================================================= */
+
+{% comment %} #{{ gallery_id }} .vg__thumb.is-active {
+
+  border-color: #F44B20;
+} {% endcomment %}
+
+
+/* =========================================================
+   THUMBNAIL ARROWS
+========================================================= */
+
+#{{ gallery_id }} .vg__arrow {
+
+  flex: 0 0 35px;
+
+  width: 35px;
+
+  height: 35px;
+
+  padding: 0;
+
+  border: 0;
+background: #5c7650;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border: 1px solid #ffffff;
+    border-radius: 25px;
+
+  box-shadow:
+    rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px,
+    rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px,
+    rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+
+#{{ gallery_id }} .vg__arrow svg {
+
+  width: 22px;
+
+  height: 22px;
+}
+
+
+/* Previous = LEFT */
+
+#{{ gallery_id }} .vg__prev {
+
+  transform: rotate(-90deg);
+}
+
+
+/* Next = RIGHT */
+
+#{{ gallery_id }} .vg__next {
+
+  transform: rotate(90deg);
+}
+
+
+#{{ gallery_id }} .vg__arrow[disabled] {
+
+  opacity: .3;
+
+  cursor: default;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 749px) {
+
+  #{{ gallery_id }} {
+
+    --thumb: 150px;
+
+    gap: 12px;
+  }
+
+
+  #{{ gallery_id }} .vg__main {
+
+    width: 100%;
+
+    flex: 0 0 auto;
+  }
+
+
+  #{{ gallery_id }} .vg__thumbs {
+
+    width: 100%;
+
+    flex: 0 0 auto;
+
+    justify-content: center;
+
+    gap: 6px;
+  }
+
+
+  #{{ gallery_id }} .vg__window {
+
+    width: auto;
+
+    max-width: calc(100% - 72px);
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+  }
+
+
+  #{{ gallery_id }} .vg__list {
+
+    flex-direction: row;
+
+    width: max-content;
+  }
+
+
+  #{{ gallery_id }} .vg__arrow {
+
+    width: 30px;
+
+    height: 30px;
+
+    flex: 0 0 30px;
+  }
+
+
+  #{{ gallery_id }} .vg__arrow svg {
+
+    width: 20px;
+
+    height: 20px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+
+  #{{ gallery_id }} .vg__thumb img {
+
+
+    width: 80px;
+
+  }
+
+
+
+  #{{ gallery_id }} .vg__swiper img {
+
+
+        max-width: 60%;
+  
+  
+  }
+
+  #{{ gallery_id }} {
+
+    --thumb: 110px;
+  }
+
+}
+
+</style>
+
+
+<div class="vg" id="{{ gallery_id }}">
+
+
+  <!-- =====================================================
+       MAIN IMAGE
+  ====================================================== -->
+
+  <div class="vg__main">
+
+    <div class="swiper vg__swiper">
+
+      <div class="swiper-wrapper"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       BOTTOM THUMBNAILS
+  ====================================================== -->
+
+  <div class="vg__thumbs">
+
+
+    <!-- PREVIOUS -->
+
+    <button
+      type="button"
+      class="vg__arrow vg__prev"
+      aria-label="Previous image"
+    >
+
+      <svg
+        viewBox="0 0 30 30"
+        fill="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+
+        <path
+          d="M15 26L15 4M15 4L20 9M10 9L15 4"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+
+      </svg>
+
+    </button>
+
+
+    <!-- THUMBNAIL WINDOW -->
+
+    <div class="vg__window">
+
+      <div class="vg__list"></div>
+
+    </div>
+
+
+    <!-- NEXT -->
+
+    <button
+      type="button"
+      class="vg__arrow vg__next"
+      aria-label="Next image"
+    >
+
+      <svg
+        viewBox="0 0 30 30"
+        fill="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+
+        <path
+          d="M15 26L15 4M15 4L20 9M10 9L15 4"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+
+      </svg>
+
+    </button>
+
+  </div>
+
+
+</div>
+
+
+<script
+  src="https://cdn.jsdelivr.net/npm/swiper@14.0.1/swiper-bundle.min.js"
+></script>
+
+
+<script>
+
+(function () {
+
+
+  /* =======================================================
+     ROOT
+  ======================================================== */
+
+  var root =
+    document.getElementById(
+      '{{ gallery_id }}'
+    );
+
+
+  if (
+    !root ||
+    typeof Swiper === 'undefined'
+  ) {
+    return;
+  }
+
+
+  /* =======================================================
+     VARIANT OPTION
+  ======================================================== */
+
+  var OPTION_NAME = 'size';
+
+
+  /* =======================================================
+     ALL PRODUCT MEDIA
+  ======================================================== */
+
+  var all = [
+
+    {%- for media in product.media -%}
+
+      {%- if media.preview_image -%}
+
+        {
+
+          id:
+            {{ media.id | json }},
+
+          alt:
+            {{ media.alt | default: '' | json }},
+
+          image:
+            {{ media.preview_image
+              | image_url: width: 1600
+              | json
+            }},
+
+          thumb:
+            {{ media.preview_image
+              | image_url: width: 300
+              | json
+            }}
+
+        }
+
+        {% unless forloop.last %},{% endunless %}
+
+      {%- endif -%}
+
+    {%- endfor -%}
+
+  ];
+
+
+  /* =======================================================
+     ELEMENTS
+  ======================================================== */
+
+  var list =
+    root.querySelector(
+      '.vg__list'
+    );
+
+
+  var win =
+    root.querySelector(
+      '.vg__window'
+    );
+
+
+  var wrapper =
+    root.querySelector(
+      '.swiper-wrapper'
+    );
+
+
+  var thumbs =
+    root.querySelector(
+      '.vg__thumbs'
+    );
+
+
+  var prevBtn =
+    root.querySelector(
+      '.vg__prev'
+    );
+
+
+  var nextBtn =
+    root.querySelector(
+      '.vg__next'
+    );
+
+
+  var swiper = null;
+
+  var selected = null;
+
+
+  /* =======================================================
+     NORMALIZE
+  ======================================================== */
+
+  function norm(v) {
+
+    return String(v || '')
+      .trim()
+      .toLowerCase();
+
+  }
+
+
+  /* =======================================================
+     ESCAPE HTML
+  ======================================================== */
+
+  function esc(v) {
+
+    return String(v || '')
+      .replace(
+        /&/g,
+        '&amp;'
+      )
+      .replace(
+        /"/g,
+        '&quot;'
+      )
+      .replace(
+        /</g,
+        '&lt;'
+      );
+
+  }
+
+
+  /* =======================================================
+     FILTER MEDIA
+  ======================================================== */
+
+  function getFiltered() {
+
+    if (!selected) {
+
+      return all.slice();
+
+    }
+
+
+    var f =
+      all.filter(
+        function (m) {
+
+          return (
+            norm(m.alt) === selected
+          );
+
+        }
+      );
+
+
+    return f.length
+      ? f
+      : all.slice();
+
+  }
+
+
+  /* =======================================================
+     KEEP ACTIVE THUMBNAIL VISIBLE
+  ======================================================== */
+
+  function keepThumbVisible(active) {
+
+    if (!active) {
+      return;
+    }
+
+
+    var horizontal =
+      getComputedStyle(list)
+        .flexDirection === 'row';
+
+
+    if (horizontal) {
+
+      var l =
+        active.offsetLeft;
+
+
+      var r =
+        l +
+        active.offsetWidth;
+
+
+      if (
+        l <
+        win.scrollLeft
+      ) {
+
+        win.scrollTo({
+
+          left: l,
+
+          behavior: 'smooth'
+
+        });
+
+      }
+
+
+      else if (
+        r >
+        win.scrollLeft +
+        win.clientWidth
+      ) {
+
+        win.scrollTo({
+
+          left:
+            r -
+            win.clientWidth,
+
+          behavior: 'smooth'
+
+        });
+
+      }
+
+    }
+
+  }
+
+
+  /* =======================================================
+     SYNC ACTIVE THUMBNAIL
+  ======================================================== */
+
+  function sync() {
+
+    var idx =
+      swiper
+        ? swiper.activeIndex
+        : 0;
+
+
+    var active = null;
+
+
+    Array.prototype.forEach.call(
+
+      list.children,
+
+      function (btn, i) {
+
+        var on =
+          i === idx;
+
+
+        btn.classList.toggle(
+          'is-active',
+          on
+        );
+
+
+        if (on) {
+
+          active = btn;
+
+        }
+
+      }
+
+    );
+
+
+    keepThumbVisible(active);
+
+
+    if (swiper) {
+
+      prevBtn.disabled =
+        swiper.isBeginning;
+
+
+      nextBtn.disabled =
+        swiper.isEnd;
+
+    }
+
+  }
+
+
+  /* =======================================================
+     RENDER
+  ======================================================== */
+
+  function render() {
+
+    var media =
+      getFiltered();
+
+
+    /* -----------------------------------------------------
+       Hide thumbnails if only 1 image
+    ----------------------------------------------------- */
+
+    if (media.length <= 1) {
+
+      thumbs.style.display =
+        'none';
+
+    }
+
+    else {
+
+      thumbs.style.display =
+        '';
+
+    }
+
+
+    /* -----------------------------------------------------
+       MAIN IMAGES
+    ----------------------------------------------------- */
+
+    wrapper.innerHTML =
+
+      media.map(
+
+        function (m, i) {
+
+          return (
+
+            '<div class="swiper-slide">' +
+
+              '<img src="' +
+                m.image +
+                '" alt="' +
+                esc(m.alt) +
+                '" draggable="false"' +
+
+                (
+                  i
+                    ? ' loading="lazy"'
+                    : ''
+                ) +
+
+              '>' +
+
+            '</div>'
+
+          );
+
+        }
+
+      ).join('');
+
+
+    /* -----------------------------------------------------
+       THUMBNAILS
+    ----------------------------------------------------- */
+
+    list.innerHTML =
+
+      media.map(
+
+        function (m, i) {
+
+          return (
+
+            '<button ' +
+
+              'type="button" ' +
+
+              'class="vg__thumb" ' +
+
+              'data-i="' +
+                i +
+              '" ' +
+
+              'aria-label="View image ' +
+                (i + 1) +
+              '"' +
+
+            '>' +
+
+              '<img ' +
+
+                'src="' +
+                  m.thumb +
+                '" ' +
+
+                'alt="' +
+                  esc(m.alt) +
+                '" ' +
+
+                'loading="lazy" ' +
+
+                'draggable="false"' +
+
+              '>' +
+
+            '</button>'
+
+          );
+
+        }
+
+      ).join('');
+
+
+    /* -----------------------------------------------------
+       SWIPER
+    ----------------------------------------------------- */
+
+    if (!swiper) {
+
+      swiper =
+        new Swiper(
+
+          root.querySelector(
+            '.vg__swiper'
+          ),
+
+          {
+
+            slidesPerView: 1,
+
+            spaceBetween: 0,
+
+            speed: 400,
+
+            grabCursor: true,
+
+            observer: true,
+
+            observeParents: true,
+
+            on: {
+
+              slideChange:
+                sync
+
+            }
+
+          }
+
+        );
+
+    }
+
+    else {
+
+      swiper.update();
+
+      swiper.slideTo(
+        0,
+        0
+      );
+
+    }
+
+
+    /* -----------------------------------------------------
+       RESET THUMBNAIL SCROLL
+    ----------------------------------------------------- */
+
+    win.scrollTop = 0;
+
+    win.scrollLeft = 0;
+
+
+    sync();
+
+  }
+
+
+  /* =======================================================
+     THUMBNAIL CLICK
+  ======================================================== */
+
+  list.addEventListener(
+
+    'click',
+
+    function (e) {
+
+      var btn =
+        e.target.closest(
+          '.vg__thumb'
+        );
+
+
+      if (
+        btn &&
+        swiper
+      ) {
+
+        swiper.slideTo(
+
+          parseInt(
+            btn.getAttribute(
+              'data-i'
+            ),
+            10
+          ),
+
+          400
+
+        );
+
+      }
+
+    }
+
+  );
+
+
+  /* =======================================================
+     PREVIOUS
+  ======================================================== */
+
+  prevBtn.addEventListener(
+
+    'click',
+
+    function () {
+
+      if (swiper) {
+
+        swiper.slidePrev();
+
+      }
+
+    }
+
+  );
+
+
+  /* =======================================================
+     NEXT
+  ======================================================== */
+
+  nextBtn.addEventListener(
+
+    'click',
+
+    function () {
+
+      if (swiper) {
+
+        swiper.slideNext();
+
+      }
+
+    }
+
+  );
+
+
+  /* =======================================================
+     CHECK ALT MATCH
+  ======================================================== */
+
+  function altExists(v) {
+
+    return all.some(
+
+      function (m) {
+
+        return (
+          norm(m.alt) === v
+        );
+
+      }
+
+    );
+
+  }
+
+
+  /* =======================================================
+     READ SELECTED VARIANT
+  ======================================================== */
+
+  function readSelectedFromDom() {
+
+    var scope =
+      root.closest(
+        'product-info'
+      ) ||
+      document;
+
+
+    var values = [];
+
+
+    scope
+      .querySelectorAll(
+        'input[type="radio"]:checked, select'
+      )
+      .forEach(
+
+        function (el) {
+
+          if (
+            el.tagName ===
+            'SELECT'
+          ) {
+
+            var o =
+              el.options[
+                el.selectedIndex
+              ];
+
+
+            if (o) {
+
+              values.push(
+                norm(o.value)
+              );
+
+
+              values.push(
+                norm(o.text)
+              );
+
+            }
+
+          }
+
+          else {
+
+            values.push(
+              norm(el.value)
+            );
+
+          }
+
+        }
+
+      );
+
+
+    for (
+      var i = 0;
+      i < values.length;
+      i++
+    ) {
+
+      if (
+        altExists(
+          values[i]
+        )
+      ) {
+
+        return values[i];
+
+      }
+
+    }
+
+
+    return null;
+
+  }
+
+
+  /* =======================================================
+     VARIANT OPTION CHANGE
+  ======================================================== */
+
+  document.addEventListener(
+
+    'change',
+
+    function (e) {
+
+      var t =
+        e.target;
+
+
+      if (
+        !t ||
+        !t.matches ||
+        !t.matches(
+          'input[type="radio"], select'
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        root.contains(t)
+      ) {
+
+        return;
+
+      }
+
+
+      setTimeout(
+
+        function () {
+
+          var val =
+            readSelectedFromDom();
+
+
+          console.log(
+
+            '[variant-gallery] selected:',
+
+            val,
+
+            '| available alts:',
+
+            all.map(
+              function (m) {
+                return m.alt;
+              }
+            )
+
+          );
+
+
+          if (
+            val === selected
+          ) {
+
+            return;
+
+          }
+
+
+          selected = val;
+
+
+          render();
+
+        },
+
+        50
+
+      );
+
+    }
+
+  );
+
+
+  /* =======================================================
+     INITIAL RENDER
+  ======================================================== */
+
+  render();
+
+
+})();
+
+</script>

@@ -1,0 +1,49 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "cust_head_banner_tt3Drk": {
+      "type": "cust-head-banner",
+      "name": "Dynamic page heading",
+      "settings": {
+        "show_heading": true,
+        "custom_heading": "",
+        "text_transform": "uppercase",
+        "heading_size": 42,
+        "mobile_heading_size": 32,
+        "heading_weight": "700",
+        "letter_spacing": 1,
+        "mobile_letter_spacing": 0,
+        "background_image": "shopify://shop_images/Background_1.png",
+        "image_position": "center center",
+        "background_color": "#102A27",
+        "overlay_color": "#E7A0C2",
+        "overlay_opacity": 65,
+        "desktop_height": 260,
+        "mobile_height": 360,
+        "padding_vertical": 20,
+        "mobile_padding": 20,
+        "heading_color": "#FFFFFF"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "cust_head_banner_tt3Drk"
+  ]
+}

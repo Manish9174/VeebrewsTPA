@@ -1,0 +1,478 @@
+{%- comment -%}
+  Section: About – Split (Text + Image + Badge)
+  File name: sections/about-split.liquid
+{%- endcomment -%}
+
+{%- liquid
+  assign sid = section.id
+-%}
+
+<style>
+  #as-{{ sid }} {
+    --as-bg: {{ section.settings.bg_color }};
+    --as-heading: {{ section.settings.heading_color }};
+    --as-text: {{ section.settings.text_color }};
+    --as-btn-bg: {{ section.settings.btn_bg }};
+    --as-btn-text: {{ section.settings.btn_text_color }};
+    --as-btn-hover: {{ section.settings.btn_hover_bg }};
+    background: var(--as-bg);
+    padding: {{ section.settings.padding_top }}px 24px {{ section.settings.padding_bottom }}px;
+    font-family: 'Lineal';
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  #as-{{ sid }} *,
+  #as-{{ sid }} *::before,
+  #as-{{ sid }} *::after { box-sizing: border-box; }
+
+  #as-{{ sid }} .as__inner {
+    max-width: {{ section.settings.max_width }}px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 40px 60px;
+  }
+
+  #as-{{ sid }} .as__content {
+    max-width: 520px;
+    {% if section.settings.layout == 'image_left' %}
+      order: 2;
+      justify-self: start;
+    {% else %}
+      order: 1;
+      justify-self: end;
+    {% endif %}
+  }
+
+  #as-{{ sid }} .as__media-col {
+    {% if section.settings.layout == 'image_left' %}
+      order: 1;
+    {% else %}
+      order: 2;
+    {% endif %}
+  }
+
+  #as-{{ sid }} .as__heading {
+    margin: 0;
+    font-size: 52px;
+    line-height: 1.2;
+    font-weight: 300;
+    color: var(--as-heading);
+  }
+
+  #as-{{ sid }} .as__text {
+    margin: 32px 0 0;
+    font-size: 21px;
+    line-height: 1.9;
+    font-weight: 400;
+    color: var(--as-text);
+  }
+
+  #as-{{ sid }} .as__text p { margin: 0 0 1em; }
+  #as-{{ sid }} .as__text p:last-child { margin-bottom: 0; }
+
+  #as-{{ sid }} .as__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 48px;
+    padding: 22px 36px;
+    background: var(--as-btn-bg);
+    color: var(--as-btn-text);
+    border: 0;
+    border-radius: {{ section.settings.btn_radius }}px;
+    font-family: 'Lineal';
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .25s ease, transform .25s ease;
+  }
+
+  #as-{{ sid }} .as__btn svg {
+    width: 12px;
+    height: 12px;
+    transition: transform .25s ease;
+  }
+
+  #as-{{ sid }} .as__btn:hover { background: var(--as-btn-hover); }
+  #as-{{ sid }} .as__btn:hover svg { transform: translate(2px, -2px); }
+  #as-{{ sid }} .as__btn:focus-visible { outline: 2px solid var(--as-heading); outline-offset: 3px; }
+
+  #as-{{ sid }} .as__media {
+    position: relative;
+    width: 100%;
+    max-width: {{ section.settings.image_max_width }}px;
+    margin: 0 auto;
+  }
+
+  #as-{{ sid }} .as__image img,
+  #as-{{ sid }} .as__image svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  {% if section.settings.float_image %}
+  #as-{{ sid }} .as__image {
+    animation: as-float-{{ sid }} 4s ease-in-out infinite;
+  }
+  @keyframes as-float-{{ sid }} {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+  {% endif %}
+
+  #as-{{ sid }} .as__badge {
+    position: absolute;
+    left: {{ section.settings.badge_left }}%;
+    top: -20%;
+    width: {{ section.settings.badge_size }}%;
+    z-index: 2;
+  }
+
+  #as-{{ sid }} .as__badge img {
+    display: block;
+    width: 100%;
+    height: auto;
+    {% if section.settings.rotate_badge %}
+      animation: as-spin-{{ sid }} 18s linear infinite;
+    {% endif %}
+  }
+
+  {% if section.settings.rotate_badge %}
+  @keyframes as-spin-{{ sid }} {
+    to { transform: rotate(360deg); }
+  }
+  {% endif %}
+
+  @media (prefers-reduced-motion: reduce) {
+    #as-{{ sid }} .as__image,
+    #as-{{ sid }} .as__badge img { animation: none; }
+    #as-{{ sid }} .as__btn,
+    #as-{{ sid }} .as__btn svg { transition: none; }
+  }
+
+  /* Laptop */
+  @media (max-width: 1199px) {
+    #as-{{ sid }} .as__inner { gap: 40px; }
+    #as-{{ sid }} .as__heading { font-size: 44px; }
+    #as-{{ sid }} .as__text { font-size: 19px; line-height: 1.8; }
+  }
+
+  /* Tablet & Mobile: stack */
+  @media (max-width: 989px) {
+    #as-{{ sid }} {
+      padding-top: {{ section.settings.padding_top | times: 0.7 | round }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.7 | round }}px;
+    }
+    #as-{{ sid }} .as__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 36px;
+    }
+    #as-{{ sid }} .as__content {
+      order: {% if section.settings.mobile_image_first %}2{% else %}1{% endif %};
+      max-width: 640px;
+      justify-self: center;
+      text-align: {{ section.settings.mobile_align }};
+    }
+    #as-{{ sid }} .as__media-col {
+      order: {% if section.settings.mobile_image_first %}1{% else %}2{% endif %};
+    }
+    #as-{{ sid }} .as__media { max-width: 560px; }
+    #as-{{ sid }} .as__heading { font-size: 38px; }
+    #as-{{ sid }} .as__text { margin-top: 22px; }
+    #as-{{ sid }} .as__btn { margin-top: 34px; }
+  }
+
+  @media (max-width: 599px) {
+    #as-{{ sid }} {
+      padding-left: 18px;
+      padding-right: 18px;
+      padding-top: {{ section.settings.padding_top | times: 0.5 | round }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round }}px;
+    }
+    #as-{{ sid }} .as__heading { font-size: 30px; }
+    #as-{{ sid }} .as__text { font-size: 16px; line-height: 1.7; }
+    #as-{{ sid }} .as__btn { padding: 18px 28px; font-size: 15px; }
+  }
+</style>
+
+<section id="as-{{ sid }}" class="as" data-section-id="{{ sid }}">
+  <div class="as__inner">
+
+    <div class="as__content">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="as__heading">{{ section.settings.heading | newline_to_br }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.text != blank -%}
+        <div class="as__text">{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.btn_label != blank and section.settings.btn_link != blank -%}
+        <a class="as__btn" href="{{ section.settings.btn_link }}">
+          {{ section.settings.btn_label }}
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M2 10L10 2M4 2h6v6"/>
+          </svg>
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="as__media-col">
+      <div class="as__media">
+        <div class="as__image">
+          {%- if section.settings.image != blank -%}
+            {{ section.settings.image | image_url: width: 1400 | image_tag:
+              loading: 'lazy',
+              widths: '400, 600, 800, 1000, 1400',
+              sizes: '(min-width: 990px) 50vw, 100vw',
+              alt: section.settings.image.alt | default: section.settings.heading }}
+          {%- else -%}
+            {{ 'image' | placeholder_svg_tag }}
+          {%- endif -%}
+        </div>
+
+        {%- if section.settings.badge != blank -%}
+          <div class="as__badge">
+            {{ section.settings.badge | image_url: width: 400 | image_tag:
+              loading: 'lazy',
+              widths: '120, 200, 300, 400',
+              sizes: '(min-width: 990px) 160px, 25vw',
+              alt: '' }}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About – Split",
+  "tag": "section",
+  "class": "section-about-split",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Nayi line ke liye Enter dabao",
+      "default": "Made with the finest\nIndian beans"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description",
+      "default": "<p>You can’t have a delicious cup of coffee without the most sought-after beans in the country. We only use beans that have been certified Grade-A to make our coffee.</p>"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button label",
+      "default": "Our Coffee"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Main image"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge",
+      "label": "Badge / seal image (optional, transparent PNG)"
+    },
+    {
+      "type": "range",
+      "id": "badge_size",
+      "label": "Badge size",
+      "min": 8,
+      "max": 40,
+      "step": 1,
+      "unit": "%",
+      "default": 21
+    },
+    {
+      "type": "range",
+      "id": "badge_left",
+      "label": "Badge position - left",
+      "min": 0,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_top",
+      "label": "Badge position - top",
+      "min": 0,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "rotate_badge",
+      "label": "Badge ko slowly ghumao",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "float_image",
+      "label": "Image ko upar-neeche float karao",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "image_max_width",
+      "label": "Image max width",
+      "min": 300,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "default": 760
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Desktop layout",
+      "options": [
+        { "value": "image_right", "label": "Image right, text left" },
+        { "value": "image_left", "label": "Image left, text right" }
+      ],
+      "default": "image_right"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_image_first",
+      "label": "Mobile par image pehle dikhao",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "mobile_align",
+      "label": "Mobile text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Section max width",
+      "min": 900,
+      "max": 1700,
+      "step": 20,
+      "unit": "px",
+      "default": 1320
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 90
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#e2e9f6"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1f2a6b"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Description color",
+      "default": "#1f2a6b"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg",
+      "label": "Button background",
+      "default": "#1f2a6b"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_bg",
+      "label": "Button hover background",
+      "default": "#141c4d"
+    },
+    {
+      "type": "range",
+      "id": "btn_radius",
+      "label": "Button corner radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "About – Split"
+    }
+  ]
+}
+{% endschema %}

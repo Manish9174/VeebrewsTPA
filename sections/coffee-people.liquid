@@ -1,0 +1,289 @@
+{% comment %}
+  ============================================================
+  HUCK STYLE COFFEE PEOPLE  (sections/hckx-coffee-people.liquid)
+  ------------------------------------------------------------
+  File needed: assets/hckx-coffee-people.css
+  ------------------------------------------------------------
+  Saare classes/ids "hckxcp-" prefix se unique hain.
+  ------------------------------------------------------------
+  Photo stack: default state me 3 photos ek dusre ke peeche
+  thodi si peek karte hain. Jab is-open class lagti hai (hover
+  ya tap se), left photo left me aur right photo right me slide
+  ho jaate hain, center photo apni jagah rehta hai.
+  ------------------------------------------------------------
+  BACKGROUND: optional image, jiske upar "Overlay color" ka tint
+  (opacity se control) chadhta hai - image halki dikhti hai. Image
+  na ho to gradient (start/end) hi pehle jaisa dikhta hai, koi
+  farak nahi padta.
+  ============================================================
+{% endcomment %}
+
+{{ 'cust-coffee.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign s = section.settings
+-%}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --hckxcp-bg-start: {{ s.bg_gradient_start }};
+    --hckxcp-bg-end: {{ s.bg_gradient_end }};
+    --hckxcp-heading-color: {{ s.heading_color }};
+    --hckxcp-body-color: {{ s.body_text_color }};
+    --hckxcp-accent-color: {{ s.accent_color }};
+    --hckxcp-icon-size: {{ s.icon_max_width | default: 140 }}px;
+    --hckxcp-gap: {{ s.split_gap | default: 70 }}px;
+    --hckxcp-overlay-color: {{ s.overlay_color | default: s.bg_gradient_start }};
+    {% if s.background_image != blank %}
+      --hckxcp-bg-image: url('{{ s.background_image | image_url: width: 1600 }}');
+      --hckxcp-overlay-opacity: {{ s.overlay_opacity | default: 65 }}%;
+    {% else %}
+      --hckxcp-bg-image: none;
+      --hckxcp-overlay-opacity: 0%;
+    {% endif %}
+  }
+{% endstyle %}
+
+<div
+  class="hckxcp"
+  id="hckxcp-{{ section.id }}"
+  data-hckxcp
+  data-hckxcp-threshold="{{ s.trigger_point | default: 30 | divided_by: 100.0 }}"
+  {% if s.replay_on_scroll %}data-hckxcp-replay{% endif %}
+>
+  <div class="hckxcp-inner">
+
+    <div class="hckxcp-heading-row" data-hckxcp-heading>
+      <span class="hckxcp-heading-word" data-hckxcp-part="word-left">{{ s.heading_left | default: 'Coffee' }}</span>
+      {%- if s.heading_icon != blank -%}
+        <span class="hckxcp-heading-icon" data-hckxcp-part="icon">
+          {{ s.heading_icon | image_url: width: 400 | image_tag: widths: '100, 200, 300, 400', loading: 'lazy', alt: '' }}
+        </span>
+      {%- endif -%}
+      <span class="hckxcp-heading-word" data-hckxcp-part="word-right">{{ s.heading_right | default: 'People' }}</span>
+    </div>
+
+    <div class="hckxcp-content">
+
+      <div class="hckxcp-photos" data-hckxcp-stack tabindex="0" role="button" aria-label="Reveal more photos">
+        {%- if s.image_left != blank -%}
+          <div class="hckxcp-photo hckxcp-photo--left">
+            {{ s.image_left | image_url: width: 700 | image_tag: widths: '250, 375, 500, 700', alt: s.image_left.alt | escape }}
+          </div>
+        {%- endif -%}
+
+        {%- if s.image_right != blank -%}
+          <div class="hckxcp-photo hckxcp-photo--right">
+            {{ s.image_right | image_url: width: 700 | image_tag: widths: '250, 375, 500, 700', alt: s.image_right.alt | escape }}
+          </div>
+        {%- endif -%}
+
+        {%- if s.image_center != blank -%}
+          <div class="hckxcp-photo hckxcp-photo--center">
+            {{ s.image_center | image_url: width: 700 | image_tag: widths: '250, 375, 500, 700', alt: s.image_center.alt | escape }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="hckxcp-text">
+        <div class="hckxcp-columns">
+          <div class="hckxcp-col">
+            <div class="hckxcp-col-top">
+              <span class="hckxcp-col-heading">{{ s.passion_heading | default: 'Our Passion' }}</span>
+              {%- if s.passion_icon != blank -%}
+                <span class="hckxcp-col-icon">
+                  {{ s.passion_icon | image_url: width: 80 | image_tag: loading: 'lazy', alt: '' }}
+                </span>
+              {%- endif -%}
+            </div>
+            <span class="hckxcp-col-sub">{{ s.passion_subheading | default: 'Is People' }}</span>
+          </div>
+
+          <div class="hckxcp-divider" aria-hidden="true"></div>
+
+          <div class="hckxcp-col">
+            <div class="hckxcp-col-top">
+              <span class="hckxcp-col-heading">{{ s.mission_heading | default: 'Our Mission' }}</span>
+              {%- if s.mission_icon != blank -%}
+                <span class="hckxcp-col-icon">
+                  {{ s.mission_icon | image_url: width: 80 | image_tag: loading: 'lazy', alt: '' }}
+                </span>
+              {%- endif -%}
+            </div>
+            <span class="hckxcp-col-sub">{{ s.mission_subheading | default: 'Is Coffee' }}</span>
+          </div>
+        </div>
+
+        {%- if s.paragraph != blank -%}
+          <div class="hckxcp-paragraph">{{ s.paragraph }}</div>
+        {%- endif -%}
+
+        {%- if s.link_text != blank -%}
+          <a class="hckxcp-link" href="{{ s.link_url | default: '#' }}">
+            <span>{{ s.link_text }}</span>
+            <svg class="hckxcp-link-arrow" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M2 14c7-9 16-12 24-11 4 .5 7 2.5 8.5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M27 3c2.5 2 4.5 4.5 5.5 6.5-2.5.5-5.5 1-8 2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    function boot() {
+      var root = document.getElementById('hckxcp-{{ section.id }}');
+      if (!root) return;
+
+      /* Double init se bachne ke liye guard */
+      if (root.getAttribute('data-hckxcp-ready') === 'true') return;
+      root.setAttribute('data-hckxcp-ready', 'true');
+
+      /* -------------------------------------------------------
+         HEADING SPLIT + ICON GROW  (jab heading view me aaye)
+         ------------------------------------------------------- */
+      document.documentElement.classList.add('hckxcp-js');
+
+      var threshold = parseFloat(root.getAttribute('data-hckxcp-threshold'));
+      if (isNaN(threshold) || threshold <= 0) threshold = 0.3;
+      var replay = root.hasAttribute('data-hckxcp-replay');
+
+      if ('IntersectionObserver' in window) {
+        var revealObserver = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                root.classList.add('hckxcp-is-inview');
+                if (!replay) revealObserver.unobserve(root);
+              } else if (replay) {
+                root.classList.remove('hckxcp-is-inview');
+              }
+            });
+          },
+          { threshold: threshold }
+        );
+        revealObserver.observe(root);
+      } else {
+        root.classList.add('hckxcp-is-inview');
+      }
+
+      /* -------------------------------------------------------
+         PHOTO STACK OPEN / CLOSE
+         ------------------------------------------------------- */
+      var stack = root.querySelector('[data-hckxcp-stack]');
+      if (!stack) return;
+
+      /* Mobile / touch device check */
+      var canHover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+      function toggle() {
+        stack.classList.toggle('is-open');
+      }
+
+      /* Tap/click: touch aur desktop dono par chalta hai */
+      stack.addEventListener('click', toggle);
+      stack.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggle();
+        }
+      });
+
+      if (canHover) {
+        /* DESKTOP: hover par open / close */
+        stack.addEventListener('mouseenter', function () {
+          stack.classList.add('is-open');
+        });
+        stack.addEventListener('mouseleave', function () {
+          stack.classList.remove('is-open');
+        });
+      } else if ('IntersectionObserver' in window) {
+        /* MOBILE: photos screen par aate hi apne aap open ho jayein,
+           screen se bahar jaane par band, taaki dobara scroll karne par phir khulein */
+        var openObserver = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                stack.classList.add('is-open');
+              } else {
+                stack.classList.remove('is-open');
+              }
+            });
+          },
+          { threshold: 0.6 }
+        );
+        openObserver.observe(stack);
+      } else {
+        stack.classList.add('is-open');
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', boot);
+    } else {
+      boot();
+    }
+
+    /* Theme Editor me section reload hone par dobara init */
+    document.addEventListener('shopify:section:load', function (e) {
+      if (e.target && e.target.querySelector('#hckxcp-{{ section.id }}')) {
+        boot();
+      }
+    });
+  })();
+</script>
+
+
+{% schema %}
+{
+  "name": "Coffee People",
+  "class": "m-section-hckxcp",
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "heading_left", "label": "Heading left word", "default": "Coffee" },
+    { "type": "image_picker", "id": "heading_icon", "label": "Heading icon (hands)" },
+    { "type": "text", "id": "heading_right", "label": "Heading right word", "default": "People" },
+    { "type": "range", "id": "icon_max_width", "min": 60, "max": 320, "step": 10, "unit": "px", "label": "Icon max width (jab grow ho jaye)", "default": 140 },
+    { "type": "range", "id": "split_gap", "min": 20, "max": 200, "step": 5, "unit": "px", "label": "Words ke beech gap (jab icon grow ho jaye)", "default": 70 },
+    { "type": "range", "id": "trigger_point", "min": 10, "max": 70, "step": 5, "unit": "%", "label": "Heading viewport me kitna dikhte hi animate ho", "default": 30 },
+    { "type": "checkbox", "id": "replay_on_scroll", "label": "Har baar scroll me heading aane par dobara animate ho", "default": true },
+
+    { "type": "header", "content": "Photos" },
+    { "type": "image_picker", "id": "image_left", "label": "Left photo (revealed on hover)" },
+    { "type": "image_picker", "id": "image_center", "label": "Center photo (front)" },
+    { "type": "image_picker", "id": "image_right", "label": "Right photo (revealed on hover)" },
+
+    { "type": "header", "content": "Passion / Mission" },
+    { "type": "text", "id": "passion_heading", "label": "Passion heading", "default": "Our Passion" },
+    { "type": "text", "id": "passion_subheading", "label": "Passion subheading", "default": "Is People" },
+    { "type": "image_picker", "id": "passion_icon", "label": "Passion icon (heart)" },
+    { "type": "text", "id": "mission_heading", "label": "Mission heading", "default": "Our Mission" },
+    { "type": "text", "id": "mission_subheading", "label": "Mission subheading", "default": "Is Coffee" },
+    { "type": "image_picker", "id": "mission_icon", "label": "Mission icon (rocket)" },
+
+    { "type": "header", "content": "Body text" },
+    { "type": "richtext", "id": "paragraph", "label": "Paragraph" },
+    { "type": "text", "id": "link_text", "label": "Link text", "default": "Learn about our community" },
+    { "type": "url", "id": "link_url", "label": "Link URL" },
+
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "background_image", "label": "Background image (optional, gradient ke upar chadhta hai)" },
+    { "type": "color", "id": "overlay_color", "label": "Overlay color (image ke upar tint)", "default": "#57C6AE" },
+    { "type": "range", "id": "overlay_opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "label": "Overlay opacity", "default": 65, "info": "0% = sirf image dikhegi, 100% = sirf overlay color dikhega. Image na chuno to koi asar nahi, gradient hi dikhta rahega." },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg_gradient_start", "label": "Background gradient start", "default": "#57C6AE" },
+    { "type": "color", "id": "bg_gradient_end", "label": "Background gradient end", "default": "#2E9D87" },
+    { "type": "color", "id": "heading_color", "label": "Heading / column text color", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_text_color", "label": "Body text color", "default": "#0F2A24" },
+    { "type": "color", "id": "accent_color", "label": "Accent color (link + arrow)", "default": "#F4E36B" }
+  ],
+  "presets": [
+    { "name": "Coffee People" }
+  ]
+}
+{% endschema %}

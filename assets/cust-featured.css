@@ -1,0 +1,598 @@
+/* =====================================================================
+   HUCK STYLE BLEND SWIPER  -  assets/cust-featured.css
+   Saare classes "hckxbs-" (unique) prefix se hain.
+   Positioning/drag Swiper.js khud sambhalta hai; hum sirf
+   look-and-feel (scale, colors, active-card content) control
+   karte hain.
+   ===================================================================== */
+
+:root {
+  --hckxbs-bg: #F9F4EC;
+  --hckxbs-text: #111111;
+  --hckxbs-card-bg: #ffffff;
+  --hckxbs-accent-fallback: #E6007E;
+  --hckxbs-card-width: 340px;
+  --hckxbs-card-gap: 26px;
+  --hckxbs-center-image-width: 260px;
+  --hckxbs-stage-height: 560px;
+  --hckxbs-active-left-pad: 150px;
+  --hckxbs-ease: cubic-bezier(.22, .8, .28, 1);
+  --hckxbs-modal-bg: #111111;
+  --hckxbs-modal-text: #ffffff;
+
+  /* Background image + tint overlay */
+  --hckxbs-bg-image: none;
+  --hckxbs-overlay-opacity: 65%;
+}
+
+.hckxbs,
+.hckxbs *,
+.hckxbs *::before,
+.hckxbs *::after {
+  box-sizing: border-box;
+}
+
+.hckxbs {
+  /* Fixed header ke upar kabhi na aaye, isliye z-index bahut low
+     aur bounded rakha hai (header ka z-index isse kahin zyada hai) */
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  background: var(--hckxbs-bg);
+  color: var(--hckxbs-text);
+  padding: 70px 20px 90px;
+  overflow: hidden;
+}
+
+/* -----------------------------------------------------------------
+   BACKGROUND IMAGE + COLOR OVERLAY
+   Image piche se dikhti hai, uske upar "Section background" color
+   ka tint (color-mix se semi-transparent) chadhta hai - opacity
+   jitni zyada utna color solid / image utni halki. Image na ho to
+   --hckxbs-bg-image: none hoti hai aur ye layer harmless rehti hai.
+   z-index 0 par, source order me sabse pehla child hone ki wajah se
+   heading/tabs/stage (jo isi stacking context ke andar aate hain)
+   ke hamesha piche rehta hai; fixed header ka z-index isse kahin
+   zyada hai isliye header par koi asar nahi.
+   ----------------------------------------------------------------- */
+.hckxbs::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--hckxbs-bg) var(--hckxbs-overlay-opacity), transparent),
+      color-mix(in srgb, var(--hckxbs-bg) var(--hckxbs-overlay-opacity), transparent)
+    ),
+    var(--hckxbs-bg-image) center / cover no-repeat;
+}
+
+.hckxbs-heading {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 10px;
+  text-align: center;
+  font-size: clamp(36px, 6vw, 64px);
+  text-transform: uppercase;
+  letter-spacing: .01em;
+}
+
+.hckxbs-intro {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto 28px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* -----------------------------------------------------------------
+   TABS
+   ----------------------------------------------------------------- */
+.hckxbs-tabs {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto 40px;
+  padding: 6px;
+  max-width: fit-content;
+  border-radius: 10px;
+  background-image:url(https://cdn.shopify.com/oxygen-v2/36130/28857/60168/4301998/assets/huck-texture--filters-crop-OhUWFhvT.webp);
+      background-size: cover;
+    background-position: right bottom;
+}
+
+.hckxbs-tab {
+  appearance: none;
+  cursor: pointer;
+  border: none;
+  padding: .35em 1em;
+  border-radius: 10px;
+  background: transparent;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: .01em;
+  text-transform: capitalize;
+  transition: background .3s ease, color .3s ease;
+  white-space: nowrap;
+}
+
+.hckxbs-tab.is-active {
+  background: white;
+  color: black;
+}
+
+/* -----------------------------------------------------------------
+   STAGE (blob + center image + arrows + swiper)
+   Iske andar ke saare z-index chhote (max 5) jaan-boojh kar rakhe
+   hain taaki fixed header (z-index 30) hamesha upar rahe.
+   ----------------------------------------------------------------- */
+.hckxbs-stage {
+  position: relative;
+  z-index: 1;
+  height: var(--hckxbs-stage-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Big background color blob - jo active product ke hisaab se badalta hai */
+.hckxbs-blob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(70vw, 720px);
+  height: min(70vw, 720px);
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hckxbs-blob img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+
+/* Fixed center bag/product mockup image - kabhi move nahi hota */
+.hckxbs-center-image {
+  position: absolute;
+  top: 53%;
+  left: 44%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  width: var(--hckxbs-center-image-width);
+  pointer-events: none;
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, .25));
+}
+
+.hckxbs-center-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Arrows */
+.hckxbs-arrow {
+  appearance: none;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  background: var(--hckxbs-text);
+  color: #fff;
+  transition: transform .25s ease, background .25s ease;
+}
+
+.hckxbs-arrow:hover {
+  background: var(--hckxbs-accent-fallback);
+}
+
+.hckxbs-arrow svg {
+  width: 60%;
+  height: 22px;
+      color: #edec79;
+}
+
+.hckxbs-arrow-prev { left: 4%; }
+.hckxbs-arrow-next { 
+  
+  right: 4%; 
+
+    scale: -1 1;
+
+}
+
+@media (max-width: 900px) {
+  .hckxbs-arrow-prev { left: 10px; }
+  .hckxbs-arrow-next { right: 10px; }
+}
+
+/* -----------------------------------------------------------------
+   SWIPER (positioning/drag Swiper.js khud karta hai)
+   ----------------------------------------------------------------- */
+.hckxbs-swiper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: none; /* JS "is-active-track" wale hi dikhata hai */
+}
+
+.hckxbs-swiper.is-active-track {
+  display: block;
+}
+
+.hckxbs-swiper .swiper-wrapper {
+  align-items: center;
+}
+
+.hckxbs-swiper .swiper-slide {
+  width: var(--hckxbs-card-width);
+  height: auto;
+}
+
+/* -----------------------------------------------------------------
+   CARDS
+   ----------------------------------------------------------------- */
+.hckxbs-card {
+  position: relative;
+  padding: 26px 26px 34px;
+  border-radius: 22px;
+  background: var(--hckxbs-card-bg);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .10);
+  overflow: hidden;
+  transform: scale(.82);
+  opacity: .55;
+  transition: transform .5s var(--hckxbs-ease), opacity .5s ease, box-shadow .5s ease;
+}
+
+.swiper-slide-active .hckxbs-card {
+  opacity: 1;
+  box-shadow: 0 26px 50px rgba(0, 0, 0, .16);
+  padding-left: var(--hckxbs-active-left-pad);
+  transition:
+    transform .5s var(--hckxbs-ease),
+    opacity .5s ease,
+    box-shadow .5s ease,
+    padding-left .5s var(--hckxbs-ease);
+}
+
+.hckxbs-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hckxbs-card-title {
+  font-weight: 700;
+  line-height: 1em;
+  margin-top: auto;
+  font-size: 36px;
+}
+
+.hckxbs-card-title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hckxbs-card-blob {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
+
+.hckxbs-card-flavor {
+  margin: 0px 0 0px;
+  padding: 0px 0px 5px;
+  border-top: 2px solid var(--hckxbs-text);
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: .01em;
+  border-bottom: 2px solid var(--hckxbs-text);
+}
+
+/* Description + buttons sirf ACTIVE (center) card par dikhte hain */
+.hckxbs-card-desc,
+.hckxbs-card-actions {
+  display: none;
+}
+
+.swiper-slide-active .hckxbs-card-desc {
+  display: block;
+  margin-top: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: black;
+}
+
+.hckxbs-card-desc p + p { margin-top: 8px; }
+
+.swiper-slide-active .hckxbs-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.hckxbs-learn-more {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.hckxbs-buy-now {
+  appearance: none;
+  cursor: pointer;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  background: var(--hckxbs-text);
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  transition: transform .25s ease, opacity .25s ease;
+}
+
+.hckxbs-buy-now:hover {
+  transform: translateY(-2px);
+}
+
+.hckxbs-buy-now:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+/* Bottom accent strip */
+.hckxbs-card-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 10px;
+  background-size: cover;
+  background-position: center 70%;
+}
+
+.hckxbs-card-strip-fallback {
+  background: var(--hckxbs-accent-fallback);
+}
+
+/* -----------------------------------------------------------------
+   BUY NOW POPUP
+   JS is-open class daal/hata kar isse dikhata/chhupata hai. Modal
+   ko JS document.body me move kar deta hai taaki fixed header ke
+   upar dikh sake (section ka apna z-index jaan-boojh kar low hai).
+   ----------------------------------------------------------------- */
+.hckxbs-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.hckxbs-modal.is-open {
+  display: flex;
+}
+
+.hckxbs-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, .45);
+}
+
+.hckxbs-modal-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 22.8rem;
+  border-radius: 18px;
+  background: var(--hckxbs-modal-bg);
+  color: var(--hckxbs-modal-text);
+  padding: 24px 24px 26px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, .35);
+}
+
+.hckxbs-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+     border-bottom: 2px solid white;
+    padding-bottom: .5rem;
+    margin-bottom: 1rem;
+}
+
+.hckxbs-modal-title {
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: .02em;
+    line-height: 1.4em;
+  text-transform: uppercase;
+}
+
+.hckxbs-modal-close {
+  appearance: none;
+  cursor: pointer;
+  border: 0px;
+  background: transparent;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  line-height: 1;
+  font-size: 16px;
+  display: grid;
+  place-items: center;
+}
+
+.hckxbs-modal-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+}
+
+.hckxbs-modal-label {
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: white;
+}
+
+.hckxbs-modal-price {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.hckxbs-modal-size-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: flex-end;
+}
+
+.hckxbs-modal-size-btn {
+  appearance: none;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, .5);
+  background: transparent;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.hckxbs-modal-size-btn.is-active {
+  background: #fff;
+  color: #111;
+  border-color: #fff;
+}
+
+.hckxbs-modal-size-btn:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+
+.hckxbs-modal-qty {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hckxbs-modal-qty-btn {
+  appearance: none;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, .5);
+  background: transparent;
+  color: #fff;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  line-height: 1;
+  font-size: 16px;
+  display: grid;
+  place-items: center;
+}
+
+.hckxbs-modal-qty-value {
+  min-width: 14px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.hckxbs-modal-add {
+  appearance: none;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  margin-top: 18px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  font-weight: 700;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.hckxbs-modal-add:hover {
+  transform: translateY(-1px);
+}
+
+.hckxbs-modal-add:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+/* -----------------------------------------------------------------
+   RESPONSIVE
+   ----------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .swiper-slide-active .hckxbs-card {
+    padding-left: 180px;
+  }
+
+  :root {
+    --hckxbs-card-width: 250px;
+    --hckxbs-active-left-pad: 90px;
+  }
+
+  .hckxbs-stage {
+    height: 520px;
+  }
+
+  .hckxbs-center-image {
+    width: 250px;
+    left: 35%;
+    top: 52%;
+  }
+
+  .hckxbs-card-title {
+    font-size: 18px;
+  }
+
+  .hckxbs-card-desc,
+  .hckxbs-card-flavor {
+    font-size: 13px;
+  }
+}
+
+/* -----------------------------------------------------------------
+   REDUCED MOTION
+   ----------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .hckxbs-card,
+  .hckxbs-blob img {
+    transition-duration: .01ms !important;
+  }
+}

@@ -1,0 +1,264 @@
+{%- comment -%}
+  sections/know-your-bean.liquid
+  Product metafield used: custom.coffee_details  (type: Metaobject reference -> coffee_details)
+{%- endcomment -%}
+
+{%- assign raw_details = product.metafields.custom.coffee_details.value -%}
+{%- comment -%} Works for both: single metaobject reference and list of references {%- endcomment -%}
+{%- if raw_details.system != blank -%}
+  {%- assign d = raw_details -%}
+{%- else -%}
+  {%- assign d = raw_details | first -%}
+{%- endif -%}
+
+{%- if d != blank -%}
+  {%- assign notes = d.notes.value -%}
+  {%- assign roast = d.roast_level.value | default: 5 | plus: 0 -%}
+  {%- if roast < 1 -%}{%- assign roast = 1 -%}{%- endif -%}
+  {%- assign roast_max = section.settings.roast_max | default: 3 -%}
+  {%- if roast > roast_max -%}{%- assign roast = roast_max -%}{%- endif -%}
+  {%- assign roast_pos = roast | minus: 0.5 | times: 100.0 | divided_by: roast_max -%}
+  {%- assign bitterness = d.bitterness.value | default: 0 | plus: 0 -%}
+  {%- assign acidity = d.acidity.value | default: 0 | plus: 0 -%}
+  {%- assign badge_size = section.settings.badge_size | default: 112 -%}
+  {%- assign badge_size_mobile = badge_size | times: 0.82 | round: 0 -%}
+
+  <section class="kyb kyb-{{ section.id }}" style="--kyb-bg: {{ section.settings.bg }}; --kyb-card: {{ section.settings.card }}; --kyb-ink: {{ section.settings.ink }}; --kyb-title: {{ section.settings.title_color }}; --kyb-badge: {{ section.settings.badge }}; --kyb-badge-size: {{ badge_size }}px; --kyb-badge-size-m: {{ badge_size_mobile }}px;">
+    <h2 class="kyb__heading">{{ section.settings.heading }}</h2>
+
+    <div class="kyb__wrap">
+      {%- if section.settings.badge_image != blank -%}
+        {%- comment -%} Image badge: rotates on scroll {%- endcomment -%}
+        <div class="kyb__badge kyb__badge--img" data-kyb-spin data-speed="{{ section.settings.rotate_speed }}">
+          {{
+            section.settings.badge_image
+            | image_url: width: 400
+            | image_tag:
+              loading: 'lazy',
+              widths: '150, 200, 300, 400',
+              alt: 'Sourced from ' | append: d.region.value
+          }}
+        </div>
+      {%- elsif d.region.value != blank -%}
+        {%- comment -%} Fallback: text-on-circle SVG badge {%- endcomment -%}
+        <svg class="kyb__badge" viewBox="0 0 120 120" role="img" aria-label="Sourced from {{ d.region.value | escape }}">
+          <circle cx="60" cy="60" r="60" fill="var(--kyb-badge)"/>
+          <path id="kyb-ring-{{ section.id }}" d="M 60,60 m -45,0 a 45,45 0 1,1 90,0 a 45,45 0 1,1 -90,0" fill="none"/>
+          <text font-size="11" font-weight="700" fill="var(--kyb-ink)" letter-spacing="1">
+            <textPath href="#kyb-ring-{{ section.id }}" textLength="276" lengthAdjust="spacing">SOURCED FROM {{ d.region.value | upcase | escape }}</textPath>
+          </text>
+          <polygon points="60,44 63,54 71,49 66,58 76,60 66,62 71,71 63,66 60,76 57,66 49,71 54,62 44,60 54,58 49,49 57,54" fill="var(--kyb-card)"/>
+        </svg>
+      {%- endif -%}
+
+      <div class="kyb__card">
+        {%- if section.settings.illustration != blank -%}
+          <div class="kyb__art">
+            {{ section.settings.illustration | image_url: width: 400 | image_tag: loading: 'lazy', alt: '' }}
+          </div>
+        {%- endif -%}
+
+        <div class="kyb__body">
+          {%- if notes != blank -%}
+            <div class="kyb__row">
+              <p class="kyb__label">Tasting notes</p>
+              <p class="kyb__value kyb__value--big">{{ notes | join: ', ' }}</p>
+            </div>
+          {%- endif -%}
+
+          {%- if d.roast_level.value != blank -%}
+            <div class="kyb__row">
+              <p class="kyb__label">Roast level</p>
+              <div class="kyb__roast" role="img" aria-label="Roast level {{ roast }} out of {{ roast_max }}">
+                <span class="kyb__line"></span>
+                <span class="kyb__dot kyb__dot--l"></span>
+                <span class="kyb__dot kyb__dot--r"></span>
+                {%- for i in (1..roast_max) -%}
+                  {%- assign tick_pos = i | minus: 0.5 | times: 100.0 | divided_by: roast_max -%}
+                  <span class="kyb__tick" style="left: {{ tick_pos }}%"></span>
+                {%- endfor -%}
+                <span class="kyb__marker" style="left: {{ roast_pos }}%"></span>
+              </div>
+              <div class="kyb__scale"><span>Light</span><span>Dark</span></div>
+            </div>
+          {%- endif -%}
+
+          {%- if d.bitterness.value != blank -%}
+            <div class="kyb__row">
+              <p class="kyb__label">Bitterness</p>
+              {% render 'kyb-stars', score: bitterness %}
+            </div>
+          {%- endif -%}
+
+          {%- if d.acidity.value != blank -%}
+            <div class="kyb__row">
+              <p class="kyb__label">Acidity</p>
+              {% render 'kyb-stars', score: acidity %}
+            </div>
+          {%- endif -%}
+
+          <div class="kyb__grid">
+            {%- if d.process.value != blank -%}<div class="kyb__row"><p class="kyb__label">Process</p><p class="kyb__value">{{ d.process.value }}</p></div>{%- endif -%}
+            {%- if d.origin.value != blank -%}<div class="kyb__row"><p class="kyb__label">Origin</p><p class="kyb__value">{{ d.origin.value }}</p></div>{%- endif -%}
+            {%- if d.estate.value != blank -%}<div class="kyb__row"><p class="kyb__label">Estate</p><p class="kyb__value">{{ d.estate.value }}</p></div>{%- endif -%}
+            {%- if d.seed.value != blank -%}<div class="kyb__row"><p class="kyb__label">Seed</p><p class="kyb__value">{{ d.seed.value }}</p></div>{%- endif -%}
+            {%- if d.altitude.value != blank -%}<div class="kyb__row"><p class="kyb__label">Altitude</p><p class="kyb__value">{{ d.altitude.value }}</p></div>{%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .kyb-{{ section.id }}{font-family:'Lineal',sans-serif;background:var(--kyb-bg);padding:8rem 20px 72px;color:var(--kyb-ink)}
+    .kyb-{{ section.id }} .kyb__heading{margin:0 0 8rem;text-align:center;color:var(--kyb-title);font-family:'Lineal',sans-serif;font-size:65px;line-height:1;font-weight:900;text-transform:uppercase;letter-spacing:-.01em}
+    .kyb-{{ section.id }} .kyb__wrap{position:relative;max-width:680px;margin:0 auto;padding-top:0px}
+
+    /* Badge (SVG fallback + image badge) */
+    .kyb-{{ section.id }} .kyb__badge{
+      
+      position:absolute;top:-60px;left:-60px;width:var(--kyb-badge-size);height:var(--kyb-badge-size);z-index:2;
+    
+    }
+    .kyb-{{ section.id }} .kyb__badge--img{
+      
+      border-radius:50%;overflow:hidden;will-change:transform;transform-origin:50% 50%;
+    
+    
+    }
+    .kyb-{{ section.id }} .kyb__badge--img img{
+      
+      display:block;width:100%;height:100%;object-fit:cover;border-radius:50%;
+    
+    
+    }
+
+    .kyb-{{ section.id }} .kyb__card{display:flex;gap:28px;background:var(--kyb-card);border-radius:10px;padding:48px 32px 32px}
+    .kyb-{{ section.id }} .kyb__art{
+      
+      
+      flex:0 0 45%;
+      align-self:flex-end;
+    
+    
+    }
+    .kyb-{{ section.id }} .kyb__art img{width:100%;height:auto;display:block}
+    .kyb-{{ section.id }} .kyb__body{flex:1;min-width:0}
+    .kyb-{{ section.id }} .kyb__row{border-top:1px solid var(--kyb-ink);padding:6px 0 12px}
+    .kyb-{{ section.id }} .kyb__row:first-child{border-top:0}
+    .kyb-{{ section.id }} .kyb__label{margin:0 0 6px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+    .kyb-{{ section.id }} .kyb__value{margin:0;font-size:18px;font-weight:600;line-height:1.2}
+    .kyb-{{ section.id }} .kyb__value--big{font-size:22px;font-weight:700;text-transform:uppercase}
+    .kyb-{{ section.id }} .kyb__grid{display:grid;grid-template-columns:1fr 1fr;column-gap:20px}
+    .kyb-{{ section.id }} .kyb__roast{position:relative;height:28px;margin:4px 6px 0}
+    .kyb-{{ section.id }} .kyb__line{position:absolute;left:0;right:0;top:50%;height:1.5px;background:var(--kyb-ink);transform:translateY(-50%)}
+    .kyb-{{ section.id }} .kyb__dot{position:absolute;top:50%;width:8px;height:8px;border-radius:50%;background:var(--kyb-ink);transform:translate(-50%,-50%)}
+    .kyb-{{ section.id }} .kyb__dot--l{left:0}.kyb-{{ section.id }} .kyb__dot--r{left:100%}
+    .kyb-{{ section.id }} .kyb__tick{position:absolute;top:50%;width:1.5px;height:10px;background:var(--kyb-ink);transform:translate(-50%,-50%)}
+    .kyb-{{ section.id }} .kyb__marker{position:absolute;top:50%;width:3px;height:26px;border-radius:2px;background:var(--kyb-ink);transform:translate(-50%,-50%);transition:left .6s ease}
+    .kyb-{{ section.id }} .kyb__scale{display:flex;justify-content:space-between;font-size:12px;margin:2px 0 0}
+    .kyb-{{ section.id }} .kyb__stars{display:flex;gap:6px}
+    .kyb-{{ section.id }} .kyb__star{position:relative;width:22px;height:22px;display:block}
+    .kyb-{{ section.id }} .kyb__star svg{position:absolute;inset:0;width:100%;height:100%}
+    .kyb-{{ section.id }} .kyb__star .fill{overflow:hidden;position:absolute;inset:0}
+
+    .bbw__heading{
+    font-size:65px;
+
+    }
+
+    @media (max-width:640px){
+
+      .kyb__heading, .bbw__heading{
+      
+        font-size: 32px!important;
+      }
+
+
+      #BBW-template--26157465469212__cust_brewed_ACkync{
+      
+        padding-top:0px!important;
+      }
+
+      
+
+      .kyb-{{ section.id }} .kyb__wrap{padding:0}
+      .kyb-{{ section.id }} .kyb__badge{left:-6px;width:100px;height:100px;}
+      .kyb-{{ section.id }} .kyb__card{flex-direction:column;padding:32px 20px 32px}
+      .kyb-{{ section.id }} .kyb__art{display:none}
+      .kyb-{{ section.id }} .kyb__value{font-size:16px}
+      .kyb-{{ section.id }} .kyb__value--big{font-size:19px}
+    }
+    @media (prefers-reduced-motion:reduce){.kyb-{{ section.id }} .kyb__marker{transition:none}}
+  </style>
+<script>
+  (function () {
+    var el = document.querySelector('.kyb-{{ section.id }} [data-kyb-spin]');
+    if (!el) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var section = document.querySelector('.kyb-{{ section.id }}');
+    var speed = parseFloat(el.getAttribute('data-speed')) || 3; /* 1-10 */
+    var angle = 0;
+    var lastY = window.scrollY;
+    var ticking = false;
+
+    /* true when at least 50% of the section is on screen */
+    function isHalfVisible() {
+      var r = section.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      var visible = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+      var needed = Math.min(r.height, vh) * 0.5;
+      return visible >= needed;
+    }
+
+    function update() {
+      var y = window.scrollY;
+      var delta = y - lastY;
+      lastY = y;
+      if (isHalfVisible()) {
+        angle += delta * speed * 0.1;
+        el.style.transform = 'rotate(' + angle + 'deg)';
+      }
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(update);
+      }
+    }, { passive: true });
+  })();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Know your bean",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Know your bean" },
+    { "type": "range", "id": "roast_max", "label": "Roast level scale (max value)", "info": "Metaobject me roast_level ki jo max value rakhi hai wahi yaha rakho", "min": 2, "max": 10, "step": 1, "default": 3 },
+    { "type": "image_picker", "id": "illustration", "label": "Illustration (optional)" },
+
+    { "type": "header", "content": "Top-left badge" },
+    {
+      "type": "image_picker",
+      "id": "badge_image",
+      "label": "Badge image (circle, rotates on scroll)",
+      "info": "Square image upload karo (e.g. 400x400). Empty chhodoge to purana text badge dikhega."
+    },
+    { "type": "range", "id": "badge_size", "label": "Badge size", "min": 60, "max": 220, "step": 4, "unit": "px", "default": 112 },
+    { "type": "range", "id": "rotate_speed", "label": "Rotation speed", "info": "Higher = faster rotation on scroll", "min": 1, "max": 10, "step": 1, "default": 3 },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Section background", "default": "#034d29" },
+    { "type": "color", "id": "card", "label": "Card background", "default": "#72c9bc" },
+    { "type": "color", "id": "ink", "label": "Text and line color", "default": "#fff6e9" },
+    { "type": "color", "id": "title_color", "label": "Heading color", "default": "#fff6e9" },
+    { "type": "color", "id": "badge", "label": "Badge color (fallback SVG)", "default": "#c99a74" }
+  ],
+  "presets": [{ "name": "Know your bean" }]
+}
+{% endschema %}

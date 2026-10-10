@@ -1,0 +1,580 @@
+{%- comment -%}
+  Section: About – EPIC (Outline text + values + jobs)
+  File name: sections/about-epic.liquid
+{%- endcomment -%}
+
+{%- liquid
+  assign sid = section.id
+-%}
+
+<style>
+  #ae-{{ sid }} {
+    --ae-bg: {{ section.settings.bg_color }};
+    --ae-outline: {{ section.settings.outline_color }};
+    --ae-heading: {{ section.settings.heading_color }};
+    --ae-text: {{ section.settings.text_color }};
+    --ae-link: {{ section.settings.link_color }};
+    --ae-icon-bg: {{ section.settings.icon_bg }};
+    --ae-job-bg: {{ section.settings.job_bg }};
+    --ae-job-alt: {{ section.settings.job_alt_bg }};
+    --ae-job-text: {{ section.settings.job_text_color }};
+    --ae-job-loc: {{ section.settings.job_location_color }};
+    background: var(--ae-bg);
+    color: var(--ae-text);
+    padding: {{ section.settings.padding_top }}px 24px {{ section.settings.padding_bottom }}px;
+    font-family: 'Lineal', 'Rubik', sans-serif;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  #ae-{{ sid }} *,
+  #ae-{{ sid }} *::before,
+  #ae-{{ sid }} *::after { box-sizing: border-box; }
+
+  #ae-{{ sid }} .ae__inner {
+    max-width: {{ section.settings.max_width }}px;
+    margin: 0 auto;
+  }
+
+  /* Big outlined word */
+  #ae-{{ sid }} .ae__big {
+    margin: 0;
+    font-size: clamp(110px, 31vw, {{ section.settings.big_size }}px);
+    line-height: .9;
+    font-weight: {{ section.settings.big_weight }};
+    letter-spacing: {{ section.settings.big_spacing }}px;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: {{ section.settings.stroke_width }}px var(--ae-outline);
+    paint-order: stroke fill;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  #ae-{{ sid }} .ae__cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px {{ section.settings.col_gap }}px;
+    margin-top: {{ section.settings.cols_top_gap }}px;
+    align-items: start;
+  }
+
+  #ae-{{ sid }} .ae__heading {
+    margin: 0;
+    font-size: 30px;
+    line-height: 1.3;
+    font-weight: 300;
+    color: var(--ae-heading);
+  }
+
+  #ae-{{ sid }} .ae__body {
+    margin-top: 28px;
+    font-size: 15px;
+    line-height: 1.7;
+    font-weight: 400;
+  }
+
+  #ae-{{ sid }} .ae__body p { margin: 0 0 1.5em; }
+  #ae-{{ sid }} .ae__body p:last-child { margin-bottom: 0; }
+  #ae-{{ sid }} .ae__body a { color: var(--ae-link); text-decoration: underline; }
+  #ae-{{ sid }} .ae__body a:hover { opacity: .8; }
+  #ae-{{ sid }} .ae__body strong,
+  #ae-{{ sid }} .ae__body b { font-weight: 700; }
+
+  /* Links list */
+  #ae-{{ sid }} .ae__links {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  #ae-{{ sid }} .ae__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ae-link);
+    font-size: 15px;
+    text-decoration: none;
+  }
+
+  #ae-{{ sid }} .ae__icon {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    background: var(--ae-icon-bg);
+    color: var(--ae-link);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .3px;
+  }
+
+  #ae-{{ sid }} .ae__link-text {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  #ae-{{ sid }} .ae__link svg {
+    width: 8px;
+    height: 8px;
+    margin-left: -6px;
+    margin-top: -4px;
+    flex: 0 0 auto;
+    transition: transform .2s ease;
+  }
+
+  #ae-{{ sid }} .ae__link:hover .ae__link-text { opacity: .8; }
+  #ae-{{ sid }} .ae__link:hover svg { transform: translate(1px, -1px); }
+  #ae-{{ sid }} .ae__link:focus-visible,
+  #ae-{{ sid }} .ae__job:focus-visible { outline: 2px solid var(--ae-link); outline-offset: 3px; }
+
+  /* Jobs list */
+  #ae-{{ sid }} .ae__jobs {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  #ae-{{ sid }} .ae__jobs li:nth-child(odd) .ae__job { background: var(--ae-job-bg); }
+  #ae-{{ sid }} .ae__jobs li:nth-child(even) .ae__job { background: var(--ae-job-alt); }
+
+  #ae-{{ sid }} .ae__job {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 10px;
+    color: var(--ae-job-text);
+    text-decoration: none;
+    font-size: 12px;
+    transition: filter .2s ease;
+  }
+
+  #ae-{{ sid }} a.ae__job:hover { filter: brightness(1.25); }
+
+  #ae-{{ sid }} .ae__job-title { font-weight: 700; }
+
+  #ae-{{ sid }} .ae__job-loc {
+    flex: 0 0 auto;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--ae-job-loc);
+    white-space: nowrap;
+  }
+
+  #ae-{{ sid }} .ae__after { margin-top: 24px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    #ae-{{ sid }} .ae__link svg,
+    #ae-{{ sid }} .ae__job { transition: none; }
+  }
+
+  /* Laptop */
+  @media (max-width: 1199px) {
+    #ae-{{ sid }} .ae__heading { font-size: 27px; }
+  }
+
+  /* Tablet & Mobile: stack */
+  @media (max-width: 849px) {
+    #ae-{{ sid }} {
+      padding-top: {{ section.settings.padding_top | times: 0.7 | round }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.7 | round }}px;
+    }
+    #ae-{{ sid }} .ae__cols {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 50px;
+      margin-top: {{ section.settings.cols_top_gap | times: 0.7 | round }}px;
+    }
+    #ae-{{ sid }} .ae__heading { font-size: 26px; }
+  }
+
+  @media (max-width: 599px) {
+    #ae-{{ sid }} {
+      padding-left: 18px;
+      padding-right: 18px;
+      padding-top: {{ section.settings.padding_top | times: 0.5 | round }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round }}px;
+    }
+    #ae-{{ sid }} .ae__big { -webkit-text-stroke-width: {{ section.settings.stroke_width | times: 0.7 }}px; }
+    #ae-{{ sid }} .ae__heading { font-size: 23px; }
+    #ae-{{ sid }} .ae__body { margin-top: 20px; font-size: 14px; }
+    #ae-{{ sid }} .ae__job { font-size: 12px; padding: 12px 10px; }
+  }
+</style>
+
+<section id="ae-{{ sid }}" class="ae" data-section-id="{{ sid }}">
+  <div class="ae__inner">
+
+    {%- if section.settings.big_text != blank -%}
+      <p class="ae__big" aria-hidden="true">{{ section.settings.big_text | escape }}</p>
+      <span class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;">{{ section.settings.big_text | escape }}</span>
+    {%- endif -%}
+
+    <div class="ae__cols">
+
+      {%- comment -%} LEFT COLUMN {%- endcomment -%}
+      <div class="ae__col">
+        {%- if section.settings.left_heading != blank -%}
+          <h2 class="ae__heading">{{ section.settings.left_heading | newline_to_br }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.left_text != blank -%}
+          <div class="ae__body">{{ section.settings.left_text }}</div>
+        {%- endif -%}
+
+        {%- assign has_links = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'link' -%}{%- assign has_links = true -%}{%- endif -%}
+        {%- endfor -%}
+
+        {%- if has_links -%}
+          <ul class="ae__links">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'link' -%}
+                <li {{ block.shopify_attributes }}>
+                  <a class="ae__link" href="{{ block.settings.url | default: '#' }}"{% if block.settings.new_tab %} target="_blank" rel="noopener"{% endif %}>
+                    {%- if block.settings.icon_text != blank -%}
+                      <span class="ae__icon" aria-hidden="true">{{ block.settings.icon_text }}</span>
+                    {%- endif -%}
+                    <span class="ae__link-text">{{ block.settings.label }}</span>
+                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 10L10 2M4 2h6v6"/></svg>
+                  </a>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} RIGHT COLUMN {%- endcomment -%}
+      <div class="ae__col">
+        {%- if section.settings.right_heading != blank -%}
+          <h2 class="ae__heading">{{ section.settings.right_heading | newline_to_br }}</h2>
+        {%- endif -%}
+
+        {%- assign has_jobs = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'job' -%}{%- assign has_jobs = true -%}{%- endif -%}
+        {%- endfor -%}
+
+        {%- if has_jobs -%}
+          <ul class="ae__jobs">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'job' -%}
+                <li {{ block.shopify_attributes }}>
+                  {%- if block.settings.url != blank -%}
+                    <a class="ae__job" href="{{ block.settings.url }}">
+                  {%- else -%}
+                    <div class="ae__job">
+                  {%- endif -%}
+                      <span class="ae__job-title">{{ block.settings.title }}</span>
+                      <span class="ae__job-loc">{{ block.settings.location }}</span>
+                  {%- if block.settings.url != blank -%}
+                    </a>
+                  {%- else -%}
+                    </div>
+                  {%- endif -%}
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if section.settings.right_text != blank -%}
+          <div class="ae__body ae__after">{{ section.settings.right_text }}</div>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About – EPIC",
+  "tag": "section",
+  "class": "section-about-epic",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Big outlined text"
+    },
+    {
+      "type": "text",
+      "id": "big_text",
+      "label": "Big text",
+      "default": "EPIC"
+    },
+    {
+      "type": "range",
+      "id": "big_size",
+      "label": "Big text max size",
+      "min": 120,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "default": 340,
+      "info": "Chhoti screen par ye apne aap chhota ho jaata hai"
+    },
+    {
+      "type": "range",
+      "id": "big_weight",
+      "label": "Font weight",
+      "min": 100,
+      "max": 600,
+      "step": 100,
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "big_spacing",
+      "label": "Letter spacing",
+      "min": -10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "stroke_width",
+      "label": "Outline thickness",
+      "min": 1,
+      "max": 6,
+      "step": 0.5,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "header",
+      "content": "Left column"
+    },
+    {
+      "type": "textarea",
+      "id": "left_heading",
+      "label": "Heading",
+      "default": "It’s not just a word. It’s who we are & what pushes us to be better, daily."
+    },
+    {
+      "type": "richtext",
+      "id": "left_text",
+      "label": "Text",
+      "default": "<p>EPIC is a collection of values that we live and work by—<strong>E</strong>ntrepreneurial, <strong>P</strong>eople-first, <strong>I</strong>mpact, <strong>I</strong>ntegrity, <strong>C</strong>ommunication & Collaboration. It means being the best you can be with the resources, knowledge and experience available to you.</p><p>Whether we’re tasting new coffee recipes, designing beautiful packaging or figuring out the best way to keep you caffeinated, we’re EPIC every day. And we want you to be EPIC with us.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Right column"
+    },
+    {
+      "type": "textarea",
+      "id": "right_heading",
+      "label": "Heading",
+      "default": "Come, work with us and see how we put this principle to proper use."
+    },
+    {
+      "type": "richtext",
+      "id": "right_text",
+      "label": "Text below jobs",
+      "default": "<p>Think you’re a good fit? Tell us how we can work together at <a href=\"mailto:marketing@sleepyowl.co\">marketing@sleepyowl.co</a></p>"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Content max width",
+      "min": 700,
+      "max": 1500,
+      "step": 20,
+      "unit": "px",
+      "default": 1000
+    },
+    {
+      "type": "range",
+      "id": "col_gap",
+      "label": "Columns ke beech gap",
+      "min": 20,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "cols_top_gap",
+      "label": "Big text aur columns ke beech gap",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#1a2670"
+    },
+    {
+      "type": "color",
+      "id": "outline_color",
+      "label": "Big text outline color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#8fa6ff"
+    },
+    {
+      "type": "color",
+      "id": "icon_bg",
+      "label": "Link icon box background",
+      "default": "#141d5c"
+    },
+    {
+      "type": "header",
+      "content": "Jobs list colors"
+    },
+    {
+      "type": "color",
+      "id": "job_bg",
+      "label": "Row background (dark)",
+      "default": "#0d1450"
+    },
+    {
+      "type": "color",
+      "id": "job_alt_bg",
+      "label": "Row background (alternate)",
+      "default": "#121a63"
+    },
+    {
+      "type": "color",
+      "id": "job_text_color",
+      "label": "Job title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "job_location_color",
+      "label": "Job location color",
+      "default": "#6f8cff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Link (left column)",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon_text",
+          "label": "Icon text (e.g. PDF, in)",
+          "default": "PDF"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Link text",
+          "default": "Curious about EPIC? Keep reading"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "new_tab",
+          "label": "Naye tab me kholo",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "job",
+      "name": "Job (right column)",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Job title",
+          "default": "D2C Operations Lead"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location",
+          "default": "New Delhi"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About – EPIC",
+      "blocks": [
+        { "type": "link", "settings": { "icon_text": "PDF", "label": "Curious about EPIC? Keep reading" } },
+        { "type": "link", "settings": { "icon_text": "in", "label": "Sleepy Owl on LinkedIn" } },
+        { "type": "job", "settings": { "title": "D2C Operations Lead", "location": "New Delhi" } },
+        { "type": "job", "settings": { "title": "Customer Relationship Executive", "location": "New Delhi" } },
+        { "type": "job", "settings": { "title": "eCommerce Marketing Specialist", "location": "New Delhi" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

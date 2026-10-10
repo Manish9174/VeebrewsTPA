@@ -1,0 +1,341 @@
+
+
+{%- style -%}
+  #BBW-{{ section.id }} {
+    --bbw-section-bg: {{ section.settings.section_bg }};
+    --bbw-heading-color: {{ section.settings.heading_color }};
+    --bbw-card-bg: {{ section.settings.card_bg }};
+    --bbw-card-title: {{ section.settings.card_title_color }};
+    --bbw-card-text: {{ section.settings.card_text_color }};
+    --bbw-cols: {{ section.settings.columns_desktop }};
+    --bbw-radius: {{ section.settings.card_radius }}px;
+    --bbw-gap: {{ section.settings.gap }}px;
+    --bbw-img-h: {{ section.settings.image_height }}px;
+
+    background: var(--bbw-section-bg);
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    #BBW-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #BBW-{{ section.id }} .bbw__heading {
+    margin: 0 0 3rem;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--bbw-heading-color);
+    font-size: {{ section.settings.heading_size | times: 0.6 | round: 0 }}px;
+    line-height: 1;
+    font-weight: 800;
+  }
+
+  @media screen and (min-width: 750px) {
+    #BBW-{{ section.id }} .bbw__heading {
+      font-size: {{ section.settings.heading_size }}px;
+      margin-bottom: 4rem;
+    }
+  }
+
+  #BBW-{{ section.id }} .bbw__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--bbw-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media screen and (min-width: 750px) {
+    #BBW-{{ section.id }} .bbw__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    #BBW-{{ section.id }} .bbw__grid {
+      grid-template-columns: repeat(var(--bbw-cols), minmax(0, 1fr));
+    }
+  }
+
+  #BBW-{{ section.id }} .bbw__card {
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 2.4rem 3.4rem;
+    background: var(--bbw-card-bg);
+    border-radius:10px;
+    {% if section.settings.card_shadow %}
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    {% endif %}
+  }
+
+  #BBW-{{ section.id }} .bbw__card-title {
+    margin: 0;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--bbw-card-title);
+    font-size: 2.2rem;
+    line-height: 1.1;
+    font-weight: 700;
+  }
+
+  #BBW-{{ section.id }} .bbw__card-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--bbw-img-h);
+    margin: 2.4rem 0;
+  }
+
+  #BBW-{{ section.id }} .bbw__card-image img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  #BBW-{{ section.id }} .bbw__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin: auto 0 0;
+    padding: 0;
+  }
+
+  #BBW-{{ section.id }} .bbw__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1.2rem;
+    margin: 0;
+    color: var(--bbw-card-text);
+    font-size: 1.4rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  #BBW-{{ section.id }} .bbw__row dt,
+  #BBW-{{ section.id }} .bbw__row dd {
+    margin: 0;
+    font-weight: 500;
+  }
+
+  #BBW-{{ section.id }} .bbw__row dd {
+    text-align: right;
+        font-family: 'Lineal', sans-serif;
+  }
+{%- endstyle -%}
+
+<div id="BBW-{{ section.id }}" class="bbw">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="bbw__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    <ul class="bbw__grid">
+      {%- for block in section.blocks -%}
+        <li class="bbw__card" {{ block.shopify_attributes }}>
+          {%- if block.settings.title != blank -%}
+            <h3 class="bbw__card-title">{{ block.settings.title }}</h3>
+          {%- endif -%}
+
+          {%- if block.settings.image != blank -%}
+            <div class="bbw__card-image">
+              {{
+                block.settings.image
+                | image_url: width: 600
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '200, 300, 400, 600',
+                  alt: block.settings.title
+              }}
+            </div>
+          {%- endif -%}
+
+          <dl class="bbw__rows">
+            {%- for i in (1..5) -%}
+              {%- assign label_key = 'label_' | append: i -%}
+              {%- assign value_key = 'value_' | append: i -%}
+              {%- assign row_label = block.settings[label_key] -%}
+              {%- assign row_value = block.settings[value_key] -%}
+              {%- if row_label != blank or row_value != blank -%}
+                <div class="bbw__row">
+                  <dt>{{ row_label }}</dt>
+                  <dd>{{ row_value }}</dd>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </dl>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Best Brewed With",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Best Brewed With" },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size (desktop)",
+      "min": 30,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 80
+    },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#e7a0c2" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#05522b" },
+    { "type": "color", "id": "card_bg", "label": "Card background", "default": "#05522b" },
+    { "type": "color", "id": "card_title_color", "label": "Card title color", "default": "#ffffff" },
+    { "type": "color", "id": "card_text_color", "label": "Card text color (labels & values)", "default": "#ffffff" },
+
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Cards per row (desktop)",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between cards",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "Icon height",
+      "min": 80,
+      "max": 260,
+      "step": 5,
+      "unit": "px",
+      "default": 150
+    },
+    { "type": "checkbox", "id": "card_shadow", "label": "Show card shadow", "default": true },
+
+    { "type": "header", "content": "Section padding" },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Brew card",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Card title", "default": "Home Espresso" },
+        { "type": "image_picker", "id": "image", "label": "Icon image" },
+
+        { "type": "header", "content": "Row 1" },
+        { "type": "text", "id": "label_1", "label": "Label", "default": "Coffee" },
+        { "type": "text", "id": "value_1", "label": "Value", "default": "18g" },
+
+        { "type": "header", "content": "Row 2" },
+        { "type": "text", "id": "label_2", "label": "Label", "default": "Brew Time" },
+        { "type": "text", "id": "value_2", "label": "Value", "default": "30 - 35 secs" },
+
+        { "type": "header", "content": "Row 3" },
+        { "type": "text", "id": "label_3", "label": "Label", "default": "Water" },
+        { "type": "text", "id": "value_3", "label": "Value", "default": "40 - 50ml" },
+
+        { "type": "header", "content": "Row 4" },
+        { "type": "text", "id": "label_4", "label": "Label", "default": "Water Temp" },
+        { "type": "text", "id": "value_4", "label": "Value", "default": "95 °C" },
+
+        { "type": "header", "content": "Row 5" },
+        { "type": "text", "id": "label_5", "label": "Label", "default": "Grind Size" },
+        { "type": "text", "id": "value_5", "label": "Value", "default": "Home Espresso" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Best Brewed With",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "title": "Home Espresso",
+            "value_1": "18g", "value_2": "30 - 35 secs", "value_3": "40 - 50ml",
+            "value_4": "95 °C", "value_5": "Home Espresso"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Pour Over",
+            "value_1": "15g", "value_2": "3:00 - 3:30 mins", "value_3": "240ml",
+            "value_4": "88 - 94 °C", "value_5": "Pour Over"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Moka Pot",
+            "value_1": "20g", "value_2": "2:30 mins", "value_3": "100ml",
+            "value_4": "Boiling", "value_5": "Moka Pot"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Electronic Drip",
+            "value_1": "20g", "value_2": "Auto", "value_3": "300ml",
+            "value_4": "Auto", "value_5": "Electronic Drip"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

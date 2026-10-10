@@ -1,0 +1,84 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "cust_head_banner_yPaK4N": {
+      "type": "cust-head-banner",
+      "name": "Dynamic page heading",
+      "settings": {
+        "show_heading": true,
+        "custom_heading": "",
+        "text_transform": "uppercase",
+        "heading_size": 60,
+        "mobile_heading_size": 32,
+        "heading_weight": "700",
+        "letter_spacing": 1,
+        "mobile_letter_spacing": 0,
+        "background_image": "shopify://shop_images/Background_1.png",
+        "image_position": "center center",
+        "background_color": "#5C7650",
+        "overlay_color": "#5C7650",
+        "overlay_opacity": 90,
+        "desktop_height": 360,
+        "mobile_height": 200,
+        "padding_vertical": 0,
+        "mobile_padding": 0,
+        "heading_color": "#ffffff"
+      }
+    },
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": false,
+        "show_collection_image": false,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "grid_style": "cards",
+        "products_per_page": 36,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": true,
+        "quick_add": "standard",
+        "grid_top_space": 300,
+        "row_gap": 180,
+        "product_image_width": 400,
+        "image_overlap": 40,
+        "card_width": 340,
+        "card_gap": 26,
+        "background_image": "shopify://shop_images/Background_1.png",
+        "overlay_opacity": 90,
+        "background_color": "#5C7650",
+        "text_color": "#111111",
+        "card_background": "#ffffff",
+        "accent_fallback_color": "#e6007e",
+        "enable_filtering": false,
+        "filter_type": "drawer",
+        "enable_sorting": false,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "cust_head_banner_yPaK4N",
+    "banner",
+    "product-grid"
+  ]
+}

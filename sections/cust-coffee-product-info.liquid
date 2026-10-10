@@ -1,0 +1,262 @@
+{{ 'cust-product-coffee-info.css' | asset_url | stylesheet_tag }}
+
+{% assign coffee_info_list = product.metafields.custom.coffee_product_info.value %}
+
+{% for coffee_info in coffee_info_list limit: 1 %}
+
+  {%- comment -%} Images {%- endcomment -%}
+  {% assign bg_image         = coffee_info.background_image.value %}
+  {% assign left_leaf        = coffee_info.left_leaf_image.value %}
+  {% assign right_leaf       = coffee_info.right_leaf_image.value %}
+  {% assign cup_image        = coffee_info.coffee_cup_image.value %}
+  {% assign coffee_type_icon = coffee_info.coffee_type_icon.value %}
+  {% assign cup_size_icon    = coffee_info.cup_size_icon.value %}
+
+  {%- comment -%} Text fields {%- endcomment -%}
+  {% assign coffee_type_label = coffee_info.coffee_type_label.value %}
+  {% assign coffee_type       = coffee_info.coffee_type.value %}
+  {% assign intensity_label   = coffee_info.intensity_label.value %}
+  {% assign intensity_value   = coffee_info.intensity_value.value %}
+  {% assign cup_size_label    = coffee_info.cup_size_label.value %}
+  {% assign cup_size          = coffee_info.cup_size.value %}
+
+  {%- comment -%} List of Intensity Icon Item metaobjects {%- endcomment -%}
+  {% assign intensity_items = coffee_info.intensity_items.value | reverse %}
+
+  <section
+    id="CoffeeProductInfo-{{ section.id }}"
+    class="coffee-info-section{% if section.settings.enable_cup_float %} is-cup-floating{% endif %}{% if section.settings.enable_leaf_rotate %} is-leaf-rotating{% endif %}"
+    style="
+      {% if bg_image != blank %}background-image: url('{{ bg_image | image_url: width: 1920 }}');{% endif %}
+      --panel-overlay-color: {{ section.settings.overlay_color }};
+      --panel-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+      --cup-float-duration: {{ section.settings.cup_float_duration }}s;
+      --cup-float-distance: {{ section.settings.cup_float_distance }}px;
+      --leaf-rotate-duration: {{ section.settings.leaf_rotate_duration }}s;
+      --leaf-rotate-direction: {{ section.settings.leaf_rotate_direction }};
+    "
+  >
+    <div
+      class="coffee-info__panel"
+      {% if left_leaf != blank or right_leaf != blank %}
+        style="
+          {% if left_leaf != blank %}
+            --coffee-leaf-left: url('{{ left_leaf | image_url: width: 600 }}');
+          {% endif %}
+          {% if right_leaf != blank %}
+            --coffee-leaf-right: url('{{ right_leaf | image_url: width: 600 }}');
+          {% endif %}
+        "
+      {% endif %}
+    >
+
+      {% if section.settings.panel_bg_image != blank %}
+        <div
+          class="coffee-info__panel-bg"
+          style="background-image: url('{{ section.settings.panel_bg_image | image_url: width: 1600 }}');"
+        >
+          <span class="coffee-info__panel-overlay"></span>
+        </div>
+      {% endif %}
+
+      {% if cup_image != blank %}
+        <div class="coffee-info__cup">
+          <img
+            src="{{ cup_image | img_url: 'master' }}"
+            alt="{{ coffee_type | default: 'Coffee cup' | escape }}"
+            loading="lazy"
+          >
+        </div>
+      {% endif %}
+
+      <div class="coffee-info__content">
+
+        {%- comment -%} Coffee Type {%- endcomment -%}
+        <div class="coffee-info__item coffee-info__type">
+          <div class="coffee-info__label">
+            {{ coffee_type_label | default: 'Coffee Type' | escape }}
+          </div>
+          <div class="coffee-info__value">
+            {% if coffee_type_icon != blank %}
+              <img
+                class="coffee-info__icon"
+                src="{{ coffee_type_icon | img_url: 'master' }}"
+                alt=""
+                loading="lazy"
+              >
+            {% endif %}
+            {% if coffee_type != blank %}
+              <span class="coffee-info__text">
+                {{ coffee_type | escape }}
+              </span>
+            {% endif %}
+          </div>
+        </div>
+
+        {%- comment -%} Intensity {%- endcomment -%}
+        <div class="coffee-info__item coffee-info__intensity">
+          <div class="coffee-info__label">
+            {{ intensity_label | default: 'Intensity' | escape }}
+          </div>
+          <div class="coffee-info__value coffee-info__intensity-value">
+
+            {% if intensity_items != blank %}
+              <div class="coffee-info__intensity-icons">
+                {% for intensity_item in intensity_items %}
+                  {% assign intensity_image = intensity_item.intensity_icon.value %}
+                  {% if intensity_image != blank %}
+                    <img
+                      class="coffee-info__intensity-icon"
+                      src="{{ intensity_image | image_url: width: 48 }}"
+                      alt=""
+                      width="18"
+                      height="18"
+                      loading="lazy"
+                    >
+                  {% endif %}
+                  {% unless forloop.last %}
+                    <span class="coffee-info__intensity-line"></span>
+                  {% endunless %}
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {% if intensity_value != blank %}
+              <span class="coffee-info__text">
+                {{ intensity_value | escape }}
+              </span>
+            {% endif %}
+
+          </div>
+        </div>
+
+        {%- comment -%} Cup Size {%- endcomment -%}
+        <div class="coffee-info__item coffee-info__size">
+          <div class="coffee-info__label">
+            {{ cup_size_label | default: 'Cup size' | escape }}
+          </div>
+          <div class="coffee-info__value">
+            {% if cup_size_icon != blank %}
+              <img
+                class="coffee-info__icon"
+                src="{{ cup_size_icon | image_url: width: 64 }}"
+                alt=""
+                width="20"
+                height="20"
+                loading="lazy"
+              >
+            {% endif %}
+            {% if cup_size != blank %}
+              <span class="coffee-info__text">
+                {{ cup_size | escape }}
+              </span>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+{% endfor %}
+
+{% schema %}
+{
+  "name": "Custom Product Info",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content area background"
+    },
+    {
+      "type": "image_picker",
+      "id": "panel_bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay / Background color",
+      "info": "Image na ho to ye color panel ka background banega",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 85
+    },
+    {
+      "type": "header",
+      "content": "Cup animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cup_float",
+      "label": "Enable cup up-down jump",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "cup_float_duration",
+      "label": "Speed (one up-down cycle)",
+      "info": "Zyada seconds = slow movement",
+      "min": 1,
+      "max": 10,
+      "step": 0.5,
+      "unit": "s",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "cup_float_distance",
+      "label": "Jump height",
+      "min": 5,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Leaf animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_leaf_rotate",
+      "label": "Enable leaf rotation",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "leaf_rotate_duration",
+      "label": "Rotation duration (full turn)",
+      "info": "Zyada seconds = slow rotation",
+      "min": 5,
+      "max": 60,
+      "step": 1,
+      "unit": "s",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "leaf_rotate_direction",
+      "label": "Rotation direction",
+      "options": [
+        { "value": "normal", "label": "Clockwise" },
+        { "value": "reverse", "label": "Anticlockwise" }
+      ],
+      "default": "normal"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Product Info"
+    }
+  ]
+}
+{% endschema %}

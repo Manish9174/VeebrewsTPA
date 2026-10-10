@@ -1,0 +1,245 @@
+{% comment %}
+  ============================================================
+  HUCK STYLE SCROLL REVEAL SECTION  (sections/hckx-split-reveal.liquid)
+  ------------------------------------------------------------
+  File needed: assets/hckx-split-reveal.css
+  (JS is inline in this file - no separate asset, so it can
+  never fail to load / get a wrong path)
+  ------------------------------------------------------------
+  NOTE: Saare classes/ids/data-attributes "hckxsr-" prefix se
+  unique hain (header ke "hckx-" classes se clash nahi karte).
+  ------------------------------------------------------------
+  - Heading beech se 2 hisso me split hoti hai + icon grow hota hai
+    (section view me aate hi, ek baar)
+  - Wave shape jab bhi aap scroll karte ho, paani jaisi upar-neeche
+    "bounce" karti hai aur phir dheere-dheere settle ho jaati hai
+    (spring physics - JS se, har scroll par)
+  - Paragraph fade-up hota hai
+  - Background: optional image, jiske upar "Background color" ka
+    tint (opacity se control) chadhta hai - image halki dikhti hai
+  ============================================================
+{% endcomment %}
+
+{{ 'cust-reveal.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign s = section.settings
+-%}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --hckxsr-bg: {{ s.background_color }};
+    --hckxsr-text: {{ s.text_color }};
+    --hckxsr-wave: {{ s.wave_color }};
+    --hckxsr-heading-size-max: {{ s.heading_max_size }}px;
+    --hckxsr-heading-size-min: {{ s.heading_min_size }}px;
+    --hckxsr-wave-height: {{ s.wave_height }}px;
+    --hckxsr-wave-overlap: {{ s.wave_overlap }}px;
+    --hckxsr-icon-size: {{ s.icon_max_width }}px;
+    --hckxsr-gap: {{ s.split_gap }}px;
+    --hckxsr-overlay-opacity: {{ s.overlay_opacity | default: 65 }}%;
+    {% if s.background_image != blank %}
+      --hckxsr-bg-image: url('{{ s.background_image | image_url: width: 1600 }}');
+    {% else %}
+      --hckxsr-bg-image: none;
+    {% endif %}
+  }
+{% endstyle %}
+
+<section
+  class="hckxsr"
+  id="hckxsr-{{ section.id }}"
+  data-hckxsr
+  data-hckxsr-threshold="{{ s.trigger_point | default: 30 | divided_by: 100.0 }}"
+  {% if s.replay_on_scroll %}data-hckxsr-replay{% endif %}
+>
+  {%- if s.show_wave -%}
+    <div class="hckxsr-wave" data-hckxsr-part="wave-outer" aria-hidden="true">
+      <div class="hckxsr-wave-inner" data-hckxsr-wave-el>
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+          <path d="M0,70 C220,120 380,10 620,34 C860,58 1000,118 1220,60 C1320,34 1400,40 1440,54 L1440,120 L0,120 Z" />
+        </svg>
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="hckxsr-inner">
+    <h2 class="hckxsr-heading">
+      <span class="hckxsr-word hckxsr-word-left" data-hckxsr-part="word-left">
+        {{ s.heading_left | default: 'Our' }}
+      </span>
+
+      {%- if s.icon_image != blank -%}
+        <span class="hckxsr-icon" data-hckxsr-part="icon">
+          {{
+            s.icon_image
+            | image_url: width: 400
+            | image_tag: widths: '100, 200, 300, 400', loading: 'lazy', alt: s.icon_alt
+          }}
+        </span>
+      {%- endif -%}
+
+      <span class="hckxsr-word hckxsr-word-right" data-hckxsr-part="word-right">
+        {{ s.heading_right | default: 'Coffee' }}
+      </span>
+    </h2>
+
+    {%- if s.paragraph != blank -%}
+      <div class="hckxsr-paragraph" data-hckxsr-part="paragraph">
+        {{ s.paragraph }}
+      </div>
+    {%- endif -%}
+
+    {%- if s.button_text != blank -%}
+      <div class="hckxsr-button-wrap" data-hckxsr-part="button">
+        <a class="hckxsr-button" href="{{ s.button_url | default: '#' }}">{{ s.button_text }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  (function () {
+    var section = document.getElementById('hckxsr-{{ section.id }}');
+    if (!section) return;
+
+    document.documentElement.classList.add('hckxsr-js');
+
+    var threshold = parseFloat(section.getAttribute('data-hckxsr-threshold'));
+    if (isNaN(threshold) || threshold <= 0) threshold = 0.3;
+    var replay = section.hasAttribute('data-hckxsr-replay');
+
+    /* ---------------------------------------------------------
+       1) HEADING SPLIT + ICON GROW  (ek baar, jab section view me aaye)
+       --------------------------------------------------------- */
+    if ('IntersectionObserver' in window) {
+      var revealObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              section.classList.add('hckxsr-is-inview');
+              if (!replay) revealObserver.unobserve(section);
+            } else if (replay) {
+              section.classList.remove('hckxsr-is-inview');
+            }
+          });
+        },
+        { threshold: threshold }
+      );
+      revealObserver.observe(section);
+    } else {
+      section.classList.add('hckxsr-is-inview');
+    }
+
+    /* ---------------------------------------------------------
+       2) WATER-WAVE SCROLL PHYSICS
+       Jab bhi page scroll hoti hai, wave ko ek "impulse" milta hai.
+       Spring force use wapas center (0) ki taraf kheenchta hai,
+       friction (damping) dheere-dheere motion kam karti hai -
+       bilkul paani ki lehar jaisa: upar-neeche bounce karke settle.
+       --------------------------------------------------------- */
+    var waveEl = section.querySelector('[data-hckxsr-wave-el]');
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (waveEl && !reduceMotion) {
+      var pos = 0;
+      var vel = 0;
+      var stiffness = 0.10;   /* wave kitni jaldi wapas center pe aaye */
+      var damping = 0.86;     /* wave kitni jaldi settle ho (friction) - zyada = jaldi rukegi */
+      var impulseStrength = 0.16; /* har scroll px ka kitna asar wave par pade */
+      var maxDeltaPerEvent = 55;  /* ek hi jhatke me bahut bada scroll jump clamp ho jaaye */
+      var maxTravel = {{ s.wave_travel | default: 22 }}; /* wave kitni door (px) tak hi ja sakti hai */
+      var lastScrollY = window.scrollY || window.pageYOffset || 0;
+      var rafId = null;
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function step() {
+        var force = -pos * stiffness;
+        vel += force;
+        vel *= damping;
+        pos += vel;
+        pos = clamp(pos, -maxTravel, maxTravel);
+
+        if (Math.abs(pos) < 0.03 && Math.abs(vel) < 0.03) {
+          pos = 0;
+          vel = 0;
+          waveEl.style.transform = 'translateY(0px) scaleY(1)';
+          rafId = null;
+          return;
+        }
+
+        waveEl.style.transform =
+          'translateY(' + pos.toFixed(2) + 'px) scaleY(' + (1 + pos / 900).toFixed(3) + ')';
+        rafId = requestAnimationFrame(step);
+      }
+
+      function onScroll() {
+        var currentY = window.scrollY || window.pageYOffset || 0;
+        var rawDelta = currentY - lastScrollY;
+        lastScrollY = currentY;
+        var delta = clamp(rawDelta, -maxDeltaPerEvent, maxDeltaPerEvent);
+        vel += delta * impulseStrength;
+        if (!rafId) rafId = requestAnimationFrame(step);
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+
+    /* Theme editor: section reload hone par dobara chalu ho */
+    document.addEventListener('shopify:section:load', function (e) {
+      if (e.target && e.target.querySelector('#hckxsr-{{ section.id }}')) {
+        location.reload();
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Split Heading Reveal",
+  "class": "m-section-hckxsr",
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "heading_left", "label": "Left word", "default": "Our" },
+    { "type": "text", "id": "heading_right", "label": "Right word", "default": "Coffee" },
+    { "type": "image_picker", "id": "icon_image", "label": "Icon / illustration (beech me grow hoga)" },
+    { "type": "text", "id": "icon_alt", "label": "Icon alt text" },
+    { "type": "range", "id": "icon_max_width", "min": 60, "max": 320, "step": 10, "unit": "px", "label": "Icon max width", "default": 160 },
+    { "type": "range", "id": "split_gap", "min": 20, "max": 200, "step": 5, "unit": "px", "label": "Words ke beech gap (jab icon grow ho jaye)", "default": 90 },
+    { "type": "range", "id": "heading_max_size", "min": 40, "max": 160, "step": 4, "unit": "px", "label": "Heading size (desktop)", "default": 96 },
+    { "type": "range", "id": "heading_min_size", "min": 28, "max": 90, "step": 2, "unit": "px", "label": "Heading size (mobile)", "default": 48 },
+
+    { "type": "header", "content": "Paragraph + Button" },
+    { "type": "richtext", "id": "paragraph", "label": "Paragraph", "default": "<p>Every bag starts with a relationship. With the farmers who grow it, the roasters who craft it, and the community that drinks it.</p>" },
+    { "type": "text", "id": "button_text", "label": "Button text" },
+    { "type": "url", "id": "button_url", "label": "Button link" },
+
+    { "type": "header", "content": "Wave divider" },
+    { "type": "checkbox", "id": "show_wave", "label": "Show wave shape", "default": true },
+    { "type": "color", "id": "wave_color", "label": "Wave color", "default": "#ffffff" },
+    { "type": "range", "id": "wave_height", "min": 40, "max": 220, "step": 10, "unit": "px", "label": "Wave height", "default": 120 },
+    { "type": "range", "id": "wave_overlap", "min": 0, "max": 160, "step": 5, "unit": "px", "label": "Wave upar wale section me kitna overlap kare (resting position)", "default": 60, "info": "Ye value jitni zyada, wave utna hi upar wale section ke andar tak jaayegi" },
+    { "type": "range", "id": "wave_travel", "min": 5, "max": 80, "step": 1, "unit": "px", "label": "Scroll par wave kitni door tak bounce kare (max)", "default": 22, "info": "Kam rakhoge to subtle rahega, zyada rakhoge to bada jhatka jaisa lagega" },
+
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "background_image", "label": "Background image (optional)" },
+    { "type": "range", "id": "overlay_opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "label": "Overlay opacity (image ke upar 'Background color' kitna solid dikhe)", "default": 65, "info": "0% = sirf image dikhegi, 100% = sirf color dikhega (image chhup jayegi). Neeche wale 'Background color' hi tint ke liye use hota hai." },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#F6F1E9" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
+
+    { "type": "header", "content": "Scroll animation" },
+    { "type": "range", "id": "trigger_point", "min": 10, "max": 70, "step": 5, "unit": "%", "label": "Section viewport me kitna dikhte hi animation chale", "default": 30 },
+    { "type": "checkbox", "id": "replay_on_scroll", "label": "Har baar scroll me aane par dobara animate ho (upar-neeche karne par)", "default": false }
+  ],
+  "presets": [
+    {
+      "name": "Split Heading Reveal"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,315 @@
+/* =====================================================================
+   HUCK STYLE SCROLL REVEAL  -  assets/hckx-split-reveal.css
+   Saare classes "hckxsr-" (unique) prefix se hain, header ke
+   "hckx-" classes se koi clash nahi hota.
+   ===================================================================== */
+
+:root {
+  --hckxsr-bg: #F6F1E9;
+  --hckxsr-text: #111111;
+  --hckxsr-wave: #ffffff;
+  --hckxsr-heading-size-max: 96px;
+  --hckxsr-heading-size-min: 48px;
+  --hckxsr-wave-height: 120px;
+  --hckxsr-wave-overlap: 60px;
+  --hckxsr-icon-size: 160px;
+  --hckxsr-gap: 90px;
+  --hckxsr-ease-snap: cubic-bezier(.2, .9, .25, 1.2);
+
+  /* Background image + tint overlay */
+  --hckxsr-bg-image: none;
+  --hckxsr-overlay-opacity: 65%;
+}
+
+.hckxsr,
+.hckxsr *,
+.hckxsr *::before,
+.hckxsr *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.hckxsr {
+  position: relative;
+  z-index: 2;
+  background: var(--hckxsr-bg);
+  color: var(--hckxsr-text);
+  padding: 15rem 24px 110px;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* -----------------------------------------------------------------
+   BACKGROUND IMAGE + COLOR OVERLAY
+   Image piche se dikhti hai, uske upar "Background color" ka tint
+   (color-mix se semi-transparent) chadhta hai - opacity jitni
+   zyada utna color solid / image utni halki. Image na ho to
+   --hckxsr-bg-image: none hoti hai aur ye layer harmless rehti hai.
+   z-index 1 rakha hai taaki wave (3) aur content (4) hamesha upar
+   dikhe.
+   ----------------------------------------------------------------- */
+.hckxsr::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--hckxsr-bg) var(--hckxsr-overlay-opacity), transparent),
+      color-mix(in srgb, var(--hckxsr-bg) var(--hckxsr-overlay-opacity), transparent)
+    ),
+    var(--hckxsr-bg-image) center / cover no-repeat;
+}
+
+/* -----------------------------------------------------------------
+   WAVE DIVIDER
+   Outer = entrance (fade/scale in once, gated by .hckxsr-js so it
+   never stays invisible if JS fails to load).
+   Inner = JS directly sets inline transform here every scroll
+   (spring physics) - isliye koi CSS transition yahan nahi lagate,
+   warna JS ke saath "fight" karegi aur motion jerky dikhega.
+   ----------------------------------------------------------------- */
+.hckxsr-wave {
+  position: absolute;
+  top: calc(-1 * var(--hckxsr-wave-overlap));
+  left: 0;
+  right: 0;
+  height: var(--hckxsr-wave-height);
+  z-index: 3;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.hckxsr-wave-inner {
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+.hckxsr-wave-inner svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hckxsr-wave-inner path {
+  fill: var(--hckxsr-wave);
+}
+
+/* -----------------------------------------------------------------
+   HEADING (split words + growing icon in the middle)
+   Text hamesha visible rehta hai (no-JS safe). Animation classes
+   sirf tab lagti hain jab JS load ho chuka ho (.hckxsr-js body par).
+   ----------------------------------------------------------------- */
+.hckxsr-inner {
+  position: relative;
+  z-index: 4;
+  margin: 0 auto;
+}
+
+.hckxsr-heading {
+  font-family: Lineal, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 65px;
+  color:white;
+  line-height: 1.2em;
+  letter-spacing: -.03em;
+  text-transform: uppercase;
+}
+
+.hckxsr-word {
+  display: inline-block;
+}
+
+.hckxsr-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--hckxsr-icon-size);
+  max-width: var(--hckxsr-icon-size);
+  overflow: visible;
+
+
+}
+
+.hckxsr-icon img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hckxsr-paragraph {
+ 
+  margin: 34px auto 0;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--hckxsr-text);
+      padding: 0px 54px;
+      text-align: justify;
+          max-width: 120rem;
+}
+
+
+.hckxsr-paragraph p {
+
+  font-family: 'Inter 18pt', sans-serif;
+ color:black;
+}
+
+.hckxsr-paragraph p + p { margin-top: 12px; }
+
+.hckxsr-button-wrap {
+  margin-top: 30px;
+}
+
+.hckxsr-button {
+  text-decoration: none;
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 999px;
+  background: var(--hckxsr-text);
+  color: var(--hckxsr-bg);
+  font-weight: 600;
+  font-size: 18px;
+  transition: transform .3s ease;
+}
+
+.hckxsr-button:hover {
+  transform: translateY(-2px);
+}
+
+/* -----------------------------------------------------------------
+   ANIMATION STATES
+   Ye saare "hidden -> revealed" states SIRF tab active hote hain
+   jab JS successfully load ho gaya ho (body.hckxsr-js).
+   Isse agar JS kisi wajah se fail ho jaye, content hamesha visible
+   rehta hai (blank section kabhi nahi dikhega).
+   ----------------------------------------------------------------- */
+.hckxsr-js .hckxsr-wave {
+  opacity: 0;
+  transform: translateY(-30px) scaleY(.7);
+  transform-origin: bottom;
+  transition: transform .5s var(--hckxsr-ease-snap), opacity .4s ease;
+}
+
+.hckxsr-js .hckxsr.hckxsr-is-inview .hckxsr-wave {
+  opacity: 1;
+  transform: translateY(0) scaleY(1);
+}
+
+.hckxsr-js .hckxsr-word {
+  transition: margin .6s var(--hckxsr-ease-snap);
+}
+
+.hckxsr-js .hckxsr-word-left { margin-right: 0; }
+.hckxsr-js .hckxsr-word-right { margin-left: 0; }
+
+.hckxsr-js .hckxsr.hckxsr-is-inview .hckxsr-word-left {
+  margin-right: calc(var(--hckxsr-gap) / 2);
+}
+
+.hckxsr-js .hckxsr.hckxsr-is-inview .hckxsr-word-right {
+  margin-left: calc(var(--hckxsr-gap) / 2);
+}
+
+.hckxsr-js .hckxsr-icon {
+  width: 0;
+  opacity: 0;
+  transform: scale(.3) rotate(-8deg);
+  transition:
+    width .5s .12s var(--hckxsr-ease-snap),
+    transform .5s .12s var(--hckxsr-ease-snap),
+    opacity .35s .12s ease;
+}
+
+.hckxsr-js .hckxsr.hckxsr-is-inview .hckxsr-icon {
+  width: var(--hckxsr-icon-size);
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.hckxsr-js .hckxsr-paragraph {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .5s .3s ease, transform .5s .3s ease;
+}
+
+.hckxsr-js .hckxsr.hckxsr-is-inview .hckxsr-paragraph {
+  opacity: 1;
+  transform: none;
+}
+
+.hckxsr-js .hckxsr-button-wrap {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .5s .4s ease, transform .5s .4s ease;
+}
+
+.hckxsr-js .hckxsr.hckxsr-is-inview .hckxsr-button-wrap {
+  opacity: 1;
+  transform: none;
+}
+
+/* -----------------------------------------------------------------
+   RESPONSIVE
+   ----------------------------------------------------------------- */
+@media (max-width: 700px) {
+
+
+  .hckxsr-heading{
+        font-size: 32px;
+  }
+
+  .hckxsr-paragraph{
+    padding: 0px; 
+  }
+
+
+  .hckxsr { padding: 64px 18px 70px; }
+
+  .hckxsr-js .hckxsr.hckxsr-is-inview .hckxsr-word-left,
+  .hckxsr-js .hckxsr.hckxsr-is-inview .hckxsr-word-right {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .hckxsr-heading {
+    flex-direction: unset;
+    gap: 14px;
+  }
+
+  .hckxsr-icon {
+    max-width: calc(var(--hckxsr-icon-size) * .7);
+  }
+
+  .hckxsr-js .hckxsr.hckxsr-is-inview .hckxsr-icon {
+    width: calc(var(--hckxsr-icon-size) * .7);
+  }
+}
+
+/* -----------------------------------------------------------------
+   REDUCED MOTION
+   ----------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .hckxsr * {
+    transition-duration: .01ms !important;
+  }
+}
+
+
+
+@media (max-width: 900px) {
+  .hckxsr::before {
+    background-size: auto, auto 100vh;
+    background-size: auto, auto 100lvh;
+    background-repeat: no-repeat, repeat-y;
+    background-position: 0 0, center top;
+  }
+}

@@ -1,0 +1,397 @@
+{% comment %}
+  ============================================================
+  HUCK STYLE HEADER  (sections/header.liquid)
+  ------------------------------------------------------------
+  Files needed:
+    assets/hckx-header.css
+    assets/hckx-header.js
+  ------------------------------------------------------------
+  Mega menu: har "Mega menu column" block me "Parent menu item"
+  daalo (left menu ke item ka exact title). Same parent wale
+  blocks mil kar us item ka mega menu banate hain.
+
+  Lamba (tall) pink blob sirf HOME PAGE par dikhta hai. Baaki
+  sabhi pages (product, collection, page, cart, etc.) par sirf
+  chhota (compact) blob dikhta hai — shuru se hi, scroll na bhi
+  karo tab bhi. Ye "is_home" check se control hota hai.
+  ============================================================
+{% endcomment %}
+
+
+
+{%- liquid
+  assign s = section.settings
+  assign main_menu = linklists[s.main_menu]
+  assign side_menu = linklists[s.side_menu]
+  assign default_parent = s.default_mega_parent | default: 'Shop' | downcase
+
+  assign is_home = false
+  if request.page_type == 'index'
+    assign is_home = true
+  endif
+-%}
+
+
+
+{%- if s.load_google_fonts -%}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Semi+Condensed:wght@500;600&family=Barlow:wght@500;600&family=Montserrat:wght@400;500&display=swap"
+    rel="stylesheet">
+{%- endif -%}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --hckx-yellow: {{ s.color_yellow }};
+    --hckx-lime: {{ s.color_lime }};
+    --hckx-pink: {{ s.color_pink }};
+    --hckx-pink-deep: {{ s.color_pink_deep }};
+    --hckx-ink: {{ s.color_ink }};
+    --hckx-logo-color: {{ s.logo_color }};
+    --hckx-texture-opacity: {{ s.texture_opacity | divided_by: 100.0 }};
+    --hckx-bar-height: {{ s.bar_height }}px;
+    --hckx-logo-size: {{ s.logo_font_size }}px;
+    --hckx-mega-height: {{ s.mega_height }}px;
+    {% if s.texture_image != blank %}
+      --hckx-texture: url('{{ s.texture_image | image_url: width: 1200 }}');
+    {% else %}
+      --hckx-texture: none;
+    {% endif %}
+  }
+
+  {% comment %}
+    Ye hi asli fix hai: ye CSS seedha page ke HTML me likhi jaati hai
+    (kisi cached .css asset file me nahi), isliye ye har page-load par
+    turant sahi lagti hai — chahe assets/hckx-header.css ka CDN cache
+    kuch der purana kyun na ho.
+
+    Home page ke alawa har jagah: lamba (100vh) pink blob poori tarah
+    hata do, aur chhota (compact) blob shuru se hi dikhao. !important
+    is liye taaki koi bhi doosra CSS (theme ka ya asset file ka) ise
+    override na kar sake.
+  {% endcomment %}
+  {% unless request.page_type == 'index' %}
+   .hckx-blob-right {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      transform: none !important;
+    }
+   .hckx-blob-compact {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+    }
+  {% endunless %}
+{% endstyle %}
+
+
+
+
+
+
+
+<header
+  class="hckx-header{% unless is_home %} hckx-not-home{% endunless %}"
+  id="hckx-header-{{ section.id }}"
+  data-hckx-header
+  data-hckx-scroll="{{ s.scroll_offset }}"
+  data-hckx-home="{{ is_home }}"
+>
+  {% comment %} Blob shapes {% endcomment %}
+  <svg class="hckx-defs" aria-hidden="true" focusable="false">
+    <defs>
+      <clipPath id="hckx-clip-blob-left" clipPathUnits="objectBoundingBox">
+        <path d="M0,0 H1 C1,0.2 0.985,0.34 0.94,0.42 C0.9,0.48 0.8,0.49 0.7,0.5 C0.45,0.53 0.2,0.75 0,0.98 Z" />
+      </clipPath>
+      <clipPath id="hckx-clip-blob-right" clipPathUnits="objectBoundingBox">
+        <path d="M0,0 H1 V1 H0.86 C0.78,0.93 0.66,0.86 0.68,0.75 C0.7,0.65 0.78,0.62 0.72,0.52 C0.66,0.42 0.5,0.4 0.3,0.28 C0.1,0.18 0.03,0.1 0,0 Z" />
+      </clipPath>
+      <clipPath id="hckx-clip-blob-compact" clipPathUnits="objectBoundingBox">
+        <path d="M0.04,0 H1 V0.97 C0.95,0.86 0.85,0.8 0.73,0.8 C0.6,0.8 0.45,0.96 0.3,0.99 C0.15,1 0.05,0.85 0.01,0.55 C-0.01,0.3 0.04,0.1 0.04,0 Z" />
+      </clipPath>
+      <clipPath id="hckx-clip-mega" clipPathUnits="objectBoundingBox">
+        <path d="M0,0 H0.858 C0.9,0.1 0.935,0.25 0.945,0.38 C0.955,0.55 0.95,0.68 0.92,0.78 C0.89,0.9 0.8,1 0.66,0.99 C0.5,0.98 0.42,0.925 0.3,0.925 C0.18,0.925 0.06,0.96 0,0.985 Z" />
+      </clipPath>
+      <clipPath id="hckx-clip-mega-full" clipPathUnits="objectBoundingBox">
+        <path d="M0,0 H1 V0.8 C0.99,0.93 0.94,0.99 0.86,0.99 C0.72,0.99 0.6,0.93 0.45,0.915 C0.3,0.9 0.12,0.93 0,0.98 Z" />
+      </clipPath>
+      <clipPath id="hckx-clip-side" clipPathUnits="objectBoundingBox">
+        <path d="M0,0 H1 V0.98 C0.75,0.97 0.45,0.95 0.3,0.87 C0.15,0.79 0.05,0.72 0.04,0.6 C0.03,0.45 0.1,0.4 0.15,0.3 C0.2,0.2 0.2,0.14 0.12,0.08 C0.07,0.04 0.01,0.03 0,0 Z" />
+      </clipPath>
+    </defs>
+  </svg>
+
+  {% comment %} Decorative blobs {% endcomment %}
+  {%- if s.show_blob_left -%}<div class="hckx-blob-left" aria-hidden="true"></div>{%- endif -%}
+  {%- if s.show_blob_right -%}
+    <div class="hckx-blob-right" aria-hidden="true"></div>
+    <div class="hckx-blob-compact" aria-hidden="true"></div>
+  {%- endif -%}
+
+  {% comment %} Header bar {% endcomment %}
+  <div class="hckx-bar">
+    {%- if main_menu.links.size > 0 -%}
+      <nav class="hckx-nav" aria-label="Main">
+        {%- for link in main_menu.links -%}
+          {%- liquid
+            assign link_title_down = link.title | downcase
+            assign panel_id = 'hckx-mega-' | append: section.id | append: '-' | append: forloop.index
+            assign panel_cols = 0
+            for block in section.blocks
+              if block.type == 'mega_column'
+                assign parent = block.settings.parent | default: default_parent | downcase
+                if parent == link_title_down
+                  assign panel_cols = panel_cols | plus: 1
+                endif
+              endif
+            endfor
+          -%}
+
+          {%- if panel_cols > 0 -%}
+            <button
+              class="hckx-nav-link hckx-shop-toggle"
+              type="button"
+              data-hckx-shop-toggle
+              data-hckx-target="{{ panel_id }}"
+              aria-expanded="false"
+              aria-controls="{{ panel_id }}"
+            >
+              <span>{{ link.title }}</span>
+              <span class="hckx-shop-toggle-x" aria-hidden="true">
+                <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+                  <path d="M2 2l10 10M12 2L2 12" />
+                </svg>
+              </span>
+            </button>
+          {%- else -%}
+            <a class="hckx-nav-link" href="{{ link.url }}">{{ link.title }}</a>
+          {%- endif -%}
+        {%- endfor -%}
+      </nav>
+    {%- endif -%}
+
+    {% comment %} Logo {% endcomment %}
+    <a class="hckx-logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+      {%- if s.logo != blank -%}
+        {{
+          s.logo
+          | img_url:'master'
+          | image_tag: class: 'hckx-logo-img', widths: '150, 300, 450, 600', alt: shop.name
+        }}
+      {%- else -%}
+        <b>{{ s.logo_text | default: shop.name }}</b>
+        {%- if s.logo_subtext != blank -%}<small>{{ s.logo_subtext }}</small>{%- endif -%}
+      {%- endif -%}
+    </a>
+
+    {% comment %} Right actions {% endcomment %}
+    <div class="hckx-actions">
+      {%- if s.show_account_icon -%}
+        <a class="hckx-circle-btn" href="{{ routes.account_url }}" aria-label="Account">
+          <svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="24" cy="19" r="9" />
+            <circle cx="20.5" cy="18.5" r="3" />
+            <circle cx="27.5" cy="18.5" r="3" />
+            <path d="M20 21.5c2.4 1.4 5.6 1.4 8 0" />
+            <path d="M8 40c3-6.5 8.5-9.5 16-9.5S37 33.5 40 40" />
+          </svg>
+        </a>
+      {%- endif -%}
+
+      {%- if s.show_cart_icon -%}
+        <a class="hckx-circle-btn hckx-cart-btn" href="{{ routes.cart_url }}" aria-label="Cart">
+          <svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 22h32l-4 12H16z" />
+            <circle cx="18" cy="39" r="2.6" />
+            <circle cx="32" cy="39" r="2.6" />
+            <path d="M27 6l-4.5 8.5h5.5L23.5 21" />
+          </svg>
+          {%- if s.show_cart_count -%}
+            <span class="hckx-cart-count" data-hckx-cart-count>{{ cart.item_count }}</span>
+          {%- endif -%}
+        </a>
+      {%- endif -%}
+
+      <button
+        class="hckx-burger"
+        type="button"
+        data-hckx-burger
+        aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="hckx-side-{{ section.id }}"
+      >
+        <i></i><i></i><i></i>
+      </button>
+    </div>
+  </div>
+
+  {% comment %} ---- MEGA MENUS: har matching main menu item ke liye ek panel ---- {% endcomment %}
+  {%- for link in main_menu.links -%}
+    {%- liquid
+      assign link_title_down = link.title | downcase
+      assign panel_id = 'hckx-mega-' | append: section.id | append: '-' | append: forloop.index
+      assign panel_cols = 0
+      for block in section.blocks
+        if block.type == 'mega_column'
+          assign parent = block.settings.parent | default: default_parent | downcase
+          if parent == link_title_down
+            assign panel_cols = panel_cols | plus: 1
+          endif
+        endif
+      endfor
+    -%}
+
+    {%- if panel_cols > 0 -%}
+      <section class="hckx-mega" id="{{ panel_id }}" data-hckx-mega aria-label="{{ link.title | escape }} menu">
+        <div class="hckx-mega-shape">
+          <div class="hckx-mega-inner" style="--hckx-mega-cols:{{ panel_cols }}">
+            {%- for block in section.blocks -%}
+              {%- if block.type != 'mega_column' -%}{%- continue -%}{%- endif -%}
+              {%- assign parent = block.settings.parent | default: default_parent | downcase -%}
+              {%- if parent != link_title_down -%}{%- continue -%}{%- endif -%}
+              {%- assign col_list = linklists[block.settings.menu] -%}
+
+              <div class="hckx-mega-group" {{ block.shopify_attributes }}>
+                <div class="hckx-mega-text">
+                  {%- if block.settings.heading != blank -%}
+                    <h3 class="hckx-mega-title hckx-reveal" style="--hckx-i:0">{{ block.settings.heading }}</h3>
+                  {%- endif -%}
+                  {%- if col_list.links.size > 0 -%}
+                    <ul class="hckx-mega-list">
+                      {%- for cl in col_list.links -%}
+                        <li class="hckx-reveal" style="--hckx-i:{{ forloop.index }}">
+                          <a class="hckx-mega-link" href="{{ cl.url }}">{{ cl.title }}</a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+
+                {%- if block.settings.image != blank -%}
+                  <div class="hckx-mega-art hckx-reveal" style="--hckx-i:2" aria-hidden="true">
+                    {{ block.settings.image | image_url: width: 700 | image_tag: widths: '280, 420, 700', alt: '' }}
+                  </div>
+                {%- endif -%}
+
+                {%- if block.settings.button_text != blank -%}
+                  <div class="hckx-mega-btn-wrap hckx-reveal" style="--hckx-i:{{ col_list.links.size | plus: 1 }}">
+                    <a class="hckx-btn-dark" href="{{ block.settings.button_url | default: '#' }}">{{ block.settings.button_text }}</a>
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </section>
+    {%- endif -%}
+  {%- endfor -%}
+
+  {% comment %} RIGHT SIDE MENU {% endcomment %}
+  <aside class="hckx-side" id="hckx-side-{{ section.id }}" data-hckx-side aria-label="Site menu">
+    <nav class="hckx-side-nav">
+      {%- assign i = 0 -%}
+
+      {% comment %} Mobile par main menu ke links {% endcomment %}
+      {%- for link in main_menu.links -%}
+        {%- liquid
+          assign link_title_down = link.title | downcase
+          assign panel_id = 'hckx-mega-' | append: section.id | append: '-' | append: forloop.index
+          assign panel_cols = 0
+          for block in section.blocks
+            if block.type == 'mega_column'
+              assign parent = block.settings.parent | default: default_parent | downcase
+              if parent == link_title_down
+                assign panel_cols = panel_cols | plus: 1
+              endif
+            endif
+          endfor
+        -%}
+        <a
+          class="hckx-side-link hckx-only-mobile hckx-reveal"
+          style="--hckx-i:{{ i }}"
+          href="{{ link.url }}"
+          {% if panel_cols > 0 %}data-hckx-open-shop="{{ panel_id }}"{% endif %}
+        >{{ link.title }}</a>
+        {%- assign i = i | plus: 1 -%}
+      {%- endfor -%}
+
+      {%- for link in side_menu.links -%}
+        <a class="hckx-side-link hckx-reveal" style="--hckx-i:{{ i }}" href="{{ link.url }}">{{ link.title }}</a>
+        {%- assign i = i | plus: 1 -%}
+      {%- endfor -%}
+
+      {%- if s.side_button_text != blank -%}
+        <a class="hckx-side-link hckx-btn-dark hckx-reveal" style="--hckx-i:{{ i }}" href="{{ s.side_button_url | default: routes.all_products_collection_url }}">
+          {{ s.side_button_text }}
+        </a>
+      {%- endif -%}
+    </nav>
+  </aside>
+</header>
+
+{%- if s.add_spacer -%}
+  <div class="hckx-header-spacer" aria-hidden="true"></div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Header (Huck)",
+  "class": "m-section-header",
+  "settings": [
+    { "type": "header", "content": "Logo" },
+    { "type": "image_picker", "id": "logo", "label": "Logo image", "info": "Blank chhodoge to neeche ka text logo use hoga" },
+    { "type": "text", "id": "logo_text", "label": "Logo text", "default": "HUCK" },
+    { "type": "text", "id": "logo_subtext", "label": "Logo sub-text", "default": "HUCKLEBERRY ROASTERS" },
+    { "type": "range", "id": "logo_font_size", "min": 40, "max": 160, "step": 4, "unit": "px", "label": "Logo text size", "default": 104 },
+    { "type": "color", "id": "logo_color", "label": "Logo color", "default": "#ffffff" },
+
+    { "type": "header", "content": "Menus" },
+    { "type": "link_list", "id": "main_menu", "label": "Left menu (desktop)", "default": "main-menu" },
+    { "type": "text", "id": "default_mega_parent", "label": "Default parent menu item", "default": "Shop", "info": "Jis mega column block me Parent khaali hoga wo is item ke neeche jaayega" },
+    { "type": "link_list", "id": "side_menu", "label": "Right (pink) menu links" },
+    { "type": "text", "id": "side_button_text", "label": "Right menu button text", "default": "Shop All" },
+    { "type": "url", "id": "side_button_url", "label": "Right menu button link" },
+
+    { "type": "header", "content": "Icons" },
+    { "type": "checkbox", "id": "show_account_icon", "label": "Show account icon", "default": true },
+    { "type": "checkbox", "id": "show_cart_icon", "label": "Show cart icon", "default": true },
+    { "type": "checkbox", "id": "show_cart_count", "label": "Show cart item count", "default": true },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "color_yellow", "label": "Yellow (left blob / mega menu)", "default": "#EBC272" },
+    { "type": "color", "id": "color_lime", "label": "Lime (mega menu)", "default": "#D5E784" },
+    { "type": "color", "id": "color_pink", "label": "Pink (right menu)", "default": "#E6007E" },
+    { "type": "color", "id": "color_pink_deep", "label": "Deep pink", "default": "#C2318C" },
+    { "type": "color", "id": "color_ink", "label": "Text / button black", "default": "#111111" },
+
+    { "type": "header", "content": "Texture" },
+    { "type": "image_picker", "id": "texture_image", "label": "Texture image (blobs + menus)" },
+    { "type": "range", "id": "texture_opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "label": "Texture opacity", "default": 100 },
+
+    { "type": "header", "content": "Layout" },
+    { "type": "checkbox", "id": "show_blob_left", "label": "Show left yellow blob", "default": true },
+    { "type": "checkbox", "id": "show_blob_right", "label": "Show right pink blob", "default": true, "info": "Lamba (tall) blob sirf home page par dikhega. Baaki pages par hamesha chhota (compact) blob dikhta hai." },
+    { "type": "range", "id": "bar_height", "min": 80, "max": 200, "step": 5, "unit": "px", "label": "Header bar height", "default": 130 },
+    { "type": "range", "id": "mega_height", "min": 400, "max": 800, "step": 10, "unit": "px", "label": "Mega menu height", "default": 620 },
+    { "type": "range", "id": "scroll_offset", "min": 0, "max": 400, "step": 10, "unit": "px", "label": "Scroll par compact hone ki distance (sirf home page par)", "default": 60 },
+    { "type": "checkbox", "id": "add_spacer", "label": "Page content ke liye top spacing add karo", "default": false, "info": "Header fixed hai. Agar aapka first section full-screen banner nahi hai to ise ON rakho." },
+    { "type": "checkbox", "id": "load_google_fonts", "label": "Google Fonts load karo (Bebas Neue, Barlow, Montserrat)", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "mega_column",
+      "name": "Mega menu column",
+      "limit": 16,
+      "settings": [
+        { "type": "text", "id": "parent", "label": "Parent menu item", "info": "Left menu ke item ka exact title, jaise: Shop / Subscriptions / Huck Cafes" },
+        { "type": "text", "id": "heading", "label": "Column heading", "default": "Coffee" },
+        { "type": "link_list", "id": "menu", "label": "Links" },
+        { "type": "image_picker", "id": "image", "label": "Column image" },
+        { "type": "text", "id": "button_text", "label": "Button text", "default": "Shop All" },
+        { "type": "url", "id": "button_url", "label": "Button link" }
+      ]
+    }
+  ]
+}
+{% endschema %}

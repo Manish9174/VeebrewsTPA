@@ -1,0 +1,168 @@
+{% comment %}
+  ============================================================
+  HUCK STYLE BANNER  (sections/hckx-banner.liquid)
+  ------------------------------------------------------------
+  File needed: assets/hckx-banner.css
+  ------------------------------------------------------------
+  Customizer se control: heading (2 lines + accent mark),
+  background image/gradient, background video (autoplay/loop/
+  muted), buttons, colors, height.
+
+  Video kaise kaam karta hai:
+  - "Background video" me Shopify Files se koi bhi video chuno
+    (mp4). Browsers me autoplay sirf tabhi chalta hai jab video
+    muted ho, isliye video hamesha muted + loop + bina controls
+    ke chalti hai — ye fix hai, koi setting nahi.
+  - Video ke peeche wala gradient/image fallback ke roop me
+    hamesha maujood rehta hai (video load hone se pehle, mobile
+    par video hide hone par, ya "reduced motion" waale devices
+    par dikhta hai).
+  ============================================================
+{% endcomment %}
+
+{{ 'cust-banner.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign s = section.settings
+  assign has_video = false
+  if s.banner_video != blank
+    assign has_video = true
+  endif
+-%}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --hckx-accent: {{ s.accent_color }};
+    --hckx-banner-min-height: {{ s.min_height }}vh;
+    --hckx-banner-grad-top: {{ s.color_top }};
+    --hckx-banner-grad-mid: {{ s.color_mid }};
+    --hckx-banner-grad-bottom: {{ s.color_bottom }};
+    --hckx-banner-highlight-1: {{ s.color_highlight_1 }};
+    --hckx-banner-highlight-2: {{ s.color_highlight_2 }};
+    --hckx-banner-title-size-max: {{ s.title_max_size }}px;
+    --hckx-banner-title-size-min: {{ s.title_min_size }}px;
+
+    --hckx-banner-video-overlay: {{ s.video_overlay_opacity | divided_by: 100.0 }};
+
+    --hckx-banner-img-overlay-color: {{ s.image_overlay_color }};
+    --hckx-banner-img-overlay-opacity: {{ s.image_overlay_opacity | divided_by: 100.0 }};
+
+    {%- if s.background_image != blank -%}
+      --hckx-banner-img: url('{{ s.background_image | image_url: width: 2400 }}');
+    {%- else -%}
+      --hckx-banner-img: none;
+    {%- endif -%}
+  }
+{% endstyle %}
+
+<section
+  class="hckx-banner
+    {%- if s.add_top_padding %} hckx-banner--header-space{% endif -%}
+    {%- if has_video %} hckx-banner--has-video{% endif -%}
+    {%- if has_video and s.hide_video_mobile %} hckx-banner--hide-video-mobile{% endif -%}"
+  id="hckx-banner-{{ section.id }}"
+>
+  {%- if has_video -%}
+    <div class="hckx-banner-video-wrap" aria-hidden="true">
+      {{
+        s.banner_video
+        | video_tag:
+          image_size: '1920x',
+          autoplay: true,
+          loop: true,
+          muted: true,
+          controls: false,
+          playsinline: true,
+          class: 'hckx-banner-video'
+      }}
+    </div>
+  {%- endif -%}
+
+  <h1 class="hckx-banner-title">
+    {{ s.heading_line_1 }}{% if s.heading_line_2 != blank %}<br>{{ s.heading_line_2 }}{% endif -%}
+    {%- if s.accent_mark != blank -%}
+      <span class="hckx-banner-title-mark">{{ s.accent_mark }}</span>
+    {%- endif -%}
+  </h1>
+
+  {%- if s.button_1_text != blank or s.button_2_text != blank -%}
+    <div class="hckx-banner-buttons">
+      {%- if s.button_1_text != blank -%}
+        <a class="hckx-banner-btn hckx-banner-btn-solid" href="{{ s.button_1_url | default: '#' }}">
+          {{ s.button_1_text }}
+        </a>
+      {%- endif -%}
+      {%- if s.button_2_text != blank -%}
+        <a class="hckx-banner-btn" href="{{ s.button_2_url | default: '#' }}">
+          {{ s.button_2_text }}
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Banner (Huck)",
+  "class": "m-section-banner",
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "heading_line_1", "label": "Heading line 1", "default": "May we fill" },
+    { "type": "text", "id": "heading_line_2", "label": "Heading line 2", "default": "your cup" },
+    { "type": "text", "id": "accent_mark", "label": "Accent character", "default": "?", "info": "Heading ke aakhir me alag color/tilt ke saath dikhega" },
+    { "type": "color", "id": "accent_color", "label": "Accent character color", "default": "#E9EA6B" },
+
+    { "type": "header", "content": "Buttons" },
+    { "type": "text", "id": "button_1_text", "label": "Button 1 text (solid)", "default": "Shop" },
+    { "type": "url", "id": "button_1_url", "label": "Button 1 link" },
+    { "type": "text", "id": "button_2_text", "label": "Button 2 text (outline)", "default": "Subscriptions" },
+    { "type": "url", "id": "button_2_url", "label": "Button 2 link" },
+
+    { "type": "header", "content": "Background video" },
+    {
+      "type": "video",
+      "id": "banner_video",
+      "label": "Background video",
+      "info": "Video hamesha autoplay + loop + muted rahegi (browsers sirf muted video ko hi autoplay karne dete hain). Blank chhodoge to neeche wali image/gradient dikhegi."
+    },
+    { "type": "range", "id": "video_overlay_opacity", "min": 0, "max": 90, "step": 5, "unit": "%", "label": "Video ke upar dark overlay", "default": 30, "info": "Text ko readable rakhne ke liye video thodi dark ki jaati hai" },
+    { "type": "checkbox", "id": "hide_video_mobile", "label": "Mobile par video hide karo", "default": true, "info": "Mobile data/performance bachane ke liye — us waqt neeche wali image/gradient dikhegi" },
+
+    { "type": "header", "content": "Background image / gradient" },
+    { "type": "image_picker", "id": "background_image", "label": "Background image", "info": "Video ke peeche/na hone par fallback ke roop me use hoti hai. Blank chhodoge to neeche wala gradient use hoga" },
+    {
+  "type": "color",
+  "id": "image_overlay_color",
+  "label": "Image overlay color",
+  "default": "#000000"
+},
+{
+  "type": "range",
+  "id": "image_overlay_opacity",
+  "min": 0,
+  "max": 100,
+  "step": 5,
+  "unit": "%",
+  "label": "Image overlay opacity",
+  "default": 0
+},
+    
+    { "type": "color", "id": "color_top", "label": "Gradient top color", "default": "#1b1410" },
+    { "type": "color", "id": "color_mid", "label": "Gradient middle color", "default": "#6d5c50" },
+    { "type": "color", "id": "color_bottom", "label": "Gradient bottom color", "default": "#a49384" },
+    { "type": "color", "id": "color_highlight_1", "label": "Highlight glow 1", "default": "#ecc89b" },
+    { "type": "color", "id": "color_highlight_2", "label": "Highlight glow 2", "default": "#cdbeaf" },
+
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "min_height", "min": 40, "max": 100, "step": 5, "unit": "vh", "label": "Minimum height", "default": 100 },
+    { "type": "range", "id": "title_max_size", "min": 100, "max": 320, "step": 10, "unit": "px", "label": "Heading max size (desktop)", "default": 250 },
+    { "type": "range", "id": "title_min_size", "min": 50, "max": 160, "step": 5, "unit": "px", "label": "Heading min size (mobile)", "default": 60 },
+    { "type": "checkbox", "id": "add_top_padding", "label": "Fixed header ke liye top padding add karo", "default": true, "info": "Agar header fixed/transparent hai aur ye pehla section hai to ON rakho" }
+  ],
+  "presets": [
+    {
+      "name": "Banner (Huck)"
+    }
+  ]
+}
+{% endschema %}

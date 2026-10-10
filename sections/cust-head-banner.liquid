@@ -1,0 +1,344 @@
+
+{% liquid
+  assign dynamic_heading = ''
+
+  case request.page_type
+    when 'index'
+      assign dynamic_heading = 'Home'
+    when 'page'
+      assign dynamic_heading = page.title
+    when 'product'
+      assign dynamic_heading = product.title
+    when 'collection'
+      assign dynamic_heading = collection.title
+    when 'article'
+      assign dynamic_heading = article.title
+    when 'blog'
+      assign dynamic_heading = blog.title
+    when 'search'
+      assign dynamic_heading = 'Search'
+    when 'cart'
+      assign dynamic_heading = 'Cart'
+    when '404'
+      assign dynamic_heading = 'Page Not Found'
+    else
+      assign dynamic_heading = page_title
+  endcase
+
+  if section.settings.custom_heading != blank
+    assign dynamic_heading = section.settings.custom_heading
+  endif
+%}
+
+<section
+  id="DynamicPageHeading-{{ section.id }}"
+  class="dynamic-page-heading"
+>
+  {% if section.settings.show_heading %}
+    {% if dynamic_heading != blank %}
+      <h1 class="dynamic-page-heading__title">
+        {{ dynamic_heading | escape }}
+      </h1>
+    {% endif %}
+  {% endif %}
+</section>
+
+<style>
+  #DynamicPageHeading-{{ section.id }} {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    width: 100%;
+    min-height: {{ section.settings.desktop_height }}px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+        padding: 13rem 24px 0px;
+    box-sizing: border-box;
+    text-align: center;
+
+    background-color: {{ section.settings.background_color }};
+
+    {% if section.settings.background_image != blank %}
+      background-image: url('{{ section.settings.background_image | image_url: width: 2400 }}');
+      background-size: cover;
+      background-position: {{ section.settings.image_position }};
+      background-repeat: no-repeat;
+    {% endif %}
+  }
+
+  #DynamicPageHeading-{{ section.id }}::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: {{ section.settings.overlay_color }};
+    opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+  }
+
+  #DynamicPageHeading-{{ section.id }} .dynamic-page-heading__title {
+    margin: 0;
+    padding: 0;
+    color: {{ section.settings.heading_color }};
+    font-size: {{ section.settings.heading_size }}px;
+    font-weight: {{ section.settings.heading_weight }};
+    line-height: 1.05;
+    letter-spacing: {{ section.settings.letter_spacing }}px;
+    text-transform: {{ section.settings.text_transform }};
+    overflow-wrap: anywhere;
+    max-width: 100%;
+  }
+
+  @media screen and (max-width: 749px) {
+    #DynamicPageHeading-{{ section.id }} {
+      min-height: {{ section.settings.mobile_height }}px!important;
+      padding: {{ section.settings.mobile_padding }}px 16px;
+    }
+
+    #DynamicPageHeading-{{ section.id }} .dynamic-page-heading__title {
+      font-size: {{ section.settings.mobile_heading_size }}px;
+      letter-spacing: {{ section.settings.mobile_letter_spacing }}px;
+      line-height: 1.1;
+    }
+
+
+
+      #DynamicPageHeading-{{ section.id }} {
+      
+                min-height: 180px;
+        padding: 10rem 16px 0px;
+      
+      }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Dynamic page heading",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "Show heading",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_heading",
+      "label": "Custom heading",
+      "info": "Leave blank to use the current page title."
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "Text transform",
+      "options": [
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        },
+        {
+          "value": "none",
+          "label": "Default"
+        }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Desktop heading size",
+      "min": 32,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "default": 104
+    },
+    {
+      "type": "range",
+      "id": "mobile_heading_size",
+      "label": "Mobile heading size",
+      "min": 20,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 42
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Font weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra-bold"
+        }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing",
+      "label": "Desktop letter spacing",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "mobile_letter_spacing",
+      "label": "Mobile letter spacing",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Background settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        {
+          "value": "center center",
+          "label": "Center"
+        },
+        {
+          "value": "center top",
+          "label": "Top"
+        },
+        {
+          "value": "center bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "left center",
+          "label": "Left"
+        },
+        {
+          "value": "right center",
+          "label": "Right"
+        }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#102A27"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#102A27"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 65
+    },
+    {
+      "type": "header",
+      "content": "Section height"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Desktop height",
+      "min": 200,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 540
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile height",
+      "min": 60,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "default": 360
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "label": "Desktop vertical padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding",
+      "label": "Mobile vertical padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#E83BC7"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dynamic page heading"
+    }
+  ]
+}
+{% endschema %}

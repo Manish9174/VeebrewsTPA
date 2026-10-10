@@ -1,0 +1,110 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "header": {
+      "type": "header",
+      "blocks": {
+        "mega_column_XQBUJE": {
+          "type": "mega_column",
+          "settings": {
+            "parent": "Shop",
+            "heading": "Coffee",
+            "menu": "coffee",
+            "image": "shopify://shop_images/VEE_BREWS_Coffee_Pouchs_93a0b627-2d68-44b1-9e81-ab26e02463cd.png",
+            "button_text": "Shop All",
+            "button_url": "shopify://collections/all"
+          }
+        },
+        "mega_column_PTAEgc": {
+          "type": "mega_column",
+          "disabled": true,
+          "settings": {
+            "parent": "Shop",
+            "heading": "Huck Goods",
+            "menu": "huck-goods",
+            "image": "shopify://shop_images/apparel_1.webp",
+            "button_text": "Shop All",
+            "button_url": ""
+          }
+        },
+        "mega_column_4TTEyM": {
+          "type": "mega_column",
+          "disabled": true,
+          "settings": {
+            "parent": "Subscriptions",
+            "heading": "Subscriptions",
+            "menu": "coffee",
+            "image": "shopify://shop_images/shop-menu-coffee-bags.webp",
+            "button_text": "Shop All",
+            "button_url": ""
+          }
+        },
+        "mega_column_E3Tyga": {
+          "type": "mega_column",
+          "disabled": true,
+          "settings": {
+            "parent": "Huck Cafés",
+            "heading": "Huck Goods",
+            "menu": "huck-goods",
+            "image": "shopify://shop_images/apparel_1.webp",
+            "button_text": "Shop All",
+            "button_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "mega_column_XQBUJE",
+        "mega_column_PTAEgc",
+        "mega_column_4TTEyM",
+        "mega_column_E3Tyga"
+      ],
+      "settings": {
+        "logo": "shopify://shop_images/white_logo.png",
+        "logo_text": "VeeBrew",
+        "logo_subtext": "VeeBrew",
+        "logo_font_size": 104,
+        "logo_color": "#ffffff",
+        "main_menu": "left-header",
+        "default_mega_parent": "Shop",
+        "side_menu": "right-header",
+        "side_button_text": "Subscriptions",
+        "side_button_url": "shopify://collections",
+        "show_account_icon": true,
+        "show_cart_icon": true,
+        "show_cart_count": true,
+        "color_yellow": "#5c7650",
+        "color_lime": "#5c7650",
+        "color_pink": "#f44b20",
+        "color_pink_deep": "#f44b20",
+        "color_ink": "#ffffff",
+        "cart_bg_overlay_color": "#5c7650",
+        "cart_bg_overlay_opacity": 0,
+        "texture_opacity": 65,
+        "tint_color_yellow": "#5c7650",
+        "tint_opacity_yellow": 65,
+        "tint_color_pink": "#f44b20",
+        "tint_opacity_pink": 65,
+        "show_blob_left": true,
+        "show_blob_right": true,
+        "bar_height": 130,
+        "mega_height": 620,
+        "scroll_offset": 60,
+        "add_spacer": false,
+        "load_google_fonts": true
+      }
+    }
+  },
+  "order": [
+    "header"
+  ]
+}

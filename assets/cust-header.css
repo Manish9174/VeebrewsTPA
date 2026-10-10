@@ -1,0 +1,1262 @@
+/* =====================================================================
+   HUCK STYLE HEADER  -  assets/cust-header.css
+   ---------------------------------------------------------------------
+   1. Variables (defaults - section ke {% style %} se override hote hain)
+   2. Base / Reset (sirf .hckx-header ke andar)
+   3. Shared components
+   4. Blobs (+ shadow layer)
+   5. Header bar
+   6. Left mega menu
+   7. Right side menu
+   8. Cart drawer
+   9. Responsive
+   10. Reduced motion
+   ===================================================================== */
+
+
+/* 1. VARIABLES ------------------------------------------------------ */
+:root {
+  --hckx-yellow: #EBC272;
+  --hckx-lime: #D5E784;
+  --hckx-pink: #E6007E;
+  --hckx-pink-deep: #C2318C;
+  --hckx-ink: #111111;
+  --hckx-logo-color: #ffffff;
+
+  /* Texture tint colors - yellow side (left blob + mega menu),
+     pink side (right blob + compact blob + side menu) */
+  --hckx-tint-yellow: #EBC272;
+  --hckx-tint-yellow-opacity: 80%;
+  --hckx-tint-pink: #e2066f;
+  --hckx-tint-pink-opacity: 80%;
+
+  --hckx-ease: cubic-bezier(.77, 0, .18, 1);
+  --hckx-dur: .75s;
+
+  --hckx-texture: none;
+  --hckx-texture-opacity: 1;
+
+  --hckx-bar-height: 130px;
+  --hckx-logo-size: 104px;
+  --hckx-mega-cols: 2;
+  --hckx-mega-height: 620px;
+
+  /* Header + mega menu ka shadow (halka/gehra karne ke liye .28 badlo) */
+  --hckx-shadow: drop-shadow(0 10px 16px rgba(0, 0, 0, .28));
+}
+
+
+/* 2. BASE / RESET --------------------------------------------------- */
+.hckx-header,
+.hckx-header *,
+.hckx-header *::before,
+.hckx-header *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.hckx-header {
+  font-family: 'Lineal', sans-serif;
+  line-height: normal;
+  letter-spacing: normal;
+  color: var(--hckx-ink);
+}
+
+.hckx-shop-toggle,
+.hckx-burger,
+.hckx-cart-btn,
+.hckx-cart-close,
+.hckx-qty-btn {
+  appearance: none;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.hckx-header :focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px var(--hckx-ink);
+}
+
+/* Fixed header ke liye page spacing */
+.hckx-header-spacer {
+  height: var(--hckx-bar-height);
+}
+
+/* Cart drawer khula ho to page scroll lock */
+html.hckx-cart-open-lock {
+  overflow: hidden;
+}
+
+
+/* 3. SHARED COMPONENTS ---------------------------------------------- */
+.hckx-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* Texture layer (base) - position/size sabke liye common.
+   Actual color tint neeche alag-alag di gayi hai. */
+.hckx-blob-left::before,
+.hckx-blob-right::before,
+.hckx-blob-compact::before,
+.hckx-mega-shape::before,
+.hckx-side::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--hckx-texture) center / cover no-repeat;
+  opacity: var(--hckx-texture-opacity);
+}
+
+/* Left blob: tint + texture (as it is) */
+.hckx-blob-left::before {
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--hckx-tint-yellow) var(--hckx-tint-yellow-opacity), transparent),
+      color-mix(in srgb, var(--hckx-tint-yellow) var(--hckx-tint-yellow-opacity), transparent)
+    ),
+    var(--hckx-texture) center / cover no-repeat;
+}
+
+/* Mega menu: sirf texture, koi gradient/tint nahi */
+.hckx-mega-shape::before {
+  background: var(--hckx-texture) center / cover no-repeat;
+}
+
+/* Pink area -> right blob + compact blob + side menu */
+.hckx-blob-right::before,
+.hckx-blob-compact::before,
+.hckx-side::before {
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--hckx-tint-pink) var(--hckx-tint-pink-opacity), transparent),
+      color-mix(in srgb, var(--hckx-tint-pink) var(--hckx-tint-pink-opacity), transparent)
+    ),
+    var(--hckx-texture) center / cover no-repeat;
+}
+
+/* Black pill button */
+.hckx-header .hckx-btn-dark {
+  text-decoration: none;
+  display: inline-block;
+  padding: 14px 20px;
+  border-radius: 5px;
+  background: var(--hckx-ink);
+  color: #f44b20;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1;
+  transition: transform .3s ease, background .3s ease;
+}
+
+.hckx-header .hckx-btn-dark:hover {
+  transform: translateY(-2px);
+  background: white;
+  color: #f44b20;
+}
+
+/* Staggered reveal */
+.hckx-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .5s ease, transform .6s var(--hckx-ease);
+}
+
+
+/* 4. BLOBS ---------------------------------------------------------- */
+
+/* Blobs ka shadow: wrapper par drop-shadow, kyunki blobs clip-path se
+   kate hain (unki apni shadow clip ho jaati hai). Isse header ka color
+   page ke color se match hone par bhi alag dikhta hai. */
+.hckx-shadow-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 18;
+  pointer-events: none;
+  filter: var(--hckx-shadow);
+}
+
+.hckx-blob-left,
+.hckx-blob-right,
+.hckx-blob-compact {
+  position: fixed;
+  top: 0;
+  pointer-events: none;
+  transition: transform .8s var(--hckx-ease), opacity .6s ease;
+}
+
+.hckx-blob-left {
+  left: 0;
+  z-index: 10;
+  width: clamp(480px, 36.6vw, 720px);
+  height: 250px;
+  background: #5c7650;
+  clip-path: url(#hckx-clip-blob-left);
+}
+
+.hckx-blob-right {
+  right: 0;
+  z-index: 18;
+  width: clamp(300px, 21.5vw, 430px);
+  height: 100vh;
+  background:
+    radial-gradient(circle at 30% 12%, rgba(255, 120, 120, .55) 0, transparent 30%),
+    linear-gradient(170deg, var(--hckx-pink) 0%, var(--hckx-pink-deep) 45%, var(--hckx-pink) 100%);
+  clip-path: url(#hckx-clip-blob-right);
+}
+
+.hckx-blob-compact {
+  right: 0;
+  z-index: 18;
+  width: 410px;
+  height: 150px;
+  background:
+    radial-gradient(circle at 25% 15%, rgba(255, 120, 120, .55) 0, transparent 35%),
+    linear-gradient(120deg, var(--hckx-pink) 0%, var(--hckx-pink) 45%, var(--hckx-pink-deep) 100%);
+  clip-path: url(#hckx-clip-blob-compact);
+  opacity: 0;
+  transform: translate(35%, -60%);
+}
+
+/* Blob states: Shop menu / pink menu khula ho, ya scroll ho chuka ho
+   (sirf HOME PAGE par lagta hai — non-home pages ka apna fixed rule
+   thodi neeche, is section ke bilkul end me hai) */
+.hckx-open-shop .hckx-blob-left { opacity: 0; }
+.hckx-open-shop:not(.hckx-is-scrolled) .hckx-blob-right { transform: translateX(78%); }
+.hckx-open-side .hckx-blob-right { opacity: 0; }
+
+.hckx-is-scrolled .hckx-blob-right {
+  opacity: 0;
+  transform: translate(40%, -20%);
+}
+
+.hckx-is-scrolled .hckx-blob-compact {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------------------------------------------------------------------
+   NON-HOME PAGES (product / collection / page / cart / search / etc.)
+   ---------------------------------------------------------------------
+   Lamba (tall, 100vh) pink blob sirf home page ki khaasiyat hai.
+   Baaki sabhi pages par ye kabhi nahi dikhna chahiye — na load hote
+   waqt, na scroll na karne par. Isliye yahan seedha chhota (compact)
+   blob hi opacity:1 kar diya hai, scroll state se bilkul independent.
+
+   `.hckx-not-home` class section ke liquid file me lagti hai:
+     {% unless request.page_type == 'index' %} hckx-not-home {% endunless %}
+
+   Ye rules niche likhe gaye hain isliye upar wale scroll-based rules
+   (.hckx-is-scrolled) ko override kar dete hain, chahe scroll ho ya na ho.
+   --------------------------------------------------------------------- */
+.hckx-not-home .hckx-blob-right {
+  opacity: 0;
+}
+
+.hckx-not-home .hckx-blob-compact {
+  opacity: 1;
+  transform: none;
+}
+
+
+/* 5. HEADER BAR ----------------------------------------------------- */
+.hckx-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  height: var(--hckx-bar-height);
+  pointer-events: none;
+}
+
+.hckx-bar > * { pointer-events: auto; }
+
+/* ----- Left navigation ----- */
+.hckx-nav {
+  background: none;
+  position: absolute;
+  top: 38px;
+  left: 85px;
+  display: flex;
+  align-items: center;
+  gap: 64px;
+}
+
+.hckx-nav-link {
+  text-decoration: none;
+  padding: 8px 0;
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: 2px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--hckx-ink);
+}
+
+/* SHOP toggle */
+.hckx-shop-toggle {
+  display: inline-flex;
+  align-items: center;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding: 8px 20px;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  transition:
+    background .35s ease,
+    color .35s ease,
+    padding .4s var(--hckx-ease),
+    margin .4s var(--hckx-ease),
+    border-color .35s ease;
+}
+
+.hckx-shop-toggle .hckx-shop-toggle-x {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 0;
+  height: 30px;
+  margin-left: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #f44b20;
+  color: var(--hckx-ink);
+  opacity: 0;
+  transition: width .4s var(--hckx-ease), opacity .3s ease, margin .4s var(--hckx-ease);
+}
+
+.hckx-shop-toggle .hckx-shop-toggle-x svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.hckx-shop-toggle[aria-expanded="true"] {
+  margin-right: -26px;
+  padding-right: 6px;
+  border-color: #f44b20;
+  background: var(--hckx-ink);
+  color: #f44b20;
+  box-shadow: 0 0 0 2px var(--hckx-ink);
+}
+
+.hckx-shop-toggle[aria-expanded="true"] .hckx-shop-toggle-x {
+  width: 30px;
+  margin-left: 8px;
+  opacity: 1;
+}
+
+/* ----- Logo ----- */
+.hckx-logo {
+  text-decoration: none;
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  line-height: 1;
+  color: var(--hckx-logo-color);
+  transition: color .5s ease, translate .8s var(--hckx-ease), opacity .5s ease, visibility 0s;
+}
+
+.hckx-logo b {
+  color: inherit;
+  font-style: normal;
+  display: block;
+  font-weight: 400;
+  font-size: var(--hckx-logo-size);
+  line-height: .86;
+  letter-spacing: .04em;
+}
+
+.hckx-logo small {
+  color: inherit;
+  font-style: normal;
+  display: block;
+  margin-top: 6px;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: .32em;
+}
+
+.hckx-logo-img {
+  display: block;
+  width: 260px;
+  height: 100%;
+}
+
+.hckx-open-shop .hckx-logo { color: var(--hckx-ink); }
+
+.hckx-is-scrolled .hckx-logo {
+  translate: 0 -160%;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: translate .8s var(--hckx-ease), opacity .5s ease, visibility 0s linear .8s;
+}
+
+/* ----- Right actions ----- */
+.hckx-actions {
+  position: absolute;
+  top: 24px;
+  right: 56px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.hckx-circle-btn {
+  position: relative;
+  text-decoration: none;
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #5c7650;
+  transition: transform .3s ease;
+}
+
+.hckx-circle-btn:hover { transform: scale(1.06); }
+
+.hckx-circle-btn svg {
+  width: 40px;
+  height: 40px;
+}
+
+.hckx-cart-count {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--hckx-pink);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 22px;
+  text-align: center;
+}
+
+/* Hamburger */
+.hckx-burger {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  margin-left: 14px;
+  border: 2px solid #5c7650;
+  border-radius: 50%;
+  background: transparent;
+  color: #5c7650;
+  transition: border-color .4s ease, background .4s ease;
+}
+
+.hckx-burger i {
+  color: #5c7650;
+  font-style: normal;
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  height: 3px;
+  border-radius: 2px;
+  background: #ffffffff;
+  transition: transform .5s var(--hckx-ease), opacity .3s ease, top .5s var(--hckx-ease);
+}
+
+.hckx-burger i:nth-child(1) { top: 20px; }
+.hckx-burger i:nth-child(2) { top: 27px; }
+.hckx-burger i:nth-child(3) { top: 34px; }
+
+.hckx-burger:not([aria-expanded="true"]) { border-color: #ffffffff; }
+
+.hckx-burger[aria-expanded="true"] {
+  border-color: #ffffffff;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffffff;
+}
+
+.hckx-burger[aria-expanded="true"] i { background: white; }
+.hckx-burger[aria-expanded="true"] i:nth-child(1) { top: 27px; transform: rotate(45deg); }
+.hckx-burger[aria-expanded="true"] i:nth-child(2) { opacity: 0; }
+.hckx-burger[aria-expanded="true"] i:nth-child(3) { top: 27px; transform: rotate(-45deg); }
+
+
+/* 6. LEFT MEGA MENU -------------------------------------------------- */
+/* filter parent par hai (clip-path wale child par nahi), warna shadow
+   child ke clip-path se kat jaati. */
+.hckx-mega {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  height: var(--hckx-mega-height);
+  max-height: 90vh;
+  clip-path: circle(0% at 0% 0%);
+  visibility: hidden;
+  filter: var(--hckx-shadow);
+  transition: clip-path .95s cubic-bezier(.65, 0, .2, 1), visibility 0s linear .95s;
+}
+
+.hckx-mega.hckx-is-open {
+  clip-path: circle(150% at 0% 0%);
+  visibility: visible;
+  transition: clip-path .95s cubic-bezier(.65, 0, .2, 1), visibility 0s;
+}
+
+/* Solid color (gradient nahi). isolation: isolate se ::before
+   (texture, z-index:-1) background ke upar dikhta hai. */
+.hckx-mega-shape {
+  position: absolute;
+  inset: 0;
+  padding: 125px 12vw 0 4vw;
+  background: var(--hckx-yellow);
+  isolation: isolate;
+  clip-path: url(#hckx-clip-mega);
+}
+
+.hckx-mega-inner {
+  display: grid;
+  grid-template-columns: repeat(var(--hckx-mega-cols), 1fr);
+  gap: 0 40px;
+  max-width: 1400px;
+  margin: 0;
+}
+
+.hckx-mega-group {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  grid-template-areas:
+    "text art"
+    ".    btn";
+  align-items: center;
+  gap: 10px;
+}
+
+.hckx-mega-text { grid-area: text; }
+
+.hckx-mega-art {
+  grid-area: art;
+  display: grid;
+  place-items: center;
+}
+
+.hckx-mega-art img,
+.hckx-mega-art svg {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 14px 14px rgba(0, 0, 0, .28));
+}
+
+.hckx-mega-btn-wrap {
+  grid-area: btn;
+  display: flex;
+  justify-content: center;
+}
+
+.hckx-mega .hckx-btn-dark {
+  padding: 12px 18px;
+  font-size: 22px;
+}
+
+.hckx-mega-title {
+  color: inherit;
+  margin-bottom: 22px;
+  font-weight: 600;
+  font-size: 36px;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+
+.hckx-mega-list {
+  display: grid;
+  gap: 14px;
+  list-style: none;
+}
+
+.hckx-mega-list li { list-style: none; }
+
+.hckx-mega-link {
+  color: var(--hckx-ink);
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  font-weight: 500;
+  font-size: 19px;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hckx-mega-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .35s var(--hckx-ease);
+}
+
+.hckx-mega-link:hover::after,
+.hckx-mega-link:focus-visible::after { transform: scaleX(1); }
+
+.hckx-mega.hckx-is-open .hckx-reveal {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(.28s + var(--hckx-i, 0) * .07s);
+}
+
+/* Sirf 1 column ho to text + image paas-paas. 2+ columns me pehle jaisa.
+   Doori kam/zyada karne ke liye column-gap badlo. */
+@media (min-width: 901px) {
+  /* Kam columns => mega menu ki width bhi chhoti.
+     1 column: width badalni ho to neeche clamp() ke numbers badlo. */
+  .hckx-mega--single {
+    right: auto;
+    width: clamp(640px, 46vw, 860px);
+  }
+
+  .hckx-mega--single .hckx-mega-shape {
+    padding-right: 40px;
+  }
+
+  .hckx-mega--double {
+    right: auto;
+    width: min(100%, 82vw);
+  }
+
+  .hckx-mega--double .hckx-mega-shape {
+    padding-right: 6vw;
+  }
+
+  .hckx-mega-inner--single {
+    grid-template-columns: max-content;
+  }
+
+  .hckx-mega-inner--single .hckx-mega-group {
+    grid-template-columns: minmax(180px, max-content) 280px;
+    column-gap: 70px;
+  }
+}
+
+
+/* 7. RIGHT SIDE MENU ------------------------------------------------- */
+.hckx-side {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 25;
+  width: clamp(460px, 30.5vw, 700px);
+  height: 90vh;
+  min-height: 640px;
+  background:
+    radial-gradient(circle at 70% 8%, rgba(255, 110, 110, .45) 0, transparent 30%),
+    linear-gradient(170deg, var(--hckx-pink) 0%, var(--hckx-pink) 50%, var(--hckx-pink-deep) 100%);
+  clip-path: url(#hckx-clip-side);
+  transform: translateX(105%);
+  visibility: hidden;
+  transition: transform var(--hckx-dur) var(--hckx-ease), visibility 0s linear var(--hckx-dur);
+}
+
+.hckx-side.hckx-is-open {
+  transform: translateX(0);
+  visibility: visible;
+  transition: transform var(--hckx-dur) var(--hckx-ease), visibility 0s;
+}
+
+.hckx-side-nav {
+  background: none;
+  position: absolute;
+  top: 190px;
+  right: 56px;
+  display: grid;
+  gap: 22px;
+  justify-items: end;
+  text-align: right;
+}
+
+.hckx-side-link {
+  text-decoration: none;
+  position: relative;
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--hckx-ink);
+}
+
+.hckx-side-link.hckx-btn-dark {
+  margin-top: 14px;
+  font-size: 26px;
+  color: #f44b20;
+  text-transform: none;
+}
+
+.hckx-side-link:not(.hckx-btn-dark)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .35s var(--hckx-ease);
+}
+
+.hckx-side-link:not(.hckx-btn-dark):hover::after,
+.hckx-side-link:not(.hckx-btn-dark):focus-visible::after { transform: scaleX(1); }
+
+.hckx-side .hckx-reveal { transform: translateX(40px); }
+
+.hckx-side.hckx-is-open .hckx-reveal {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(.3s + var(--hckx-i, 0) * .07s);
+}
+
+.hckx-only-mobile { display: none; }
+
+/* 8. CART DRAWER ------------------------------------------------------ */
+
+.hckx-cart-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 39;
+  background: rgba(0, 0, 0, .45);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .4s ease, visibility 0s linear .4s;
+}
+
+.hckx-cart-overlay.hckx-is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .4s ease, visibility 0s;
+}
+
+
+/* CART DRAWER */
+.hckx-cart {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+
+  width: clamp(340px, 32vw, 460px);
+  max-width: 100vw;
+
+  background: #e7a0c2;
+
+  color: #fff;
+
+  transform: translateX(100%);
+  visibility: hidden;
+
+  overflow: hidden;
+
+  transition:
+    transform .5s var(--hckx-ease),
+    visibility 0s linear .5s;
+}
+
+
+/* CART BACKGROUND IMAGE */
+.hckx-cart::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image: var(--hckx-cart-bg-image);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+/* CART IMAGE OVERLAY */
+.hckx-cart::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: var(--hckx-cart-overlay-color);
+  opacity: var(--hckx-cart-overlay-opacity);
+
+  z-index: 1;
+  pointer-events: none;
+}
+
+
+/* CART CONTENT */
+.hckx-cart-inner {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+.hckx-cart.hckx-is-open {
+  transform: translateX(0);
+  visibility: visible;
+
+  transition:
+    transform .5s var(--hckx-ease),
+    visibility 0s;
+}
+
+
+.hckx-cart-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 28px 28px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, .35);
+}
+
+.hckx-cart-head-title {
+  color:#5c7650;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.hckx-cart-head-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.hckx-cart-head-count {
+  font-size: 13px;
+  font-weight: 700;
+      color: #ffffff;
+    background: #5c7650;
+  border-radius: 999px;
+  min-width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  vertical-align: top;
+}
+
+.hckx-cart-close {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid #5c7650;
+  color: #fff;
+  transition: background .25s ease, color .25s ease;
+}
+
+.hckx-cart-close svg {
+  width: 16px;
+  height: 16px;
+  color:#5c7650;
+}
+
+.hckx-cart-close svg:hover{
+  color: #ffffff;
+}
+
+.hckx-cart-close:hover {
+  background: #5c7650;
+  color: white;
+}
+
+.hckx-cart-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 20px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---- EMPTY CART: text + Continue Shopping, drawer ke center me ---- */
+.hckx-cart-empty-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  text-align: center;
+  padding: 0 10px;
+}
+
+.hckx-cart-empty-wrap[hidden] {
+  display: none;
+}
+
+.hckx-cart-empty {
+  max-width: 300px;
+  padding: 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #fff;
+}
+
+.hckx-cart-continue {
+  display: inline-block;
+  text-decoration: none;
+  padding: 14px 32px;
+  border-radius: 999px;
+  background: #fff;
+  color: #0a0a0a;
+  font-weight: 700;
+  font-size: 16px;
+  transition: transform .2s ease;
+}
+
+.hckx-cart-continue:hover {
+  transform: translateY(-2px);
+}
+
+.hckx-cart-item {
+  display: flex;
+  gap: 16px;
+  background: #fff;
+  color: #0a0a0a;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.hckx-cart-item-img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+  background: #f2f2f2;
+}
+
+.hckx-cart-item-info {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.hckx-cart-item-title {
+  font-weight: 700;
+  font-size: 16px;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  color:#5c7650;
+  text-decoration: none;
+}
+
+.hckx-cart-item-price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.hckx-cart-item-current-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: #5c7650;
+}
+
+.hckx-cart-item-compare-price {
+  font-size: 13px;
+  color: #777;
+  text-decoration: line-through;
+}
+
+.hckx-cart-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 2px;
+  color: #5c7650;
+}
+
+.hckx-cart-total-label {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.hckx-cart-total-price {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.hckx-cart-item-option {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.hckx-cart-item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hckx-cart-item-qty-label {
+  font-size: 13px;
+  font-weight: 600;
+  color:#5c7650;
+}
+
+.hckx-cart-item-qty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hckx-qty-btn {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1.5px solid #5c7650;
+  font-size: 16px;
+  line-height: 1;
+      color: #5c7650;
+}
+
+.hckx-qty-value {
+  min-width: 16px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 15px;
+  color: #5c7650;
+}
+
+/* ---- FOOTER: Total + View Cart + Check out ---- */
+.hckx-cart-foot {
+  display: grid;
+  gap: 12px;
+  padding: 20px 28px 28px;
+  border-top: 1px solid rgba(255, 255, 255, .35);
+}
+
+.hckx-cart-foot[hidden] {
+  display: none;
+}
+
+.hckx-cart-viewcart {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 2px solid #fff;
+  background: #5c7650;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  transition: background .2s ease, color .2s ease;
+}
+
+.hckx-cart-viewcart:hover {
+  background: #fff;
+  color: #5c7650;
+}
+
+.hckx-cart-checkout {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  padding: 16px;
+  border-radius: 10px;
+  color: white;
+  border: 2px solid #ffffff;
+  background-color: #f44b20;
+  font-weight: 700;
+  font-size: 18px;
+  transition: transform .2s ease;
+}
+
+.hckx-cart-checkout:hover {
+  transform: translateY(-2px);
+}
+
+
+/* 9. RESPONSIVE ------------------------------------------------------ */
+@media (max-width: 1500px) {
+  .hckx-nav { left: 60px; gap: 44px; }
+}
+
+@media (max-width: 1200px) {
+  .hckx-nav { left: 40px; gap: 40px; }
+  .hckx-nav-link { font-size: 20px; }
+  .hckx-logo b { font-size: calc(var(--hckx-logo-size) * .8); }
+  .hckx-mega-shape { padding: 125px 9vw 0 32px; }
+  .hckx-mega-title { font-size: 30px; }
+  .hckx-mega-link { font-size: 17px; }
+  .hckx-mega-art img,
+  .hckx-mega-art svg { max-width: 230px; }
+  .hckx-side-link { font-size: 34px; }
+}
+
+@media (max-width: 900px) {
+
+
+  .hckx-side-link.hckx-btn-dark{
+
+    font-size:18px;
+
+  }
+
+  .hckx-bar { height: 100px; }
+  .hckx-header-spacer { height: 100px; }
+  .hckx-nav { display: none; }
+
+  .hckx-logo {
+    top: 18px;
+    left: 50px;
+    transform: none;
+    text-align: left;
+
+    translate: none !important;
+    opacity: 1 !important;
+    visibility: unset !important;
+  }
+
+  .hckx-logo b { font-size: calc(var(--hckx-logo-size) * .62); }
+  .hckx-logo small { font-size: 8px; }
+  .hckx-logo-img {
+    max-height: 100%;
+    max-width: 80px;
+  }
+
+  .hckx-actions { top: 16px; right: 18px; gap: 10px; }
+  .hckx-circle-btn { width: 48px; height: 48px; }
+  .hckx-circle-btn svg { width: 32px; height: 32px; }
+
+  .hckx-burger { width: 46px; height: 46px; margin-left: 4px; }
+  .hckx-burger i { left: 11px; right: 11px; }
+  .hckx-burger i:nth-child(1) { top: 14px; }
+  .hckx-burger i:nth-child(2) { top: 21px; }
+  .hckx-burger i:nth-child(3) { top: 28px; }
+  .hckx-burger[aria-expanded="true"] i:nth-child(1),
+  .hckx-burger[aria-expanded="true"] i:nth-child(3) { top: 21px; }
+
+  .hckx-blob-left {
+    display: none;
+
+    width: 70vw;
+    height: 150px;
+  }
+  .hckx-blob-right {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: none !important;
+
+    width: 45vw;
+  }
+  .hckx-blob-compact {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+
+    width: 96%;
+    height: 92px;
+  }
+
+  .hckx-mega { 
+    
+    
+    height: 80vh; max-height: 100vh; 
+  
+  
+  }
+
+  .hckx-mega-shape {
+    padding: 100px 24px 110px;
+    overflow-y: auto;
+    clip-path: url(#hckx-clip-mega-full);
+  }
+
+  .hckx-mega-inner { grid-template-columns: 1fr; gap: 40px; }
+
+  .hckx-mega-group {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "text"
+      "btn";
+  }
+
+  .hckx-mega-art { display: none; }
+  .hckx-mega-btn-wrap { justify-content: flex-start; }
+  .hckx-mega-title { margin-bottom: 16px; font-size: 28px; }
+
+  .hckx-side { width: 80vw; }
+  .hckx-side-nav { top: 130px; right: 28px; gap: 16px; }
+  .hckx-side-link { font-size: 18px; }
+
+  .hckx-only-mobile { display: block; }
+
+  .hckx-cart { width: 100vw; }
+  .hckx-cart-head { padding: 22px 20px 16px; }
+  .hckx-cart-body { padding: 16px 20px; }
+  .hckx-cart-foot { padding: 16px 20px 22px; }
+}
+
+
+/* 10. REDUCED MOTION -------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .hckx-header *,
+  .hckx-header *::before,
+  .hckx-header *::after {
+    transition-duration: .01ms !important;
+    transition-delay: 0s !important;
+  }
+}
+
+
+
+.roasttxt{
+
+
+      color: #5c7650;
+    font-weight: 900;
+    font-size: 25px;
+
+}

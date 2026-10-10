@@ -1,0 +1,111 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "cust_head_banner_tt3Drk": {
+      "type": "cust-head-banner",
+      "name": "Dynamic page heading",
+      "settings": {
+        "show_heading": true,
+        "custom_heading": "",
+        "text_transform": "uppercase",
+        "heading_size": 42,
+        "mobile_heading_size": 32,
+        "heading_weight": "700",
+        "letter_spacing": 1,
+        "mobile_letter_spacing": 0,
+        "image_position": "center center",
+        "background_color": "#5C7650",
+        "overlay_color": "#5C7650",
+        "overlay_opacity": 65,
+        "desktop_height": 260,
+        "mobile_height": 360,
+        "padding_vertical": 20,
+        "mobile_padding": 20,
+        "heading_color": "#ffffff"
+      }
+    },
+    "collapsible_content_dyVifg": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_M8HAXj": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Collapsible row",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_AnVgtc": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Collapsible row",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_EDGF4A": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Collapsible row",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_eL6YRG": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Collapsible row",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_M8HAXj",
+        "collapsible_row_AnVgtc",
+        "collapsible_row_EDGF4A",
+        "collapsible_row_eL6YRG"
+      ],
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "container_color_scheme": "scheme-5",
+        "color_scheme": "scheme-5",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "cust_head_banner_tt3Drk",
+    "collapsible_content_dyVifg"
+  ]
+}

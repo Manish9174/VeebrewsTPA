@@ -1,0 +1,198 @@
+{{ 'cust-footer.css' | asset_url | stylesheet_tag }}
+
+<footer class="huck-footer" role="contentinfo">
+  <div class="huck-footer__inner">
+
+    <div class="huck-footer__layout">
+
+      <div class="huck-footer__brand">
+        <a href="{{ routes.root_url }}" class="huck-footer__logo-link">
+          {% if section.settings.logo != blank %}
+            <img
+              class="huck-footer__logo"
+              src="{{ section.settings.logo | image_url: width: 400 }}"
+              alt="{{ shop.name }}"
+              loading="lazy"
+              width="200"
+              height="{{ 200 | divided_by: section.settings.logo.aspect_ratio }}"
+            >
+          {% else %}
+            <span class="huck-footer__logo-fallback">{{ shop.name }}</span>
+          {% endif %}
+        </a>
+        {% if section.settings.tagline != blank %}
+          <p class="huck-footer__tagline">{{ section.settings.tagline }}</p>
+        {% endif %}
+
+        {% if section.settings.illustration != blank %}
+          <div class="huck-footer__illustration">
+            <img
+              src="{{ section.settings.illustration | image_url: width: 600 }}"
+              alt=""
+              loading="lazy"
+              width="300"
+              height="{{ 300 | divided_by: section.settings.illustration.aspect_ratio }}"
+            >
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="huck-footer__content">
+
+        <div class="huck-footer__top">
+
+          <div class="huck-footer__join">
+            <h3 class="huck-footer__heading huck-footer__heading--accent">{{ section.settings.join_heading }}</h3>
+            <p class="huck-footer__text">{{ section.settings.join_text }}</p>
+          </div>
+
+          <div class="huck-footer__resume">
+            <h3 class="huck-footer__heading">
+              {{ section.settings.resume_heading }}
+              <span class="huck-footer__arrow" aria-hidden="true">
+                <svg viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2 8 C 40 2, 55 30, 30 34 C 15 36, 15 18, 32 18 C 55 18, 65 40, 88 30" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M74 20 L88 30 L76 42" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </h3>
+            {% if section.settings.resume_link != blank %}
+              <a href="{{ section.settings.resume_link }}" class="huck-footer__link-overlay" aria-label="{{ section.settings.resume_heading }}"></a>
+            {% endif %}
+          </div>
+
+        </div>
+
+        <div class="huck-footer__mid">
+
+          <div class="huck-footer__contact">
+            <h3 class="huck-footer__heading huck-footer__heading--accent">{{ section.settings.contact_heading }}</h3>
+            {% if section.settings.contact_email != blank %}
+              <a href="mailto:{{ section.settings.contact_email }}" class="huck-footer__email">{{ section.settings.contact_email }}</a>
+            {% endif %}
+          </div>
+
+          <div class="huck-footer__press">
+            <h3 class="huck-footer__heading huck-footer__heading--accent">{{ section.settings.press_heading }}</h3>
+            <ul class="huck-footer__list">
+              {% for block in section.blocks %}
+                {% if block.type == 'link' %}
+                  <li>
+                    <a href="{{ block.settings.link.url | default: '#' }}">{{ block.settings.link.title | default: block.settings.label }}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+
+            <div class="huck-footer__social">
+              {% if section.settings.facebook != blank %}
+                <a href="{{ section.settings.facebook }}" aria-label="Facebook" class="huck-footer__social-icon" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.6h2.6l.4-3h-3v-1.9c0-.9.2-1.5 1.5-1.5h1.6V4.3C15.9 4.2 15 4.1 14 4.1c-2.4 0-4 1.5-4 4.1v2.3H7.4v3H10V21h3.5z"/></svg>
+                </a>
+              {% endif %}
+              {% if section.settings.instagram != blank %}
+                <a href="{{ section.settings.instagram }}" aria-label="Instagram" class="huck-footer__social-icon" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+                </a>
+              {% endif %}
+              {% if section.settings.youtube != blank %}
+                <a href="{{ section.settings.youtube }}" aria-label="YouTube" class="huck-footer__social-icon" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 12c0-3 .2-4.2.8-5 .6-.7 1.4-1 3.3-1.2C8.4 5.6 10.6 5.5 12 5.5s3.6.1 5.9.3c1.9.2 2.7.5 3.3 1.2.6.8.8 2 .8 5s-.2 4.2-.8 5c-.6.7-1.4 1-3.3 1.2-2.3.2-4.5.3-5.9.3s-3.6-.1-5.9-.3c-1.9-.2-2.7-.5-3.3-1.2-.6-.8-.8-2-.8-5z"/><path d="M10 9v6l5-3-5-3z" fill="#111"/></svg>
+                </a>
+              {% endif %}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="huck-footer__bottom">
+      <p class="huck-footer__copyright">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All Rights Reserved.</p>
+
+      <ul class="huck-footer__bottom-links">
+        {% for block in section.blocks %}
+          {% if block.type == 'bottom_link' %}
+            <li><a href="{{ block.settings.link.url | default: '#' }}">{{ block.settings.link.title | default: block.settings.label }}</a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+
+      {% if section.settings.designer_name != blank %}
+        <a href="{{ section.settings.designer_url | default: '#' }}" class="huck-footer__designed-by" target="_blank" rel="noopener">
+          Designed By {{ section.settings.designer_name }}
+        </a>
+      {% endif %}
+    </div>
+
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Huck Footer",
+  "settings": [
+    { "type": "header", "content": "Brand" },
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "image_picker", "id": "illustration", "label": "Illustration (hand + mug)" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Huckleberry Roasters" },
+
+    { "type": "header", "content": "Join our team" },
+    { "type": "text", "id": "join_heading", "label": "Heading", "default": "Join Our Team" },
+    { "type": "textarea", "id": "join_text", "label": "Text", "default": "We're always looking for awesome coffee people to join our community. Send us your resume today" },
+
+    { "type": "header", "content": "Resume" },
+    { "type": "text", "id": "resume_heading", "label": "Heading", "default": "Send Us Your Resume" },
+    { "type": "url", "id": "resume_link", "label": "Link" },
+
+    { "type": "header", "content": "Contact" },
+    { "type": "text", "id": "contact_heading", "label": "Heading", "default": "Hit Us Up" },
+    { "type": "text", "id": "contact_email", "label": "Email", "default": "info@huckleberryroasters.com" },
+
+    { "type": "header", "content": "Press" },
+    { "type": "text", "id": "press_heading", "label": "Heading", "default": "Press" },
+
+    { "type": "header", "content": "Social" },
+    { "type": "url", "id": "facebook", "label": "Facebook URL" },
+    { "type": "url", "id": "instagram", "label": "Instagram URL" },
+    { "type": "url", "id": "youtube", "label": "YouTube URL" },
+
+    { "type": "header", "content": "Bottom bar" },
+    { "type": "text", "id": "designer_name", "label": "Designed by (name)" },
+    { "type": "url", "id": "designer_url", "label": "Designed by (link)" }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Press link",
+      "settings": [
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "text", "id": "label", "label": "Label (used if link has no title)" }
+      ]
+    },
+    {
+      "type": "bottom_link",
+      "name": "Bottom bar link",
+      "settings": [
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "text", "id": "label", "label": "Label (used if link has no title)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Huck Footer",
+      "blocks": [
+        { "type": "link", "settings": { "label": "HUCK Blog" } },
+        { "type": "link", "settings": { "label": "Media Kit" } },
+        { "type": "link", "settings": { "label": "Non Profit Request Form" } },
+        { "type": "bottom_link", "settings": { "label": "Jobs" } },
+        { "type": "bottom_link", "settings": { "label": "Terms of Service" } },
+        { "type": "bottom_link", "settings": { "label": "Privacy Policy" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

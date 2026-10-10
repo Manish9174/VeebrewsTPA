@@ -1,0 +1,313 @@
+{% comment %}
+  ============================================================
+  HUCK STYLE "KEEP IT FRESH" SECTION  (sections/hckx-keep-fresh.liquid)
+  ------------------------------------------------------------
+  File needed: assets/cust-fresh.css
+  (JS inline hai, alag asset nahi)
+  Saare classes / ids / data-attributes "hckxkf-" prefix se hain.
+
+  - Heading ke beech ka icon: section view me aate hi grow hota hai
+    (words dono side split hote hain) + scroll karne par icon
+    spring-wobble karta hai aur dheere settle ho jaata hai
+  - Bag scroll par ghumta hai, text staggered reveal hota hai
+  ============================================================
+{% endcomment %}
+
+{{ 'cust-fresh.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign s = section.settings
+-%}
+
+{% style %}
+  /* {%- if s.heading_font != blank -%}{{ s.heading_font | font_face: font_display: 'swap' }}{%- endif -%}
+  {%- if s.body_font != blank -%}{{ s.body_font | font_face: font_display: 'swap' }}{%- endif -%} */
+
+  #shopify-section-{{ section.id }} {
+    --hckxkf-bg: {{ s.bg_color }};
+    {%- if s.bg_image != blank %}
+    --hckxkf-bg-image: url('{{ s.bg_image | image_url: width: 2400 }}');
+    {%- endif %}
+    --hckxkf-heading-color: {{ s.heading_color }};
+    --hckxkf-text: {{ s.text_color }};
+    --hckxkf-btn-bg: {{ s.button_bg }};
+    --hckxkf-btn-text: {{ s.button_text_color }};
+    --hckxkf-link: {{ s.link_color }};
+    --hckxkf-overlay: {{ s.overlay_opacity | divided_by: 100.0 }};
+    --hckxkf-fs-max: {{ s.heading_max_size }}px;
+    --hckxkf-fs-min: {{ s.heading_min_size }}px;
+    --hckxkf-icon-w: clamp(26px, 4.8vw, {{ s.icon_max_width }}px);
+    --hckxkf-icon-m: clamp(10px, 4.8vw, {{ s.icon_gap }}px);
+    --hckxkf-tilt: {{ s.icon_tilt }}deg;
+    --hckxkf-bag-max: {{ s.bag_max_width }}px;
+    {%- if s.heading_font != blank %}
+    --hckxkf-heading-font: {{ s.heading_font.family }}, {{ s.heading_font.fallback_families }};
+    {%- endif %}
+    {%- if s.body_font != blank %}
+    --hckxkf-body-font: {{ s.body_font.family }}, {{ s.body_font.fallback_families }};
+    {%- endif %}
+  }
+{% endstyle %}
+
+<section
+  class="hckxkf"
+  id="hckxkf-{{ section.id }}"
+  data-hckxkf
+  data-hckxkf-threshold="{{ s.trigger_point | default: 30 | divided_by: 100.0 }}"
+  data-hckxkf-travel="{{ s.wobble_travel | default: 16 }}"
+  data-hckxkf-spin-start="{{ s.spin_start | default: 20 | divided_by: 100.0 }}"
+  data-hckxkf-spin-speed="{{ s.spin_speed | default: 30 | divided_by: 100.0 }}"
+  {% if s.bag_spin %}data-hckxkf-spin{% endif %}
+  {% if s.icon_wobble %}data-hckxkf-wobble{% endif %}
+  {% if s.replay_on_scroll %}data-hckxkf-replay{% endif %}
+>
+  <h2 class="hckxkf-heading">
+    <span class="hckxkf-word">{{ s.heading_left | default: 'Keep it' }}</span>
+
+    {%- if s.icon_image != blank -%}
+      <span class="hckxkf-icon" aria-hidden="true">
+        <span class="hckxkf-icon-inner" data-hckxkf-icon-inner>
+          {{
+            s.icon_image
+            | image_url: width: 600
+            | image_tag: widths: '150, 225, 300, 450, 600', sizes: '150px', loading: 'eager', alt: s.icon_alt
+          }}
+        </span>
+      </span>
+    {%- endif -%}
+
+    <span class="hckxkf-word">{{ s.heading_right | default: 'Fresh' }}</span>
+  </h2>
+
+  <div class="hckxkf-grid">
+    <div class="hckxkf-media">
+      {%- if s.bag_image != blank -%}
+        <div class="hckxkf-bag{% if s.bag_shadow %} hckxkf-bag--shadow{% endif %}">
+          {{
+            s.bag_image
+            | image_url: width: 1000
+            | image_tag: widths: '400, 600, 800, 1000', sizes: '(min-width: 750px) 35vw, 80vw', loading: 'lazy', alt: s.bag_alt
+          }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="hckxkf-content">
+      {%- if s.subheading != blank -%}
+        <p class="hckxkf-sub" style="--hckxkf-d:.25s">{{ s.subheading }}</p>
+      {%- endif -%}
+
+      {%- if s.paragraph != blank -%}
+        <div class="hckxkf-text" style="--hckxkf-d:.35s">{{ s.paragraph }}</div>
+      {%- endif -%}
+
+      {%- if s.button_text != blank or s.link_text != blank -%}
+        <div class="hckxkf-actions" style="--hckxkf-d:.45s">
+          {%- if s.button_text != blank -%}
+            <a class="hckxkf-btn" href="{{ s.button_url | default: '#' }}">{{ s.button_text }}</a>
+          {%- endif -%}
+          {%- if s.link_text != blank -%}
+            <a class="hckxkf-link" href="{{ s.link_url | default: '#' }}">{{ s.link_text }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var section = document.getElementById('hckxkf-{{ section.id }}');
+    if (!section) return;
+
+    document.documentElement.classList.add('hckxkf-js');
+
+    var threshold = parseFloat(section.getAttribute('data-hckxkf-threshold'));
+    if (isNaN(threshold) || threshold <= 0) threshold = 0.3;
+    var replay = section.hasAttribute('data-hckxkf-replay');
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* 1) REVEAL: heading split + icon grow + bag/text */
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              section.classList.add('hckxkf-is-inview');
+              if (!replay) io.unobserve(section);
+            } else if (replay) {
+              section.classList.remove('hckxkf-is-inview');
+            }
+          });
+        },
+        { threshold: threshold }
+      );
+      io.observe(section);
+    } else {
+      section.classList.add('hckxkf-is-inview');
+    }
+
+    /* 2) ICON SCROLL WOBBLE (spring physics)
+       Scroll = impulse, spring wapas 0 par kheenchta hai,
+       damping dheere-dheere settle karti hai. */
+    var icon = section.querySelector('[data-hckxkf-icon-inner]');
+
+    if (icon && section.hasAttribute('data-hckxkf-wobble') && !reduceMotion) {
+      var pos = 0;
+      var vel = 0;
+      var stiffness = 0.09;
+      var damping = 0.88;
+      var impulse = 0.12;
+      var maxDelta = 50;
+      var maxTravel = parseFloat(section.getAttribute('data-hckxkf-travel')) || 16;
+      var lastY = window.scrollY || window.pageYOffset || 0;
+      var raf = null;
+
+      var clamp = function (v, min, max) { return Math.max(min, Math.min(max, v)); };
+
+      var step = function () {
+        vel += -pos * stiffness;
+        vel *= damping;
+        pos = clamp(pos + vel, -maxTravel, maxTravel);
+
+        if (Math.abs(pos) < 0.03 && Math.abs(vel) < 0.03) {
+          pos = 0;
+          vel = 0;
+          icon.style.setProperty('--hckxkf-r', '0deg');
+          raf = null;
+          return;
+        }
+        icon.style.setProperty('--hckxkf-r', pos.toFixed(2) + 'deg');
+        raf = requestAnimationFrame(step);
+      };
+
+      var onScroll = function () {
+        if (!section.isConnected) {
+          window.removeEventListener('scroll', onScroll);
+          return;
+        }
+        var y = window.scrollY || window.pageYOffset || 0;
+        var delta = clamp(y - lastY, -maxDelta, maxDelta);
+        lastY = y;
+        vel += delta * impulse;
+        if (!raf) raf = requestAnimationFrame(step);
+      };
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+
+    /* 3) BAG SCROLL ROTATION
+       Section ka spinStart% screen par aate hi rotation start hota hai.
+       Angle = scroll distance x speed (smooth lerp ke saath). */
+    var bag = section.querySelector('.hckxkf-bag');
+
+    if (bag && section.hasAttribute('data-hckxkf-spin') && !reduceMotion) {
+      var spinStart = parseFloat(section.getAttribute('data-hckxkf-spin-start')) || 0.2;
+      var spinSpeed = parseFloat(section.getAttribute('data-hckxkf-spin-speed')) || 0.3; /* deg per px */
+      var targetAngle = 0;
+      var currentAngle = 0;
+      var spinRaf = null;
+
+      var updateTarget = function () {
+        var rect = section.getBoundingClientRect();
+        var vh = window.innerHeight || document.documentElement.clientHeight;
+
+        /* section.top is value par hota hai jab section ka spinStart% visible ho */
+        var startTop = vh - rect.height * spinStart;
+        var scrolled = startTop - rect.top;
+
+        targetAngle = Math.max(0, scrolled) * spinSpeed;
+        if (!spinRaf) spinRaf = requestAnimationFrame(spinStep);
+      };
+
+      var spinStep = function () {
+        currentAngle += (targetAngle - currentAngle) * 0.12; /* smooth follow */
+        bag.style.setProperty('--hckxkf-spin', currentAngle.toFixed(2) + 'deg');
+
+        if (Math.abs(targetAngle - currentAngle) < 0.05) {
+          currentAngle = targetAngle;
+          bag.style.setProperty('--hckxkf-spin', currentAngle.toFixed(2) + 'deg');
+          spinRaf = null;
+          return;
+        }
+        spinRaf = requestAnimationFrame(spinStep);
+      };
+
+      var onSpinScroll = function () {
+        if (!section.isConnected) {
+          window.removeEventListener('scroll', onSpinScroll);
+          window.removeEventListener('resize', onSpinScroll);
+          return;
+        }
+        updateTarget();
+      };
+
+      window.addEventListener('scroll', onSpinScroll, { passive: true });
+      window.addEventListener('resize', onSpinScroll);
+      updateTarget();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Keep It Fresh",
+  "class": "m-section-hckxkf",
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "heading_left", "label": "Left words", "default": "Keep it" },
+    { "type": "text", "id": "heading_right", "label": "Right word", "default": "Fresh" },
+    { "type": "font_picker", "id": "heading_font", "label": "Heading font", "default": "assistant_n4" },
+    { "type": "range", "id": "heading_max_size", "min": 60, "max": 200, "step": 4, "unit": "px", "label": "Heading size (desktop max)", "default": 120 },
+    { "type": "range", "id": "heading_min_size", "min": 24, "max": 80, "step": 2, "unit": "px", "label": "Heading size (mobile min)", "default": 34 },
+
+    { "type": "header", "content": "Bag rotation" },
+    { "type": "checkbox", "id": "bag_spin", "label": "Scroll par image ghume", "default": true },
+    { "type": "range", "id": "spin_start", "min": 10, "max": 100, "step": 5, "unit": "%", "label": "Section kitna dikhne par rotation shuru ho", "default": 20 },
+    { "type": "range", "id": "spin_speed", "min": 5, "max": 100, "step": 5, "label": "Rotation speed (degree per 100px scroll)", "default": 30 },
+
+    { "type": "header", "content": "Heading (scroll animation)" },
+    { "type": "image_picker", "id": "icon_image", "label": "Icon image (small bag, transparent PNG, min 450px wide)" },
+    { "type": "text", "id": "icon_alt", "label": "Icon alt text" },
+    { "type": "range", "id": "icon_max_width", "min": 30, "max": 140, "step": 2, "unit": "px", "label": "Icon width (desktop max)", "default": 60 },
+    { "type": "range", "id": "icon_gap", "min": 10, "max": 140, "step": 2, "unit": "px", "label": "Icon ke dono side gap (desktop max)", "default": 60 },
+    { "type": "range", "id": "icon_tilt", "min": -30, "max": 30, "step": 1, "unit": "°", "label": "Icon tilt (resting)", "default": 8 },
+    { "type": "checkbox", "id": "icon_wobble", "label": "Scroll par icon wobble kare", "default": true },
+    { "type": "range", "id": "wobble_travel", "min": 4, "max": 45, "step": 1, "unit": "°", "label": "Wobble max angle", "default": 16 },
+
+    { "type": "header", "content": "Bag" },
+    { "type": "image_picker", "id": "bag_image", "label": "Bag + bubble image (transparent PNG)" },
+    { "type": "text", "id": "bag_alt", "label": "Bag alt text", "default": "HUCK coffee bag - Huck yeah" },
+    { "type": "range", "id": "bag_max_width", "min": 200, "max": 700, "step": 10, "unit": "px", "label": "Image width (desktop max)", "default": 500 },
+    { "type": "checkbox", "id": "bag_shadow", "label": "Image ke neeche soft shadow", "default": true },
+
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "subheading", "label": "Bold subheading", "default": "Keep it Fresh — Subscribe & Save" },
+    { "type": "richtext", "id": "paragraph", "label": "Paragraph", "default": "<p>Why run out of your favorite Denver-roasted coffee? Get fresh-roasted HUCK delivered to your door on your schedule. Pick your blend, set your frequency, and never face a morning without great coffee again. Need help deciding? Take the quiz &amp; we'll help you choose the perfect option for you.</p>" },
+    { "type": "text", "id": "button_text", "label": "Button text", "default": "Shop Subscriptions" },
+    { "type": "url", "id": "button_url", "label": "Button link" },
+    { "type": "text", "id": "link_text", "label": "Text link", "default": "Take the Quiz" },
+    { "type": "url", "id": "link_url", "label": "Text link URL" },
+    { "type": "font_picker", "id": "body_font", "label": "Body font", "default": "assistant_n4" },
+
+    { "type": "header", "content": "Background + colors" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image (paint texture)" },
+    { "type": "color", "id": "bg_color", "label": "Pink overlay color (image ke upar)", "default": "#e2066f" },
+    { "type": "range", "id": "overlay_opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "label": "Pink overlay opacity", "default": 75, "info": "0 = sirf image, 100 = sirf solid pink" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Body text color", "default": "#000000" },
+    { "type": "color", "id": "button_bg", "label": "Button background", "default": "#000000" },
+    { "type": "color", "id": "button_text_color", "label": "Button text", "default": "#ffffff" },
+    { "type": "color", "id": "link_color", "label": "Text link color", "default": "#ffffff" },
+
+    { "type": "header", "content": "Scroll animation" },
+    { "type": "range", "id": "trigger_point", "min": 10, "max": 70, "step": 5, "unit": "%", "label": "Section kitna dikhte hi animation chale", "default": 30 },
+    { "type": "checkbox", "id": "replay_on_scroll", "label": "Har baar scroll me aane par dobara animate ho", "default": true }
+  ],
+  "presets": [
+    {
+      "name": "Keep It Fresh"
+    }
+  ]
+}
+{% endschema %}

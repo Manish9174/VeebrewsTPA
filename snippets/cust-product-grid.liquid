@@ -1,0 +1,92 @@
+{% comment %}
+  Collection page ke liye static cards grid (3 per row, no slider).
+  Params: products, collection, section_id
+{% endcomment %}
+
+<div
+  class="hckxbs hckxbs-grid-mode"
+  id="product-grid"
+  data-id="{{ section_id }}"
+>
+  <div class="hckxbs-cards">
+    {%- for product in products -%}
+      {%- assign flavor_list = product.metafields.custom.tasting_note.value -%}
+      {%- assign color_mf = product.metafields.custom.color_image.value -%}
+      {%- assign border_mf = product.metafields.custom.border_image.value -%}
+
+      <div class="hckxbs-item">
+        <div
+          class="hckxbs-card"
+          data-title="{{ product.title | escape }}"
+        >
+          <div class="hckxbs-card-top">
+            <h3 class="hckxbs-card-title">
+              <span>{{ product.title | truncate: 25 }}</span>
+            </h3>
+            {%- if color_mf != blank -%}
+              <span
+                class="hckxbs-card-blob"
+                style="background-image:url({{ color_mf | image_url: width: 200 }})"
+                aria-hidden="true"
+              ></span>
+            {%- endif -%}
+          </div>
+
+          <p class="hckxbs-card-flavor">
+            {%- if flavor_list -%}
+              {%- for f in flavor_list -%}
+                {{ f.name }}
+                {%- assign note_text = '' -%}
+                {%- if f.fields.size > 0 -%}
+                  {%- assign note_text = f.fields.first.value -%}
+                {%- endif -%}
+                {{ note_text }}{% unless forloop.last %} &bull; {% endunless %}
+              {%- endfor -%}
+            {%- endif -%}
+          </p>
+
+          <div class="hckxbs-card-desc">
+            {{ product.metafields.custom.blend_description }}
+          </div>
+
+          <div class="hckxbs-card-actions">
+            <a class="hckxbs-learn-more" href="{{ product.url | within: collection }}">Learn More</a>
+            {%- if product.available -%}
+              <button
+                type="button"
+                class="hckxbs-buy-now"
+                data-hckxbs-buy-now
+                data-variants="{{ product.variants | json | escape }}"
+              >Buy Now</button>
+            {%- else -%}
+              <button type="button" class="hckxbs-buy-now" disabled>Sold out</button>
+            {%- endif -%}
+          </div>
+
+          {%- if border_mf != blank -%}
+            <span
+              class="hckxbs-card-strip"
+              style="background-image:url({{ border_mf | image_url: width: 500 }})"
+            ></span>
+          {%- else -%}
+            <span class="hckxbs-card-strip hckxbs-card-strip-fallback"></span>
+          {%- endif -%}
+        </div>
+
+        {%- assign prod_img = product.metafields.custom.collection_image.value -%}
+        {%- if prod_img == blank -%}
+          {%- assign prod_img = product.featured_image -%}
+        {%- endif -%}
+        {%- if prod_img != blank -%}
+          <div class="hckxbs-card-image" aria-hidden="true">
+            {{
+              prod_img
+              | image_url: width: 600
+              | image_tag: widths: '200, 300, 450, 600', loading: 'lazy', alt: ''
+            }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>

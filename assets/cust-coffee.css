@@ -1,0 +1,490 @@
+/* =====================================================================
+   HUCK STYLE COFFEE PEOPLE - assets/cust-coffee.css
+   (Liquid me 'cust-coffee.css' load ho rahi hai, isi naam se save karo)
+   ===================================================================== */
+
+:root {
+  --hckxcp-bg-start: #57C6AE;
+  --hckxcp-bg-end: #2E9D87;
+  --hckxcp-heading-color: #FFFFFF;
+  --hckxcp-body-color: #0F2A24;
+  --hckxcp-accent-color: #F4E36B;
+  --hckxcp-icon-size: 140px;
+  --hckxcp-gap: 70px;
+  --hckxcp-ease-snap: cubic-bezier(.2, .9, .25, 1.2);
+
+  /* Background image + tint overlay */
+  --hckxcp-bg-image: none;
+  --hckxcp-overlay-color: #57C6AE;
+  --hckxcp-overlay-opacity: 0%;
+}
+
+
+/* =====================================================================
+   GLOBAL
+   ===================================================================== */
+
+.hckxcp,
+.hckxcp *,
+.hckxcp *::before,
+.hckxcp *::after {
+  box-sizing: border-box;
+}
+
+
+/* =====================================================================
+   SECTION
+   ===================================================================== */
+
+.hckxcp {
+  position: relative;
+  overflow: hidden;
+
+  padding: 120px 24px 64px;
+
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--hckxcp-overlay-color) var(--hckxcp-overlay-opacity), transparent),
+      color-mix(in srgb, var(--hckxcp-overlay-color) var(--hckxcp-overlay-opacity), transparent)
+    ),
+    var(--hckxcp-bg-image) center / cover no-repeat,
+    linear-gradient(135deg, var(--hckxcp-bg-start), var(--hckxcp-bg-end));
+}
+
+.hckxcp::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  right: -8%;
+  width: 55%;
+  height: 70%;
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.hckxcp-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+
+/* =====================================================================
+   HEADING
+   ===================================================================== */
+
+.hckxcp-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(10px, 2vw, 26px);
+  margin-bottom: 15rem;
+  text-align: center;
+}
+
+.hckxcp-heading-word {
+  font-size: 65px;
+  line-height: 1;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: var(--hckxcp-heading-color);
+}
+
+.hckxcp-heading-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--hckxcp-icon-size);
+  max-width: var(--hckxcp-icon-size);
+  overflow: visible;
+}
+
+.hckxcp-heading-icon img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+
+/* =====================================================================
+   HEADING SPLIT + ICON GROW
+   ===================================================================== */
+
+.hckxcp-js .hckxcp-heading-word {
+  transition: margin .6s var(--hckxcp-ease-snap);
+}
+
+.hckxcp-js [data-hckxcp-part="word-left"] {
+  margin-right: 0;
+}
+
+.hckxcp-js [data-hckxcp-part="word-right"] {
+  margin-left: 0;
+}
+
+.hckxcp-js .hckxcp.hckxcp-is-inview [data-hckxcp-part="word-left"] {
+  margin-right: 0;
+}
+
+.hckxcp-js .hckxcp.hckxcp-is-inview [data-hckxcp-part="word-right"] {
+  margin-left: 0;
+}
+
+.hckxcp-js .hckxcp-heading-icon {
+  width: 0;
+  opacity: 0;
+  transform: scale(.3) rotate(-8deg);
+  transition:
+    width .5s .12s var(--hckxcp-ease-snap),
+    transform .5s .12s var(--hckxcp-ease-snap),
+    opacity .35s .12s ease;
+}
+
+.hckxcp-js .hckxcp.hckxcp-is-inview .hckxcp-heading-icon {
+  width: 100px;
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+
+/* =====================================================================
+   CONTENT GRID
+   ===================================================================== */
+
+.hckxcp-content {
+  display: flex;
+  align-items: center;
+  gap: 15rem;
+}
+
+
+/* =====================================================================
+   PHOTO STACK / FAN
+   ===================================================================== */
+
+.hckxcp-photos {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  height: 400px;
+  margin: 0 auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hckxcp-photo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: 400px;
+  height: 450px;
+
+  border: 8px solid #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, .25);
+  transition: transform .55s cubic-bezier(.22, .8, .28, 1);
+  will-change: transform;
+}
+
+/* Image poora frame bharegi (crop hogi, stretch nahi) */
+.hckxcp-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* CENTER PHOTO */
+.hckxcp-photo--center {
+  z-index: 3;
+  transform: translate(-50%, -50%) rotate(4deg);
+}
+
+/* LEFT PHOTO */
+.hckxcp-photo--left {
+  z-index: 2;
+  transform: translate(-64%, -46%) rotate(-9deg);
+}
+
+/* RIGHT PHOTO */
+.hckxcp-photo--right {
+  z-index: 1;
+  transform: translate(-36%, -54%) rotate(7deg);
+}
+
+/* OPEN STATE */
+.hckxcp-photos.is-open .hckxcp-photo--center {
+  transform: translate(-50%, -50%) rotate(4deg);
+}
+
+.hckxcp-photos.is-open .hckxcp-photo--left {
+  transform: translate(-132%, -50%) rotate(-8deg);
+}
+
+.hckxcp-photos.is-open .hckxcp-photo--right {
+  transform: translate(32%, -50%) rotate(6deg);
+}
+
+
+/* =====================================================================
+   TEXT SIDE
+   ===================================================================== */
+
+.hckxcp-text {
+  color: var(--hckxcp-heading-color);
+}
+
+.hckxcp-columns {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(18px, 3vw, 34px);
+  border-bottom: 2px solid white;
+}
+
+.hckxcp-col {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 20px;
+}
+
+.hckxcp-col-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.hckxcp-col-heading {
+  font-size: 6.25rem;
+  line-height: .95;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  color: var(--hckxcp-heading-color);
+}
+
+.hckxcp-col-icon {
+  display: inline-flex;
+  width: 70px;
+  margin-top: 4px;
+  flex: none;
+}
+
+.hckxcp-col-icon img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hckxcp-col-sub {
+  display: block;
+  margin-top: 25px;
+  line-height: 1;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  color: var(--hckxcp-heading-color);
+}
+
+.hckxcp-divider {
+  align-self: stretch;
+  width: 2px;
+  min-height: 64px;
+  background: white;
+}
+
+.hckxcp-paragraph {
+  margin-top: clamp(20px, 3vw, 30px);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--hckxcp-body-color);
+}
+
+.hckxcp-paragraph p {
+  font-size: 20px;
+  color: white;
+}
+
+.hckxcp-paragraph p + p {
+  margin-top: 10px;
+}
+
+.hckxcp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: clamp(18px, 2.6vw, 26px);
+  font-size: clamp(16px, 1.8vw, 20px);
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--hckxcp-heading-color);
+}
+
+.hckxcp-link span {
+  font-size: 40px;
+  padding-bottom: 2px;
+  letter-spacing: 3px;
+}
+
+.hckxcp-link-arrow {
+  width: 34px;
+  height: auto;
+  color: var(--hckxcp-accent-color);
+  flex: none;
+}
+
+
+/* =====================================================================
+   RESPONSIVE  (tablet + mobile)
+   ===================================================================== */
+
+@media (max-width: 900px) {
+
+
+  .hckxcp-col-icon{
+        width: 50px;
+  }
+
+
+ 
+
+
+  .hckxcp-heading-icon img{
+
+    width:60%;
+  }
+
+  .hckxcp {
+    padding: 64px 24px;
+  }
+
+  /* ---- Heading ---- */
+  .hckxcp-heading-row {
+    margin-bottom: 4rem;
+  }
+
+  .hckxcp-heading-word {
+    font-size: 32px;
+  }
+
+  .hckxcp-heading-icon {
+    max-width: calc(var(--hckxcp-icon-size) * .7);
+  }
+
+  .hckxcp-js .hckxcp.hckxcp-is-inview .hckxcp-heading-icon {
+    width: calc(var(--hckxcp-icon-size) * .7);
+  }
+
+  /* ---- Layout: image upar, text neeche ---- */
+  .hckxcp-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+
+  /* ---- Photos: square ---- */
+  .hckxcp-photos {
+    width: 100%;
+    max-width: 380px;
+    height: 230px;
+    margin: 0 auto 10px;
+  }
+
+  .hckxcp-photo {
+    width: 160px;
+    height: 160px;      /* desktop ka 450px override */
+    border-width: 5px;
+  }
+
+  .hckxcp-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hckxcp-photos.is-open .hckxcp-photo--left {
+    transform: translate(-108%, -50%) rotate(-8deg);
+  }
+
+  .hckxcp-photos.is-open .hckxcp-photo--right {
+    transform: translate(8%, -50%) rotate(6deg);
+  }
+
+  /* ---- Text ---- */
+  .hckxcp-text {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hckxcp-columns {
+    justify-content: center;
+  }
+
+  .hckxcp-col {
+    align-items: center;
+    flex-wrap:wrap;
+    flex-direction: row;
+
+
+  }
+
+
+  .hckxcp-col-sub {
+  
+    margin-top: 10px;
+  
+  }
+  
+
+  .hckxcp-col-top {
+    justify-content: center;
+  }
+
+  .hckxcp-col-heading {
+    font-size: 25px;
+    text-align:left;
+  }
+
+  .hckxcp-paragraph {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hckxcp-paragraph p {
+    font-size: 12px;
+  }
+
+  .hckxcp-link span {
+    font-size: 15px;
+  }
+}
+
+
+/* =====================================================================
+   REDUCED MOTION
+   ===================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .hckxcp-js .hckxcp-heading-word,
+  .hckxcp-js .hckxcp-heading-icon,
+  .hckxcp-photo {
+    transition-duration: .01ms !important;
+  }
+}
+
+
+
+/* Mobile: bg image ka size viewport height se tay ho, taaki
+   upar-neeche ke sections me lines match karein */
+@media (max-width: 900px) {
+  .hckxcp {
+    /* layers: 1) overlay  2) image  3) fallback gradient */
+    background-size: auto, auto 100vh, auto;
+    background-size: auto, auto 100lvh, auto;
+    background-repeat: no-repeat, repeat-y, no-repeat;
+    background-position: 0 0, center top, 0 0;
+  }
+}

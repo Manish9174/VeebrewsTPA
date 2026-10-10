@@ -1,0 +1,781 @@
+/* =====================================================================
+   HUCK STYLE BLEND SWIPER
+   Saare classes "hckxbs-" prefix se hain.
+   ===================================================================== */
+
+:root {
+  --hckxbs-bg: #F9F4EC;
+  --hckxbs-text: #111111;
+  --hckxbs-card-bg: #ffffff;
+  --hckxbs-accent-fallback: #E6007E;
+  --hckxbs-card-width: 340px;
+  --hckxbs-card-gap: 26px;
+  --hckxbs-product-img-width: 220px;
+  --hckxbs-stage-height: 560px;
+  --hckxbs-image-overlap: 40px;
+  --hckxbs-ease: cubic-bezier(.22, .8, .28, 1);
+  --hckxbs-modal-bg: #111111;
+  --hckxbs-modal-text: #ffffff;
+
+  --hckxbs-bg-image: none;
+  --hckxbs-overlay-opacity: 65%;
+}
+
+.hckxbs,
+.hckxbs *,
+.hckxbs *::before,
+.hckxbs *::after {
+  box-sizing: border-box;
+}
+
+.hckxbs {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  background: var(--hckxbs-bg);
+  color: var(--hckxbs-text);
+  padding: 70px 20px 90px;
+  overflow: hidden;
+}
+
+/* BACKGROUND IMAGE + COLOR OVERLAY */
+.hckxbs::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--hckxbs-bg) var(--hckxbs-overlay-opacity), transparent),
+      color-mix(in srgb, var(--hckxbs-bg) var(--hckxbs-overlay-opacity), transparent)
+    ),
+    var(--hckxbs-bg-image) center / cover no-repeat;
+}
+
+.hckxbs-heading {
+  position: relative;
+  color: white;
+  z-index: 1;
+  margin: 0 0 5rem;
+  text-align: center;
+  font-size: 65px;
+  text-transform: uppercase;
+  letter-spacing: .01em;
+}
+
+.hckxbs-intro {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto 28px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* TABS */
+.hckxbs-tabs {
+  position: relative;
+  z-index: 1;
+  display: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto 125px;
+  padding: 6px;
+  max-width: fit-content;
+  border-radius: 10px;
+  background-image: url(https://cdn.shopify.com/oxygen-v2/36130/28857/60168/4301998/assets/huck-texture--filters-crop-OhUWFhvT.webp);
+  background-size: cover;
+  background-position: right bottom;
+}
+
+.hckxbs-tab {
+  display: none;
+  appearance: none;
+  cursor: pointer;
+  border: none;
+  padding: .35em 1em;
+  border-radius: 10px;
+  background: transparent;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: .01em;
+  text-transform: capitalize;
+  transition: background .3s ease, color .3s ease;
+  white-space: nowrap;
+}
+
+.hckxbs-tab.is-active {
+  background: white;
+  color: black;
+}
+
+/* STAGE (blob + arrows + swiper) */
+.hckxbs-stage {
+  position: relative;
+  z-index: 1;
+  height: var(--hckxbs-stage-height);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.hckxbs-blob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(70vw, 720px);
+  height: min(70vw, 720px);
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hckxbs-blob img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+
+/* Arrows */
+.hckxbs-arrow {
+  appearance: none;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  background: #f44b20;
+  color: #fff;
+  transition: transform .25s ease, background .25s ease;
+}
+
+.hckxbs-arrow:hover {
+  background: white;
+}
+
+.hckxbs-arrow svg {
+  width: 60%;
+  height: 22px;
+  color: white;
+  fill: #f44b20;
+}
+
+.hckxbs-arrow svg:hover {
+  color: #f44b20;
+  fill: white;
+}
+
+.hckxbs-arrow-prev { left: 4%; }
+.hckxbs-arrow-next {
+  right: 4%;
+  scale: -1 1;
+}
+
+@media (max-width: 900px) {
+  .hckxbs-arrow-prev { left: 10px; }
+  .hckxbs-arrow-next { right: 10px; }
+}
+
+
+
+.hckxbs{
+
+    padding: 64px 20px 64px;
+
+}
+
+/* SWIPER */
+.hckxbs-swiper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+.hckxbs-swiper.is-active-track {
+  display: block;
+}
+
+.hckxbs-swiper.swiper {
+  overflow: visible;
+  height: auto;
+}
+
+.hckxbs-swiper .swiper-wrapper {
+  align-items: flex-end;
+}
+
+.hckxbs-swiper .swiper-slide {
+  position: relative;
+  width: var(--hckxbs-card-width);
+  height: auto;
+}
+
+.hckxbs-swiper .swiper-slide-active {
+  width: 350px;
+}
+
+/* PRODUCT IMAGE (card ke UPAR) */
+.hckxbs-card-image {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% - var(--hckxbs-image-overlap));
+  z-index: 3;
+  width: var(--hckxbs-product-img-width);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 40px) scale(.85);
+  transform-origin: 50% 100%;
+  transition:
+    opacity .3s ease,
+    transform .5s var(--hckxbs-ease);
+  filter: drop-shadow(0 20px 26px rgba(0, 0, 0, .28));
+  will-change: transform, opacity;
+}
+
+.hckxbs-card-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  transform-origin: 50% 60%;
+  transition: transform .7s var(--hckxbs-ease);
+}
+
+.swiper-slide-active .hckxbs-card-image {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+  pointer-events: auto; /* hover rotate ke liye */
+  transition:
+    opacity .45s ease .15s,
+    transform .7s var(--hckxbs-ease) .1s;
+}
+
+/* Hover par image halka sa right side me smoothly rotate */
+/* Poore active slide (card + image) par hover karne se image rotate hogi */
+.swiper-slide-active:hover .hckxbs-card-image img {
+  transform: rotate(8deg) scale(1.04);
+}
+
+/* CARDS */
+.hckxbs-card {
+  position: relative;
+  padding: 26px 26px 34px;
+  border-radius: 22px;
+  background: var(--hckxbs-card-bg);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .10);
+  overflow: hidden;
+  transform: scale(.82);
+  opacity: .55;
+  transition: transform .5s var(--hckxbs-ease), opacity .5s ease, box-shadow .5s ease;
+}
+
+.swiper-slide-active .hckxbs-card {
+  opacity: 1;
+  box-shadow: 0 26px 50px rgba(0, 0, 0, .16);
+  transition:
+    transform .5s var(--hckxbs-ease),
+    opacity .5s ease,
+    box-shadow .5s ease;
+}
+
+.hckxbs-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hckxbs-card-title {
+  font-weight: 700;
+  line-height: normal;
+  margin: 0 0 10px;
+  font-size: 28px;
+}
+
+.hckxbs-card-title span {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hckxbs-card-blob {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
+
+.hckxbs-card-flavor {
+  margin: 0;
+  padding: 0 0 5px;
+  border-top: 2px solid var(--hckxbs-text);
+  border-bottom: 2px solid var(--hckxbs-text);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+
+.swiper-slide-active .hckxbs-card-flavor {
+  font-size: 22px;
+}
+
+/* Description + buttons sirf ACTIVE card par */
+.hckxbs-card-desc,
+.hckxbs-card-actions {
+  display: none;
+}
+
+.swiper-slide-active .hckxbs-card-desc {
+  display: block;
+  margin-top: 16px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: black;
+}
+
+.hckxbs-card-desc p + p { margin-top: 8px; }
+
+.swiper-slide-active .hckxbs-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.hckxbs-learn-more {
+  color: #f44b20;
+  text-decoration: none;
+  text-underline-offset: 3px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.hckxbs-buy-now {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  border: none;
+  padding: 10px 50px 15px;
+  border-radius: 10px;
+  color: #fff;
+  background-color: #f44b20;
+  font-weight: 600;
+  font-size: 18px;
+  transition: transform .25s ease, opacity .25s ease;
+  align-items: center;
+}
+
+.hckxbs-buy-now:hover {
+  transform: translateY(-2px);
+}
+
+.hckxbs-buy-now:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+/* Bottom accent strip */
+.hckxbs-card-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 10px;
+  background-size: cover;
+  background-position: center 70%;
+}
+
+.hckxbs-card-strip-fallback {
+  background: var(--hckxbs-accent-fallback);
+}
+
+/* CURSOR LABEL (product title) */
+.hckxbs-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #fff;
+  color: #f44b20;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+  transition: opacity .25s ease;
+  will-change: transform, opacity;
+}
+
+.hckxbs-cursor.is-visible {
+  opacity: 1;
+}
+
+.hckxbs-cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: #f44b20;
+  transform: rotate(45deg);
+  flex: none;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .hckxbs-cursor { display: none; }
+}
+
+/* BUY NOW POPUP */
+.hckxbs-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.hckxbs-modal.is-open {
+  display: flex;
+}
+
+.hckxbs-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, .45);
+}
+
+.hckxbs-modal-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 22.8rem;
+  border-radius: 10px;
+  background: #e7a0c2;
+  border:3px solid white;
+  color: var(--hckxbs-modal-text);
+  padding: 24px 24px 26px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, .35);
+}
+
+.hckxbs-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid white;
+  padding-bottom: .5rem;
+  margin-bottom: 1rem;
+}
+
+.hckxbs-modal-title {
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: .02em;
+  line-height: 1.4em;
+  text-transform: uppercase;
+}
+
+.hckxbs-modal-close {
+  appearance: none;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  line-height: 1;
+  font-size: 16px;
+  display: grid;
+  place-items: center;
+}
+
+.hckxbs-modal-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+}
+
+.hckxbs-modal-label {
+  font-size: 20px;
+  letter-spacing: .04em;
+  color: white;
+      font-family: 'Lineal', sans-serif;
+}
+
+.hckxbs-modal-price {
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.hckxbs-modal-size-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: flex-end;
+}
+
+.hckxbs-modal-size-btn {
+  appearance: none;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, .5);
+  background: transparent;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.hckxbs-modal-size-btn.is-active {
+  background: #fff;
+  color: #111;
+  border-color: #fff;
+}
+
+.hckxbs-modal-size-btn:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+
+.hckxbs-modal-qty {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hckxbs-modal-qty-btn {
+  appearance: none;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, .5);
+  background: transparent;
+  color: #fff;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  line-height: 1;
+  font-size: 16px;
+  display: grid;
+  place-items: center;
+}
+
+.hckxbs-modal-qty-value {
+  min-width: 14px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.hckxbs-modal-add {
+  appearance: none;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  margin-top: 18px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  font-weight: 700;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.hckxbs-modal-add:hover {
+  transform: translateY(-1px);
+}
+
+.hckxbs-modal-add:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  :root {
+    --hckxbs-card-width: 250px;
+    --hckxbs-image-overlap: 30px;
+    --hckxbs-product-img-width: 150px;
+  }
+
+  .swiper-slide-active .hckxbs-card-flavor {
+    font-size: 20px;
+  }
+
+  .swiper-slide-active .hckxbs-card-title {
+    font-size: 28px;
+  }
+
+  .hckxbs-heading {
+    font-size: 32px;
+
+    margin: 0 0 7rem;
+  }
+
+  .hckxbs-stage {
+    height: 520px;
+  }
+
+  .hckxbs-card-title {
+    font-size: 18px;
+  }
+
+  .hckxbs-card-desc,
+  .hckxbs-card-flavor {
+    font-size: 13px;
+  }
+}
+
+/* REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+  .hckxbs-card,
+  .hckxbs-card-image,
+  .hckxbs-card-image img,
+  .hckxbs-blob img {
+    transition-duration: .01ms !important;
+  }
+}
+
+
+
+
+
+/* =====================================================================
+   CARDS GRID MODE (collection page, no slider, 3 per row)
+   ===================================================================== */
+.hckxbs-grid-mode .hckxbs-cards {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, var(--hckxbs-card-width)));
+  justify-content: center;
+  align-items: stretch;
+  column-gap: var(--hckxbs-card-gap);
+  row-gap: var(--hckxbs-row-gap, 180px);
+}
+
+.hckxbs-grid-mode .hckxbs-item {
+  position: relative;
+  display: flex;
+}
+
+/* Saare cards "active" jaisa look */
+.hckxbs-grid-mode .hckxbs-card {
+  width: 100%;
+  transform: none;
+  opacity: 1;
+  box-shadow: 0 26px 50px rgba(0, 0, 0, .16);
+}
+
+.hckxbs-grid-mode .hckxbs-card-title {
+  font-size: 28px;
+}
+
+.hckxbs-grid-mode .hckxbs-card-flavor {
+  font-size: 22px;
+}
+
+.hckxbs-grid-mode .hckxbs-card-desc {
+  display: block;
+  margin-top: 16px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: black;
+}
+
+.hckxbs-grid-mode .hckxbs-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Image hamesha visible */
+.hckxbs-grid-mode .hckxbs-card-image {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+  pointer-events: none;
+}
+
+/* Poore card (card + image) par hover karne se image rotate */
+.hckxbs-grid-mode .hckxbs-item:hover .hckxbs-card-image img {
+  transform: rotate(8deg) scale(1.04);
+}
+
+/* Tablet: 2 per row, Mobile: 1 per row */
+@media (max-width: 1100px) {
+  .hckxbs-grid-mode .hckxbs-cards {
+    grid-template-columns: repeat(2, minmax(0, var(--hckxbs-card-width)));
+  }
+}
+
+@media (max-width: 700px) {
+  .hckxbs-grid-mode .hckxbs-cards {
+    grid-template-columns: minmax(0, var(--hckxbs-card-width));
+  }
+
+  .hckxbs-grid-mode .hckxbs-card-title { font-size: 24px; }
+  .hckxbs-grid-mode .hckxbs-card-flavor { font-size: 18px; }
+  .hckxbs-grid-mode .hckxbs-card-desc { font-size: 15px; }
+}
+
+
+
+@media (max-width: 900px) {
+  .hckxbs::before {
+    background-size: auto, auto 100vh;
+    background-size: auto, auto 100lvh;
+    background-repeat: no-repeat, repeat-y;
+    background-position: 0 0, center top;
+  }
+}
+
+
+
+/* Desktop: ek baar me sirf 3 cards dikhein (left, active, right).
+   Baaki cards swipe karne par kinaare se andar aayenge. */
+@media (min-width: 901px) {
+  .hckxbs-swiper.swiper {
+    --hckxbs-clip-half: calc(var(--hckxbs-card-width) * 1.5 + 12px);
+    clip-path: inset(
+      -900px
+      max(0px, calc(50% - var(--hckxbs-clip-half)))
+      -150px
+      max(0px, calc(50% - var(--hckxbs-clip-half)))
+    );
+  }
+}
+
+
+/* Arrows sirf mobile / tablet par, desktop par hide */
+@media (min-width: 901px) {
+  .hckxbs-arrow {
+    display: none !important;
+  }
+}
